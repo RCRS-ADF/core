@@ -15,7 +15,8 @@ gradle/
 .gradle/
 
 # build
-build/
+build/*
+!build/libs
 
 # intelliJ
 *.iml
