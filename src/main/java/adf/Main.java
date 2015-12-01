@@ -10,6 +10,7 @@ public class Main {
         }
         catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
             System.out.println("[ERROR ] Loader not found.");
+            e.printStackTrace();
         }
     }
 }
