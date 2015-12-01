@@ -1,4 +1,4 @@
-package adf.component.algorithm.target;
+package adf.component.algorithm.targetselector;
 
 
 import adf.agent.info.AgentInfo;
