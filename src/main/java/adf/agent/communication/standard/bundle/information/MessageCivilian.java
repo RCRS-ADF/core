@@ -20,7 +20,7 @@ public class MessageCivilian extends StandardMessage
 	protected int humanDamage;
 	protected EntityID humanPosition;
 
-	public MessageCivilian(boolean isRadio, Civilian civilian, int action, EntityID target)
+	public MessageCivilian(boolean isRadio, Civilian civilian)
 	{
 		super(isRadio);
 		humanHP = civilian.getHP();
