@@ -39,9 +39,9 @@ public abstract class PathPlanner {
 
     public abstract void setFrom(EntityID id);
 
-    public abstract PathPlanner setDist(Collection<EntityID> targets);
+    public abstract PathPlanner setDestination(Collection<EntityID> targets);
 
-    public PathPlanner setDist(EntityID... targets) {
-        return this.setDist(Arrays.asList(targets));
+    public PathPlanner setDestination(EntityID... targets) {
+        return this.setDestination(Arrays.asList(targets));
     }
 }
