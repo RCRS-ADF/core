@@ -1,4 +1,4 @@
-package adf.component.algorithm.clustering;
+package adf.component.algorithm;
 
 import adf.agent.info.AgentInfo;
 import adf.agent.info.ScenarioInfo;

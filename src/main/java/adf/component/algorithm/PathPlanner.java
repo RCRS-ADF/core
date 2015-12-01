@@ -1,4 +1,4 @@
-package adf.component.algorithm.pathplanning;
+package adf.component.algorithm;
 
 
 import adf.agent.info.AgentInfo;
