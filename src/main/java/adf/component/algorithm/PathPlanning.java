@@ -11,27 +11,27 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-public abstract class PathPlanner {
+public abstract class PathPlanning {
 
     protected ScenarioInfo scenarioInfo;
     protected AgentInfo agentInfo;
     protected WorldInfo worldInfo;
 
-    public PathPlanner(AgentInfo ai, WorldInfo wi, ScenarioInfo si) {
+    public PathPlanning(AgentInfo ai, WorldInfo wi, ScenarioInfo si) {
         this.worldInfo = wi;
         this.agentInfo = ai;
         this.scenarioInfo = si;
     }
 
-    public PathPlanner precompute(PrecomputeData precomputeData) {
+    public PathPlanning precompute(PrecomputeData precomputeData) {
         return this;
     }
 
-    public PathPlanner resume(PrecomputeData precomputeData) {
+    public PathPlanning resume(PrecomputeData precomputeData) {
         return this;
     }
 
-    public PathPlanner updateInfo(){
+    public PathPlanning updateInfo(){
         return this;
     }
 
@@ -39,9 +39,9 @@ public abstract class PathPlanner {
 
     public abstract void setFrom(EntityID id);
 
-    public abstract PathPlanner setDestination(Collection<EntityID> targets);
+    public abstract PathPlanning setDestination(Collection<EntityID> targets);
 
-    public PathPlanner setDestination(EntityID... targets) {
+    public PathPlanning setDestination(EntityID... targets) {
         return this.setDestination(Arrays.asList(targets));
     }
 }
