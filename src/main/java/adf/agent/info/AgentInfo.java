@@ -68,7 +68,7 @@ public class AgentInfo {
 		return ((Human)this.world.getEntity(this.agent.getID())).getPosition();
 	}
 
-	public Area getLocation()
+	public Area getPositionArea()
 	{
 		return (Area)this.world.getEntity(this.getPosition());
 	}
