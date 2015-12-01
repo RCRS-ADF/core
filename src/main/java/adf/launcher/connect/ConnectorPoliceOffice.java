@@ -39,7 +39,7 @@ public class ConnectorPoliceOffice implements Connector
 		catch (ComponentConnectionException | InterruptedException | ConnectionException e)
 		{
 			//e.printStackTrace();
-			System.out.println("[ERROR ] Cannot Load PoliceOffice Control !!");
+			//System.out.println("[ERROR ] Cannot Load PoliceOffice Control !!");
 		}
 		System.out.println("[FINISH] Connect PoliceOffice (success:" + connected + ")");
 	}

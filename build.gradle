@@ -25,6 +25,14 @@ dependencies {
 }
 javadoc.options.encoding = 'UTF-8'
 
+jar {
+    //destinationDir = new File(projectDir, 'tactics')
+    //manifest.attributes("Main-Class", "adf.Main")
+    manifest {
+        attributes "Main-Class": "adf.Main"
+    }
+}
+
 /*
 task javadocJar(type: Jar, dependsOn:javadoc) {
     classifier = 'javadoc'

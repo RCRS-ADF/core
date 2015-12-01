@@ -34,7 +34,7 @@ public class ConnectorFireBrigade implements Connector {
 		}
 		catch (ComponentConnectionException | InterruptedException | ConnectionException e) {
 			//e.printStackTrace();
-			System.out.println("[ERROR ] Cannot Load FireBrigade Tactics !!");
+			//System.out.println("[ERROR ] Cannot Load FireBrigade Tactics !!");
 		}
 		System.out.println("[FINISH] Connect FireBrigade (success:" + connected + ")");
 	}

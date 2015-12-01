@@ -35,7 +35,7 @@ public class ConnectorAmbulanceTeam implements Connector {
 		}
 		catch (ComponentConnectionException | InterruptedException | ConnectionException e) {
 			//e.printStackTrace();
-			System.out.println("[ERROR ] Cannot Load AmbulanceTeam Tactics !!");
+			//System.out.println("[ERROR ] Cannot Load AmbulanceTeam Tactics !!");
 		}
 		System.out.println("[FINISH] Connect AmbulanceTeam (success:" + connected + ")");
 	}

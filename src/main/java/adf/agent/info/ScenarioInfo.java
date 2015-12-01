@@ -1,6 +1,5 @@
 package adf.agent.info;
 
-import rescuecore2.Constants;
 import rescuecore2.config.Config;
 
 public class ScenarioInfo
@@ -12,8 +11,8 @@ public class ScenarioInfo
 		PRECOMPUTATION_PHASE
 	}
 
-	public Config config;
-	public Mode mode;
+	private Config config;
+	private Mode mode;
 
 	public ScenarioInfo(Config config, Mode mode)
 	{
@@ -41,9 +40,8 @@ public class ScenarioInfo
 		return this.config;
 	}
 
-	public int getFireExtinguishMaxSum()
-	{
-		return config.getIntValue("fire.exthinguish.max-sum");
+	public int getFireExtinguishMaxSum() {
+		return this.config.getIntValue("fire.extinguish.max-sum");
 	}
 
 	public int getCommsChannelsMaxPlatoon()
@@ -53,17 +51,17 @@ public class ScenarioInfo
 
 	public int getKernelAgentsThinkTime()
 	{
-		return config.getIntValue("kernel.agents.think-time ");
+		return config.getIntValue("kernel.agents.think-time");
 	}
 
 	public int getFireTankMaximum()
 	{
-		return config.getIntValue("fire.tank.maximum ");
+		return config.getIntValue("fire.tank.maximum");
 	}
 
 	public int getClearRepairRate()
 	{
-		return config.getIntValue("clear.repair.rate");
+		return config.getIntValue("updateInfo.repair.rate");
 	}
 
 	public int getKernelStartupConnectTime()
@@ -111,8 +109,7 @@ public class ScenarioInfo
 		return config.getIntValue("scenario.agents.ac");
 	}
 
-	public int getCommsChannelsMaxOffice() //public int getCommsChannelsMaxCentre()
-	{
+	public int getCommsChannelsMaxOffice() {
 		return config.getIntValue("comms.channels.max.centre");
 	}
 
@@ -126,9 +123,8 @@ public class ScenarioInfo
 		return config.getIntValue("kernel.agents.ignoreuntil");
 	}
 
-	public int getClearRepairDistance()
-	{
-		return config.getIntValue("clear.repair.distance");
+	public int getClearRepairDistance() {
+		return this.config.getIntValue("clear.repair.distance");
 	}
 
 	public int getCommsChannelsCount()
@@ -148,7 +144,7 @@ public class ScenarioInfo
 
 	public int getClearRepairRad()
 	{
-		return config.getIntValue("clear.repair.rad");
+		return config.getIntValue("updateInfo.repair.rad");
 	}
 
 	public int getFireTankRefillHydrantRate()

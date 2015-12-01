@@ -38,7 +38,7 @@ public class ConnectorPoliceForce implements Connector
 		catch (ComponentConnectionException | InterruptedException | ConnectionException e)
 		{
 			//e.printStackTrace();
-			System.out.println("[ERROR ] Cannot Load PoliceForce Tactics !!");
+			//System.out.println("[ERROR ] Cannot Load PoliceForce Tactics !!");
 		}
 		System.out.println("[FINISH] Connect PoliceForce (success:" + connected + ")");
 	}

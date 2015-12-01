@@ -34,7 +34,7 @@ public class ConnectorAmbulanceCentre implements Connector {
 		}
 		catch (ComponentConnectionException | InterruptedException | ConnectionException e) {
 			//e.printStackTrace();
-			System.out.println("[ERROR ] Cannot Load AmbulanceCentre Control !!");
+			//System.out.println("[ERROR ] Cannot Load AmbulanceCentre Control !!");
 		}
 		System.out.println("[FINISH] Connect AmbulanceCentre (success:" + connected + ")");
 	}

@@ -1,16 +1,23 @@
 package adf.agent.info;
 
+import adf.util.WorldUtil;
 import rescuecore2.misc.Pair;
-import rescuecore2.standard.entities.*;
-import rescuecore2.worldmodel.*;
+import rescuecore2.standard.entities.Human;
+import rescuecore2.standard.entities.StandardEntity;
+import rescuecore2.standard.entities.StandardEntityURN;
+import rescuecore2.standard.entities.StandardWorldModel;
+import rescuecore2.worldmodel.ChangeSet;
+import rescuecore2.worldmodel.Entity;
+import rescuecore2.worldmodel.EntityID;
+import rescuecore2.worldmodel.WorldModel;
 
 import java.awt.geom.Rectangle2D;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Collection;
+import java.util.Iterator;
 
-public class WorldInfo {
-	public StandardWorldModel world;
-	public ChangeSet changed;
+public class WorldInfo implements Iterable<StandardEntity> {
+	private StandardWorldModel world;
+	private ChangeSet changed;
 
 	public WorldInfo(StandardWorldModel world) {
 		this.setWorld(world);
@@ -29,35 +36,44 @@ public class WorldInfo {
 		this.changed = changed;
 	}
 
-	public Collection<EntityID> convert(Collection<StandardEntity> entities) {
-        return entities.stream().map(StandardEntity::getID).collect(Collectors.toList());
+	public ChangeSet getChanged() {
+		return this.changed;
 	}
 
 	public Collection<EntityID> getObjectIDsInRange(EntityID entity, int range) {
-		return this.convert(this.world.getObjectsInRange(entity, range));
+		return WorldUtil.convertToID(this.world.getObjectsInRange(entity, range));
 	}
 
 	public Collection<EntityID> getObjectIDsInRange(StandardEntity entity, int range) {
-		return this.convert(this.world.getObjectsInRange(entity, range));
+		return WorldUtil.convertToID(this.world.getObjectsInRange(entity, range));
 	}
 
 	public Collection<EntityID> getObjectIDsInRange(int x, int y, int range) {
-		return this.convert(this.world.getObjectsInRange(x,y,range));
+		return WorldUtil.convertToID(this.world.getObjectsInRange(x,y,range));
 	}
 
 	public Collection<EntityID> getObjectIDsInRectangle(int x1, int y1, int x2, int y2) {
-		return this.convert(this.world.getObjectsInRectangle(x1, y1, x2, y2));
+		return WorldUtil.convertToID(this.world.getObjectsInRectangle(x1, y1, x2, y2));
 	}
 
 	public Collection<EntityID> getEntityIDsOfType(StandardEntityURN urn) {
-		return this.convert(this.world.getEntitiesOfType(urn));
+		return WorldUtil.convertToID(this.world.getEntitiesOfType(urn));
 	}
 
 	public Collection<EntityID> getEntityIDsOfType(StandardEntityURN... urns) {
-		return this.convert(this.world.getEntitiesOfType(urns));
+		return WorldUtil.convertToID(this.world.getEntitiesOfType(urns));
 	}
 
-	//org
+    public StandardEntity getPosition(Human entity) {
+        return entity.getPosition(this.world);
+    }
+
+    public Pair<Integer, Integer> getLocation(StandardEntity entity) {
+        return entity.getLocation(this.world);
+    }
+
+
+    //org
 
 	public void merge(ChangeSet changeSet) {
 		this.world.merge(changeSet);
@@ -143,6 +159,7 @@ public class WorldInfo {
         this.world.removeAllEntities();
     }
 
+	@Override
     public Iterator<StandardEntity> iterator() {
         return this.world.iterator();
     }

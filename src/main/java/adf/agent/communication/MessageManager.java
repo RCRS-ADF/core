@@ -25,6 +25,7 @@ public class MessageManager
         messageClassMap = new HashMap<>(32);
         messageClassIDMap = new HashMap<>(32);
         sendMessageList = new ArrayList<>();
+        this.receivedMessageList = new ArrayList<>();
         heardAgentHelpCount = 0;
     }
 

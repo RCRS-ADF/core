@@ -3,13 +3,15 @@ package adf.component.algorithm.cluster;
 import adf.agent.info.AgentInfo;
 import adf.agent.info.ScenarioInfo;
 import adf.agent.info.WorldInfo;
+import adf.agent.precompute.PrecomputeData;
 import rescuecore2.standard.entities.StandardEntity;
-import rescuecore2.standard.entities.StandardEntityURN;
 import rescuecore2.worldmodel.EntityID;
 
 import java.util.Collection;
 
 public abstract class Clustering{
+
+    public static final int DEFAULT_SIZE = 10;
 
     protected WorldInfo worldInfo;
     protected AgentInfo agentInfo;
@@ -17,29 +19,45 @@ public abstract class Clustering{
 
     protected int clusterSize;
 
-    protected Collection<EntityID> entityIDs;
+    protected Collection<StandardEntity> entities;
 
-    public Clustering(WorldInfo wi, AgentInfo ai, ScenarioInfo si, Collection<EntityID> elements) {
-        this(wi, ai, si, elements, -1);
+    public Clustering(AgentInfo ai, WorldInfo wi, ScenarioInfo si, Collection<StandardEntity> elements) {
+        this(ai, wi, si, elements, DEFAULT_SIZE);
     }
 
-    public Clustering(WorldInfo wi, AgentInfo ai, ScenarioInfo si, Collection<EntityID> elements, int size) {
+    public Clustering(AgentInfo ai, WorldInfo wi, ScenarioInfo si, Collection<StandardEntity> elements, int size) {
         this.worldInfo = wi;
         this.agentInfo = ai;
         this.scenarioInfo = si;
         this.clusterSize = size;
-        this.entityIDs = elements;
+        this.entities = elements;
+    }
+
+    public Clustering precompute(PrecomputeData precomputeData) {
+        return this;
+    }
+
+    public Clustering resume(PrecomputeData precomputeData) {
+        return this;
+    }
+
+    public Clustering updateInfo() {
+        return this;
     }
 
     public Clustering calc() {
         return this;
     }
 
-    public abstract int getClusterNumber();
+    public int getClusterNumber() {
+        return this.clusterSize;
+    }
+
+    public abstract int getClusterIndex(StandardEntity entity);
 
     public abstract int getClusterIndex(EntityID id);
 
-    public abstract Collection<EntityID> getClusterEntities(int index);
+    public abstract Collection<StandardEntity> getClusterEntities(int index);
 
-    //public abstract Collection<ClusterData> getClusters();
+    public abstract Collection<EntityID> getClusterEntityIDs(int index);
 }

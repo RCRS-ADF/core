@@ -40,7 +40,7 @@ public class ConnectorFireStation implements Connector
 		catch (ComponentConnectionException | InterruptedException | ConnectionException e)
 		{
 			//e.printStackTrace();
-			System.out.println("[ERROR ] Cannot Load FireStation Control !!");
+			//System.out.println("[ERROR ] Cannot Load FireStation Control !!");
 		}
 		System.out.println("[FINISH] Connect FireStation (success:" + connected + ")");
 	}

@@ -15,9 +15,11 @@ public class ConfigInitializer {
     public static Config getConfig(String... args) {
         Config commandLine = analysis(args);
         try {
-            Config config = new Config(DEFAULT_PATH);
-            config.merge(commandLine);
-            return config;
+            if(DEFAULT_PATH.exists()) {
+                Config config = new Config(DEFAULT_PATH);
+                config.merge(commandLine);
+                return config;
+            }
         }
         catch (ConfigException e) {
             e.printStackTrace();
@@ -26,19 +28,24 @@ public class ConfigInitializer {
     }
     
     public static Config analysis(String... args) {
-        Config config = new Config();
-        //set load target
-        config.setValue(ConfigKey.KEY_LOADER_CLASS, args[0]);
-        //set option
-		Map<String, Option> options = initOption();
-		for (int i = 1; i < args.length; i++) {
-			String[] strArray = args[i].split(":");
-			Option option = options.get(strArray[0]);
-			if (option != null) {
-				option.setValue(config, strArray);
-			}
-		}
-		return config;
+		if(args.length > 0) {
+            Config config = new Config();
+            //set load target
+            config.setValue(ConfigKey.KEY_LOADER_CLASS, args[0]);
+            //set option
+            Map<String, Option> options = initOption();
+            for (int i = 1; i < args.length; i++) {
+                String[] strArray = args[i].split(":");
+                Option option = options.get(strArray[0]);
+                if (option != null) {
+                    option.setValue(config, strArray);
+                }
+            }
+            return config;
+        }
+        else {
+            throw new ArrayIndexOutOfBoundsException("input Loader Class!!");
+        }
     }
     
     private static Map<String, Option> initOption() {
