@@ -22,6 +22,12 @@ public class ActionRescue extends Action
 	}
 
 	@Override
+	public String toString()
+	{
+		return "ActionRescue [target=" + target + "]";
+	}
+
+	@Override
 	public Message getCommand(EntityID agentID, int time)
 	{
 		return new AKRescue(agentID, time, this.target);

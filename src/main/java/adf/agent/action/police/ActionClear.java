@@ -41,6 +41,12 @@ public class ActionClear extends Action
 		this.posY = destY;
 	}
 
+	@Override
+	public String toString()
+	{
+		return "ActionClear [target=" + target + ", useOldFunction=" + useOldFunction + ", posX=" + posX + ", posY=" + posY + "]";
+	}
+
 	public boolean getUseOldFunction()
 	{
 		return this.useOldFunction;

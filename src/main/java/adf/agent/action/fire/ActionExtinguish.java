@@ -24,6 +24,12 @@ public class ActionExtinguish extends Action
 		this(building.getID(), maxPower);
 	}
 
+	@Override
+	public String toString()
+	{
+		return "ActionExtinguish [target=" + target + ", power=" + power + "]";
+	}
+
 	public int getPower()
 	{
 		return this.power;

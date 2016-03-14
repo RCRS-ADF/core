@@ -13,6 +13,12 @@ public class ActionRest extends Action
 	}
 
 	@Override
+	public String toString()
+	{
+		return "ActionRest []";
+	}
+
+	@Override
 	public Message getCommand(EntityID agentID, int time)
 	{
 		return new AKRest(agentID, time);

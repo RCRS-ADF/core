@@ -22,6 +22,12 @@ public class ActionLoad extends Action
 	}
 
 	@Override
+	public String toString()
+	{
+		return "ActionLoad [target=" + target + "]";
+	}
+
+	@Override
 	public Message getCommand(EntityID agentID, int time)
 	{
 		return new AKLoad(agentID, time, this.target);

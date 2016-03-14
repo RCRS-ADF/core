@@ -14,6 +14,12 @@ public class ActionUnload extends Action
 	}
 
 	@Override
+	public String toString()
+	{
+		return "ActionUnload []";
+	}
+
+	@Override
 	public Message getCommand(EntityID agentID, int time)
 	{
 		return new AKUnload(agentID, time);

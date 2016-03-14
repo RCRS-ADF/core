@@ -32,6 +32,12 @@ public class ActionMove extends Action
 		this.posY = destinationY;
 	}
 
+	@Override
+	public String toString()
+	{
+		return "ActionMove [usePosition=" + usePosition + ", posX=" + posX + ", posY=" + posY + ", path=" + path + "]";
+	}
+
 	public List<EntityID> getPath()
 	{
 		return this.path;
