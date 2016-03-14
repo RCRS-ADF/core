@@ -5,6 +5,7 @@ import adf.component.communication.CommunicationMessage;
 import adf.component.communication.MessageBundle;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -96,6 +97,19 @@ public class MessageManager
     public List<CommunicationMessage> getReceivedMessageList()
     {
         return this.receivedMessageList;
+    }
+
+    public List<CommunicationMessage> getReceivedMessageList(Class<? extends CommunicationMessage>... messageClasses)
+    {
+        List<CommunicationMessage> resultList = new ArrayList<>();
+        for (CommunicationMessage message : this.receivedMessageList)
+        {
+            if (Arrays.asList(messageClasses).contains(message.getClass()))
+            {
+                resultList.add(message);
+            }
+        }
+        return resultList;
     }
 
     public void addHeardAgentHelpCount()
