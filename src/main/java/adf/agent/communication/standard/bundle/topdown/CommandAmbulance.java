@@ -43,17 +43,24 @@ public class CommandAmbulance extends StandardMessage
 	{ return myAction; }
 
 	@Override
-	public int getByteArraySize() {
-		return SIZE_TO + SIZE_TARGET + SIZE_ACTION;
+	public int getByteArraySize()
+	{
+		return toBitOutputStream().size();
 	}
 
 	@Override
 	public byte[] toByteArray() {
+		return this.toBitOutputStream().toByteArray();
+	}
+
+	@Override
+	public BitOutputStream toBitOutputStream()
+	{
 		BitOutputStream bitOutputStream = new BitOutputStream();
 		bitOutputStream.writeBits(commandToID.getValue(), SIZE_TO);
 		bitOutputStream.writeBits(commandTargetID.getValue(), SIZE_TARGET);
 		bitOutputStream.writeBits(myAction, SIZE_ACTION);
-		return bitOutputStream.toByteArray();
+		return bitOutputStream;
 	}
 
 	public EntityID getToID()

@@ -26,14 +26,19 @@ public class MessageDummy extends StandardMessage
 	@Override
 	public int getByteArraySize()
 	{
-		return SIZE_TEST;
+		return toBitOutputStream().size();
 	}
 
 	@Override
-	public byte[] toByteArray()
+	public byte[] toByteArray() {
+		return this.toBitOutputStream().toByteArray();
+	}
+
+	@Override
+	public BitOutputStream toBitOutputStream()
 	{
 		BitOutputStream bitOutputStream = new BitOutputStream();
 		bitOutputStream.writeBits(dummyTest, SIZE_TEST);
-		return bitOutputStream.toByteArray();
+		return bitOutputStream;
 	}
 }

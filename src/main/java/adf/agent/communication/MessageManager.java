@@ -99,7 +99,8 @@ public class MessageManager
         return this.receivedMessageList;
     }
 
-    public List<CommunicationMessage> getReceivedMessageList(Class<? extends CommunicationMessage>... messageClasses)
+    @SafeVarargs
+    public final List<CommunicationMessage> getReceivedMessageList(Class<? extends CommunicationMessage>... messageClasses)
     {
         List<CommunicationMessage> resultList = new ArrayList<>();
         for (CommunicationMessage message : this.receivedMessageList)

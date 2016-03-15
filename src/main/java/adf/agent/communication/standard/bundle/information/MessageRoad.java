@@ -73,12 +73,19 @@ public class MessageRoad extends StandardMessage
 	}
 
 	@Override
-	public int getByteArraySize() {
-		return SIZE_ROADID + SIZE_BLOCKADEID + SIZE_COST + SIZE_PASSABLE;
+	public int getByteArraySize()
+	{
+		return toBitOutputStream().size();
 	}
 
 	@Override
 	public byte[] toByteArray() {
+		return this.toBitOutputStream().toByteArray();
+	}
+
+	@Override
+	public BitOutputStream toBitOutputStream()
+	{
 		BitOutputStream bitOutputStream = new BitOutputStream();
 		bitOutputStream.writeBits(roadID.getValue(), SIZE_ROADID);
 		if (roadBlockadeID == null) {
@@ -88,7 +95,7 @@ public class MessageRoad extends StandardMessage
 		}
 		bitOutputStream.writeBits(blockadeRepairCost, SIZE_COST);
 		bitOutputStream.writeBits((roadPassable?1:0), SIZE_PASSABLE);
-		return bitOutputStream.toByteArray();
+		return bitOutputStream;
 	}
 }
 

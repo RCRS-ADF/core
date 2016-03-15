@@ -58,18 +58,25 @@ public class MessageBuilding extends StandardMessage
     }
 
 	@Override
-	public int getByteArraySize() {
-		return SIZE_ID + SIZE_BROKENNESS + SIZE_FIERYNESS + SIZE_TEMPERATURE;
+	public int getByteArraySize()
+	{
+		return toBitOutputStream().size();
 	}
 
 	@Override
 	public byte[] toByteArray() {
+		return this.toBitOutputStream().toByteArray();
+	}
+
+	@Override
+	public BitOutputStream toBitOutputStream()
+	{
 		BitOutputStream bitOutputStream = new BitOutputStream();
 		bitOutputStream.writeBits(buildingID.getValue(), SIZE_ID);
 		bitOutputStream.writeBits(buildingBrokenness, SIZE_BROKENNESS);
 		bitOutputStream.writeBits(buildingFieryness, SIZE_FIERYNESS);
 		bitOutputStream.writeBits(buildingTemperature, SIZE_TEMPERATURE);
-		return bitOutputStream.toByteArray();
+		return bitOutputStream;
 	}
 }
 

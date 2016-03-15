@@ -39,18 +39,25 @@ public class MessageCivilian extends StandardMessage
 	}
 
 	@Override
-	public int getByteArraySize() {
-		return SIZE_HP + SIZE_BURIEDNESS + SIZE_DAMAGE + SIZE_POSITION;
+	public int getByteArraySize()
+	{
+		return toBitOutputStream().size();
 	}
 
 	@Override
 	public byte[] toByteArray() {
+		return this.toBitOutputStream().toByteArray();
+	}
+
+	@Override
+	public BitOutputStream toBitOutputStream()
+	{
 		BitOutputStream bitOutputStream = new BitOutputStream();
 		bitOutputStream.writeBits(humanHP, SIZE_HP);
 		bitOutputStream.writeBits(humanBuriedness, SIZE_BURIEDNESS);
 		bitOutputStream.writeBits(humanDamage, SIZE_DAMAGE);
 		bitOutputStream.writeBits(humanPosition.getValue(), SIZE_POSITION);
-		return bitOutputStream.toByteArray();
+		return bitOutputStream;
 	}
 
 	public int getHP() { return this.humanHP; }

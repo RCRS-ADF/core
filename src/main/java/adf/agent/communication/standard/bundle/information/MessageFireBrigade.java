@@ -40,7 +40,6 @@ public class MessageFireBrigade extends StandardMessage
 		humanBuriedness = fireBrigade.getBuriedness();
         humanDamage = fireBrigade.getDamage();
 		humanPosition = fireBrigade.getPosition();
-		//super(MessageID.ambulanceTeamMessage, ambulanceTeam);
 		this.myTargetID = target;
 		this.myAction = action;
 		this.fireBrigadeWater = fireBrigade.getWater();
@@ -71,12 +70,19 @@ public class MessageFireBrigade extends StandardMessage
 	}
 
 	@Override
-	public int getByteArraySize() {
-		return SIZE_HP + SIZE_BURIEDNESS + SIZE_DAMAGE + SIZE_POSITION + SIZE_TARGET + SIZE_ACTION + SIZE_WATER;
+	public int getByteArraySize()
+	{
+		return toBitOutputStream().size();
 	}
 
 	@Override
 	public byte[] toByteArray() {
+		return this.toBitOutputStream().toByteArray();
+	}
+
+	@Override
+	public BitOutputStream toBitOutputStream()
+	{
 		BitOutputStream bitOutputStream = new BitOutputStream();
 		bitOutputStream.writeBits(humanHP, SIZE_HP);
 		bitOutputStream.writeBits(humanBuriedness, SIZE_BURIEDNESS);
@@ -85,7 +91,7 @@ public class MessageFireBrigade extends StandardMessage
 		bitOutputStream.writeBits(myTargetID.getValue(), SIZE_TARGET);
 		bitOutputStream.writeBits(myAction, SIZE_ACTION);
 		bitOutputStream.writeBits(fireBrigadeWater, SIZE_WATER);
-		return bitOutputStream.toByteArray();
+		return bitOutputStream;
 	}
 
 	public int getHP() { return this.humanHP; }

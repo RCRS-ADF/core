@@ -125,7 +125,7 @@ public class StandardCommunicationModule extends CommunicationModule
 
             BitOutputStream bitOutputStream = new BitOutputStream();
             bitOutputStream.writeBits(messageClassIndex, SIZE_ID);
-            bitOutputStream.write(message.toByteArray(), 0, message.getByteArraySize());
+            bitOutputStream.writeBits(message.toBitOutputStream());
 
             if (message.isRadio())
             {

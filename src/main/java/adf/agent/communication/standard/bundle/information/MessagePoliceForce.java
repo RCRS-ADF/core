@@ -30,14 +30,13 @@ public class MessagePoliceForce extends StandardMessage
 	protected EntityID myTargetID;
 	private int myAction;
 
-	public MessagePoliceForce(boolean isRadio, PoliceForce ambulanceTeam, int action, EntityID target)
+	public MessagePoliceForce(boolean isRadio, PoliceForce policeForce, int action, EntityID target)
 	{
 		super(isRadio);
-		humanHP = ambulanceTeam.getHP();
-		humanBuriedness = ambulanceTeam.getBuriedness();
-		humanDamage = ambulanceTeam.getDamage();
-		humanPosition = ambulanceTeam.getPosition();
-		//super(MessageID.ambulanceTeamMessage, ambulanceTeam);
+		humanHP = policeForce.getHP();
+		humanBuriedness = policeForce.getBuriedness();
+		humanDamage = policeForce.getDamage();
+		humanPosition = policeForce.getPosition();
 		this.myTargetID = target;
 		this.myAction = action;
 	}
@@ -64,12 +63,19 @@ public class MessagePoliceForce extends StandardMessage
 	}
 
 	@Override
-	public int getByteArraySize() {
-		return SIZE_HP + SIZE_BURIEDNESS + SIZE_DAMAGE + SIZE_POSITION + SIZE_TARGET + SIZE_ACTION;
+	public int getByteArraySize()
+	{
+		return toBitOutputStream().size();
 	}
 
 	@Override
 	public byte[] toByteArray() {
+		return this.toBitOutputStream().toByteArray();
+	}
+
+	@Override
+	public BitOutputStream toBitOutputStream()
+	{
 		BitOutputStream bitOutputStream = new BitOutputStream();
 		bitOutputStream.writeBits(humanHP, SIZE_HP);
 		bitOutputStream.writeBits(humanBuriedness, SIZE_BURIEDNESS);
@@ -77,7 +83,7 @@ public class MessagePoliceForce extends StandardMessage
 		bitOutputStream.writeBits(humanPosition.getValue(), SIZE_POSITION);
 		bitOutputStream.writeBits(myTargetID.getValue(), SIZE_TARGET);
 		bitOutputStream.writeBits(myAction, SIZE_ACTION);
-		return bitOutputStream.toByteArray();
+		return bitOutputStream;
 	}
 
 	public int getHP() { return this.humanHP; }

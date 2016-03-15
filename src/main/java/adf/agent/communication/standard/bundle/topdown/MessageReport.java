@@ -28,14 +28,21 @@ public class MessageReport extends StandardMessage
 	{ return !this.reportDone; }
 
 	@Override
-	public int getByteArraySize() {
-		return SIZE_DONE;
+	public int getByteArraySize()
+	{
+		return toBitOutputStream().size();
 	}
 
 	@Override
 	public byte[] toByteArray() {
+		return this.toBitOutputStream().toByteArray();
+	}
+
+	@Override
+	public BitOutputStream toBitOutputStream()
+	{
 		BitOutputStream bitOutputStream = new BitOutputStream();
 		bitOutputStream.writeBits((reportDone?1:0), SIZE_DONE);
-		return bitOutputStream.toByteArray();
+		return bitOutputStream;
 	}
 }

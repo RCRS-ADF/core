@@ -37,17 +37,24 @@ public class CommandScout extends StandardMessage
 	{ return scoutRange; }
 
 	@Override
-	public int getByteArraySize() {
-		return SIZE_TO + SIZE_TARGET + SIZE_RANGE;
+	public int getByteArraySize()
+	{
+		return toBitOutputStream().size();
 	}
 
 	@Override
 	public byte[] toByteArray() {
+		return this.toBitOutputStream().toByteArray();
+	}
+
+	@Override
+	public BitOutputStream toBitOutputStream()
+	{
 		BitOutputStream bitOutputStream = new BitOutputStream();
 		bitOutputStream.writeBits(commandToID.getValue(), SIZE_TO);
 		bitOutputStream.writeBits(commandTargetID.getValue(), SIZE_TARGET);
 		bitOutputStream.writeBits(scoutRange, SIZE_RANGE);
-		return bitOutputStream.toByteArray();
+		return bitOutputStream;
 	}
 
 	public EntityID getToID()

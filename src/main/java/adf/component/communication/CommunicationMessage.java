@@ -1,5 +1,7 @@
 package adf.component.communication;
 
+import adf.component.communication.util.BitOutputStream;
+
 abstract public class CommunicationMessage
 {
     private boolean isRadio;
@@ -16,4 +18,6 @@ abstract public class CommunicationMessage
 
     abstract public int getByteArraySize();
     abstract public byte[] toByteArray();
+
+    abstract public BitOutputStream toBitOutputStream();
 }
