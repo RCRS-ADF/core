@@ -26,10 +26,10 @@ public class WorldUtil {
     }
 
     public static AmbulanceTeam reflectedMessage(WorldInfo worldInfo, MessageAmbulanceTeam message) {
-        AmbulanceTeam ambulanceteam = (AmbulanceTeam) worldInfo.getEntity(message.getSenderID());
+        AmbulanceTeam ambulanceteam = (AmbulanceTeam) worldInfo.getEntity(message.getAgentID());
         if (ambulanceteam == null) {
-            worldInfo.addEntity(new AmbulanceTeam(message.getSenderID()));
-            ambulanceteam = (AmbulanceTeam) worldInfo.getEntity(message.getSenderID());
+            worldInfo.addEntity(new AmbulanceTeam(message.getAgentID()));
+            ambulanceteam = (AmbulanceTeam) worldInfo.getEntity(message.getAgentID());
         }
         ambulanceteam.setHP(message.getHP());
         ambulanceteam.setBuriedness(message.getBuriedness());
@@ -39,10 +39,10 @@ public class WorldUtil {
     }
 
     public static Civilian reflectedMessage(WorldInfo worldInfo, MessageCivilian message) {
-        Civilian civilian = (Civilian)worldInfo.getEntity(message.getSenderID());
+        Civilian civilian = (Civilian)worldInfo.getEntity(message.getAgentID());
         if (civilian == null) {
-            worldInfo.addEntity(new Civilian(message.getSenderID()));
-            civilian = (Civilian) worldInfo.getEntity(message.getSenderID());
+            worldInfo.addEntity(new Civilian(message.getAgentID()));
+            civilian = (Civilian) worldInfo.getEntity(message.getAgentID());
         }
         civilian.setHP(message.getHP());
         civilian.setBuriedness(message.getBuriedness());
@@ -52,7 +52,7 @@ public class WorldUtil {
     }
 
     public static FireBrigade reflectedMessage(WorldInfo worldInfo, MessageFireBrigade message) {
-        FireBrigade firebrigade = (FireBrigade) worldInfo.getEntity(message.getSenderID());
+        FireBrigade firebrigade = (FireBrigade) worldInfo.getEntity(message.getAgentID());
         if (firebrigade == null) {
             worldInfo.addEntity(new FireBrigade(message.getTargetID()));
             firebrigade = (FireBrigade) worldInfo.getEntity(message.getTargetID());
@@ -66,7 +66,7 @@ public class WorldUtil {
     }
 
     public static PoliceForce reflectedMessage(WorldInfo worldInfo, MessagePoliceForce message) {
-        PoliceForce policeforce = (PoliceForce) worldInfo.getEntity(message.getSenderID());
+        PoliceForce policeforce = (PoliceForce) worldInfo.getEntity(message.getAgentID());
         if (policeforce == null) {
             worldInfo.addEntity(new PoliceForce(message.getTargetID()));
             policeforce = (PoliceForce) worldInfo.getEntity(message.getTargetID());

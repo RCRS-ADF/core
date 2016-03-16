@@ -15,6 +15,7 @@ public class MessageFireBrigade extends StandardMessage
 	public static final int ACTION_EXTINGUISH = 2;
 	public static final int ACTION_REFILL = 3;
 
+	private static final int SIZE_ID = 32;
 	private static final int SIZE_HP = 32;
 	private static final int SIZE_BURIEDNESS = 32;
 	private static final int SIZE_DAMAGE = 32;
@@ -23,6 +24,8 @@ public class MessageFireBrigade extends StandardMessage
 	private static final int SIZE_WATER = 32;
 	private static final int SIZE_ACTION = 4;
 
+	protected int rawAgentID;
+	protected EntityID agentID;
     protected int rawHumanPosition;
 	protected int humanHP;
 	protected int humanBuriedness;
@@ -36,6 +39,7 @@ public class MessageFireBrigade extends StandardMessage
 	public MessageFireBrigade(boolean isRadio, FireBrigade fireBrigade, int action, EntityID target)
 	{
 		super(isRadio);
+		agentID = fireBrigade.getID();
 		humanHP = fireBrigade.getHP();
 		humanBuriedness = fireBrigade.getBuriedness();
         humanDamage = fireBrigade.getDamage();
@@ -48,6 +52,7 @@ public class MessageFireBrigade extends StandardMessage
 	public MessageFireBrigade(boolean isRadio, int from, int ttl, BitStreamReader bitStreamReader)
 	{
         super(isRadio, from, ttl, bitStreamReader);
+		rawAgentID = bitStreamReader.getBits(SIZE_ID);
 		humanHP = bitStreamReader.getBits(SIZE_HP);
 		humanBuriedness = bitStreamReader.getBits(SIZE_BURIEDNESS);
 		humanDamage = bitStreamReader.getBits(SIZE_DAMAGE);
@@ -55,6 +60,14 @@ public class MessageFireBrigade extends StandardMessage
 		rawTargetID = bitStreamReader.getBits(SIZE_TARGET);
 		myAction = bitStreamReader.getBits(SIZE_ACTION);
 		this.fireBrigadeWater = bitStreamReader.getBits(SIZE_WATER);
+	}
+
+	public EntityID getAgentID()
+	{
+		if (this.agentID == null) {
+			this.agentID = new EntityID(this.rawAgentID);
+		}
+		return this.agentID;
 	}
 
 	public int getWater() { return this.fireBrigadeWater; }
@@ -84,6 +97,7 @@ public class MessageFireBrigade extends StandardMessage
 	public BitOutputStream toBitOutputStream()
 	{
 		BitOutputStream bitOutputStream = new BitOutputStream();
+		bitOutputStream.writeBits(agentID.getValue(), SIZE_ID);
 		bitOutputStream.writeBits(humanHP, SIZE_HP);
 		bitOutputStream.writeBits(humanBuriedness, SIZE_BURIEDNESS);
 		bitOutputStream.writeBits(humanDamage, SIZE_DAMAGE);
