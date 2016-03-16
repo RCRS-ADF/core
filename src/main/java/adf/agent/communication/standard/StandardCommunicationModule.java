@@ -83,7 +83,7 @@ public class StandardCommunicationModule extends CommunicationModule
     }
 
 
-    final Class<?>[] standardMessageArgTypes = {boolean.class, int.class, int.class, byte[].class};
+    final Class<?>[] standardMessageArgTypes = {boolean.class, int.class, int.class, BitStreamReader.class};
 
     private void addReceivedMessage(MessageManager messageManager, boolean isRadio, EntityID senderID, byte[] data)
     {
