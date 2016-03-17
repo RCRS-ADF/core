@@ -40,6 +40,11 @@ public abstract class PathPlanning {
         return this;
     }
 
+    public PathPlanning calc()
+    {
+        return this;
+    }
+
     public abstract List<EntityID> getResult();
 
     public abstract PathPlanning setFrom(EntityID id);
