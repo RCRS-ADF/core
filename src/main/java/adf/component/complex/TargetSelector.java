@@ -24,7 +24,13 @@ public abstract class TargetSelector<E extends StandardEntity> {
         return this;
     }
 
-    public TargetSelector<E> resume(PrecomputeData precomputeData) {
+    public TargetSelector<E> resume(PrecomputeData precomputeData)
+    {
+        return this;
+    }
+
+    public TargetSelector<E> preparate()
+    {
         return this;
     }
 

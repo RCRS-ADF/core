@@ -41,6 +41,11 @@ public abstract class Clustering{
         return this;
     }
 
+    public Clustering preparate()
+    {
+        return this;
+    }
+
     public Clustering updateInfo() {
         return this;
     }

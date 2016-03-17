@@ -31,6 +31,11 @@ public abstract class PathPlanning {
         return this;
     }
 
+    public PathPlanning preparate()
+    {
+        return this;
+    }
+
     public PathPlanning updateInfo(){
         return this;
     }
