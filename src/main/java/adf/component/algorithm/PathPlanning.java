@@ -42,7 +42,7 @@ public abstract class PathPlanning {
 
     public abstract List<EntityID> getResult();
 
-    public abstract void setFrom(EntityID id);
+    public abstract PathPlanning setFrom(EntityID id);
 
     public abstract PathPlanning setDestination(Collection<EntityID> targets);
 
