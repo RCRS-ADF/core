@@ -9,8 +9,11 @@ import java.util.List;
 
 public class Main
 {
+    public static final String VERSION_CODE = "2.0.2";
     public static void main(String... args)
     {
+        System.out.println("[ RCRS ADK Framework Version " + VERSION_CODE + " ]\n");
+
         List<String> launcherArguments = new ArrayList<>();
         launcherArguments.addAll(Arrays.asList(args));
         LaunchSupporter.delegate(launcherArguments);
