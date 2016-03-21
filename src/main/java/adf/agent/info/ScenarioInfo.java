@@ -61,7 +61,7 @@ public class ScenarioInfo
 
 	public int getClearRepairRate()
 	{
-		return config.getIntValue("updateInfo.repair.rate");
+		return config.getIntValue("clear.repair.rate");
 	}
 
 	public int getKernelStartupConnectTime()
@@ -144,7 +144,7 @@ public class ScenarioInfo
 
 	public int getClearRepairRad()
 	{
-		return config.getIntValue("updateInfo.repair.rad");
+		return config.getIntValue("clear.repair.rad");
 	}
 
 	public int getFireTankRefillHydrantRate()
