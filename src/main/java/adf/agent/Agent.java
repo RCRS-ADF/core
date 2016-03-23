@@ -98,7 +98,19 @@ public abstract class Agent<E extends StandardEntity> extends AbstractAgent<Stan
 
 		this.communicationModule = null;
 
-		System.out.println("Connected - " + this);
+		switch (scenarioInfo.getMode())
+		{
+			case NON_PRECOMPUTE:
+				System.out.println("Connected - " + this + " (NON_PRECOMPUTE)");
+				break;
+			case PRECOMPUTATION_PHASE:
+				System.out.println("Connected - " + this + " (PRECOMPUTATION)");
+				break;
+			case PRECOMPUTED:
+				System.out.println("Connected - " + this + " (PRECOMPUTED)");
+				break;
+			default:
+		}
 	}
 
 	@Override
