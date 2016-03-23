@@ -144,8 +144,7 @@ public final class PrecomputeData
 	}
 
 	public Boolean setBoolean(String name, boolean value) {
-		int f = this.datas.intValues.put(name, value ? 1 : 0);
-		return f > 0 ? Boolean.TRUE : Boolean.FALSE;
+		return this.datas.boolValues.put(name, value);
 	}
 
 	public String setString(String name, String value)
@@ -184,6 +183,11 @@ public final class PrecomputeData
 		return cvtList == null ? null : cvtList.stream().map(EntityID::new).collect(Collectors.toList());
 	}
 
+	public List<Boolean> setBooleanList(String name, List<Boolean> list)
+	{
+		return this.datas.boolLists.put(name, list);
+	}
+
 	public boolean setReady(boolean isReady)
 	{
 		return (this.datas.isReady = isReady);
@@ -199,10 +203,9 @@ public final class PrecomputeData
 		return this.datas.doubleValues.get(name);
 	}
 
-    public Boolean getBoolean(String name) {
-        int f = this.datas.intValues.get(name);
-        return f > 0 ? Boolean.TRUE : Boolean.FALSE;
-    }
+	public Boolean getBoolean(String name) {
+		return this.datas.boolValues.get(name);
+	}
 
 	public String getString(String name)
 	{
@@ -234,6 +237,11 @@ public final class PrecomputeData
 	{
 		List<Integer> cvtList = this.datas.idLists.get(name);
 		return cvtList == null ? null : cvtList.stream().map(EntityID::new).collect(Collectors.toList());
+	}
+
+	public List<Boolean> getBooleanList(String name)
+	{
+		return this.datas.boolLists.get(name);
 	}
 
 	public boolean isReady()
