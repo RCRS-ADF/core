@@ -35,7 +35,10 @@ public abstract class Platoon<E extends StandardEntity> extends Agent<E>
 			case PRECOMPUTATION_PHASE:
 				rootTactics.precompute(agentInfo, worldInfo, scenarioInfo, precomputeData);
 				precomputeData.setReady(true);
-				precomputeData.write();
+				if (!precomputeData.write())
+				{
+					System.out.println("[ERROR ] Failed write PrecomputeData.");
+				}
 				break;
 			case PRECOMPUTED:
 				rootTactics.resume(agentInfo, worldInfo, scenarioInfo, precomputeData);

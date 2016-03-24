@@ -114,7 +114,11 @@ public final class PrecomputeData
 		{
 			if (!PRECOMP_DATA_DIR.exists())
 			{
-				if (!PRECOMP_DATA_DIR.mkdir()) return false;
+				if (!PRECOMP_DATA_DIR.mkdir())
+				{
+					System.out.println("[!] Failed mkdir");
+					return false;
+				}
 			}
 			ObjectMapper om = new ObjectMapper(new MessagePackFactory());
 			byte[] binary = om.writeValueAsBytes(this.datas);
