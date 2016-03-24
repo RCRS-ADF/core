@@ -4,6 +4,7 @@ import adf.agent.office.OfficeAmbulance;
 import adf.component.control.ControlAmbulance;
 import adf.component.AbstractLoader;
 import adf.launcher.ConfigKey;
+import adf.launcher.dummy.control.DummyControlAmbulance;
 import rescuecore2.components.ComponentConnectionException;
 import rescuecore2.components.ComponentLauncher;
 import rescuecore2.config.Config;
@@ -19,13 +20,19 @@ public class ConnectorAmbulanceCentre implements Connector {
 		if (count == 0) {
 			return;
 		}
-		if (loader.getControlAmbulance() == null) {
-			System.out.println("[ERROR ] Cannot Load AmbulanceCentre Control !!");
-			return;
-		}
+
 		try {
 			for (int i = 0; i != count; ++i) {
-				ControlAmbulance controlAmbulance = loader.getControlAmbulance();
+				ControlAmbulance controlAmbulance;
+				if (loader.getControlAmbulance() == null)
+				{
+					System.out.println("[ERROR ] Cannot Load AmbulanceCentre Control !!");
+					controlAmbulance = new DummyControlAmbulance();
+				}
+				else
+				{
+					controlAmbulance = loader.getControlAmbulance();
+				}
 				boolean isPrecompute = config.getBooleanValue(ConfigKey.KEY_PRECOMPUTE, false);
 				launcher.connect(new OfficeAmbulance(controlAmbulance, isPrecompute));
 				//System.out.println(name);

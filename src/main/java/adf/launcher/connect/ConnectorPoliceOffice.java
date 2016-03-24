@@ -4,6 +4,7 @@ import adf.agent.office.OfficePolice;
 import adf.component.control.ControlPolice;
 import adf.component.AbstractLoader;
 import adf.launcher.ConfigKey;
+import adf.launcher.dummy.control.DummyControlPolice;
 import rescuecore2.components.ComponentConnectionException;
 import rescuecore2.components.ComponentLauncher;
 import rescuecore2.config.Config;
@@ -22,14 +23,19 @@ public class ConnectorPoliceOffice implements Connector
 		{
 			return;
 		}
-		if (loader.getControlPolice() == null) {
-			System.out.println("[ERROR ] Cannot Load PoliceOffice Control !!");
-			return;
-		}
 
 		try {
 			for (int i = 0; i != count; ++i) {
-				ControlPolice controlPolice = loader.getControlPolice();
+				ControlPolice controlPolice;
+				if (loader.getControlPolice() == null)
+				{
+					System.out.println("[ERROR ] Cannot Load PoliceOffice Control !!");
+					controlPolice = new DummyControlPolice();
+				}
+				else
+				{
+					controlPolice = loader.getControlPolice();
+				}
 				boolean isPrecompute = config.getBooleanValue(ConfigKey.KEY_PRECOMPUTE, false);
 				launcher.connect(new OfficePolice(controlPolice, isPrecompute));
 				//System.out.println(name);

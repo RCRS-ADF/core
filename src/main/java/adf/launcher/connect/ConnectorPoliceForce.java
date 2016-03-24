@@ -4,6 +4,7 @@ import adf.agent.platoon.PlatoonPolice;
 import adf.component.tactics.TacticsPolice;
 import adf.component.AbstractLoader;
 import adf.launcher.ConfigKey;
+import adf.launcher.dummy.tactics.DummyTacticsPolice;
 import rescuecore2.components.ComponentConnectionException;
 import rescuecore2.components.ComponentLauncher;
 import rescuecore2.config.Config;
@@ -21,14 +22,20 @@ public class ConnectorPoliceForce implements Connector
 		if (count == 0) {
 			return;
 		}
-		if (loader.getTacticsPolice() == null) {
-			System.out.println("[ERROR ] Cannot Load PoliceForce Tactics !!");
-			return;
-		}
+
 		try {
 			for (int i = 0; i != count; ++i)
 			{
-				TacticsPolice tacticsPolice = loader.getTacticsPolice();
+				TacticsPolice tacticsPolice;
+				if (loader.getTacticsPolice() == null)
+				{
+					System.out.println("[ERROR ] Cannot Load PoliceForce Tactics !!");
+					tacticsPolice = new DummyTacticsPolice();
+				}
+				else
+				{
+					tacticsPolice = loader.getTacticsPolice();
+				}
 				boolean isPrecompute = config.getBooleanValue(ConfigKey.KEY_PRECOMPUTE, false);
 				launcher.connect(new PlatoonPolice(tacticsPolice, isPrecompute));
 				//System.out.println(name);

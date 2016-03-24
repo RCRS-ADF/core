@@ -4,6 +4,7 @@ import adf.agent.platoon.PlatoonAmbulance;
 import adf.component.tactics.TacticsAmbulance;
 import adf.component.AbstractLoader;
 import adf.launcher.ConfigKey;
+import adf.launcher.dummy.tactics.DummyTacticsAmbulance;
 import rescuecore2.components.ComponentConnectionException;
 import rescuecore2.components.ComponentLauncher;
 import rescuecore2.config.Config;
@@ -19,14 +20,20 @@ public class ConnectorAmbulanceTeam implements Connector {
 		if (count == 0) {
 			return;
 		}
-		if (loader.getTacticsAmbulance() == null) {
-		    System.out.println("[ERROR ] Cannot Load AmbulanceTeam Tactics !!");
-			return;
-		}
+
         //connect
 		try {
 			for (int i = 0; i != count; ++i) {
-				TacticsAmbulance tacticsAmbulance = loader.getTacticsAmbulance();
+				TacticsAmbulance tacticsAmbulance;
+				if (loader.getTacticsAmbulance() == null)
+				{
+					System.out.println("[ERROR ] Cannot Load AmbulanceTeam Tactics !!");
+					tacticsAmbulance = new DummyTacticsAmbulance();
+				}
+				else
+				{
+					tacticsAmbulance = loader.getTacticsAmbulance();
+				}
 				boolean isPrecompute = config.getBooleanValue(ConfigKey.KEY_PRECOMPUTE, false);
 				launcher.connect(new PlatoonAmbulance(tacticsAmbulance, isPrecompute));
 				//System.out.println(name);

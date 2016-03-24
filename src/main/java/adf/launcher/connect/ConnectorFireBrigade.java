@@ -4,6 +4,7 @@ import adf.agent.platoon.PlatoonFire;
 import adf.component.tactics.TacticsFire;
 import adf.component.AbstractLoader;
 import adf.launcher.ConfigKey;
+import adf.launcher.dummy.tactics.DummyTacticsFire;
 import rescuecore2.components.ComponentConnectionException;
 import rescuecore2.components.ComponentLauncher;
 import rescuecore2.config.Config;
@@ -19,13 +20,19 @@ public class ConnectorFireBrigade implements Connector {
 		if (count == 0) {
 			return;
 		}
-        if (loader.getTacticsFire() == null) {
-            System.out.println("[ERROR ] Cannot Load FireBrigade Tactics !!");
-		    return;
-		}
+
 		try {
 			for (int i = 0; i != count; ++i) {
-				TacticsFire tacticsFire = loader.getTacticsFire();
+				TacticsFire tacticsFire;
+				if (loader.getTacticsFire() == null)
+				{
+					System.out.println("[ERROR ] Cannot Load FireBrigade Tactics !!");
+					tacticsFire = new DummyTacticsFire();
+				}
+				else
+				{
+					tacticsFire = loader.getTacticsFire();
+				}
 				boolean isPrecompute = config.getBooleanValue(ConfigKey.KEY_PRECOMPUTE, false);
 				launcher.connect(new PlatoonFire(tacticsFire, isPrecompute));
 				//System.out.println(name);

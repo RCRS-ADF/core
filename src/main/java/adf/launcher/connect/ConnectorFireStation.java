@@ -4,6 +4,7 @@ import adf.agent.office.OfficeFire;
 import adf.component.control.ControlFire;
 import adf.component.AbstractLoader;
 import adf.launcher.ConfigKey;
+import adf.launcher.dummy.control.DummyControlFire;
 import rescuecore2.components.ComponentConnectionException;
 import rescuecore2.components.ComponentLauncher;
 import rescuecore2.config.Config;
@@ -22,15 +23,18 @@ public class ConnectorFireStation implements Connector
 			return;
 		}
 		
-		if (loader.getControlFire() == null)
-		{
-		    System.out.println("[ERROR ] Cannot Load FireStation Control !!");
-			return;
-		}
-		
 		try {
 			for (int i = 0; i != count; ++i) {
-				ControlFire controlFire = loader.getControlFire();
+				ControlFire controlFire;
+				if (loader.getControlFire() == null)
+				{
+					System.out.println("[ERROR ] Cannot Load FireStation Control !!");
+					controlFire = new DummyControlFire();
+				}
+				else
+				{
+					controlFire = loader.getControlFire();
+				}
 				boolean isPrecompute = config.getBooleanValue(ConfigKey.KEY_PRECOMPUTE, false);
 				launcher.connect(new OfficeFire(controlFire, isPrecompute));
 				//System.out.println(name);
