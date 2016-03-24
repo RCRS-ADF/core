@@ -27,6 +27,11 @@ public class ActionRescue extends Action
 		return "ActionRescue [target=" + target + "]";
 	}
 
+	public EntityID getTarget()
+	{
+		return this.target;
+	}
+
 	@Override
 	public Message getCommand(EntityID agentID, int time)
 	{

@@ -27,6 +27,11 @@ public class ActionLoad extends Action
 		return "ActionLoad [target=" + target + "]";
 	}
 
+	public EntityID getTarget()
+	{
+		return this.target;
+	}
+
 	@Override
 	public Message getCommand(EntityID agentID, int time)
 	{

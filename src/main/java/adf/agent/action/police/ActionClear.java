@@ -1,10 +1,12 @@
 package adf.agent.action.police;
 
+import adf.agent.info.AgentInfo;
 import adf.agent.platoon.Platoon;
 import adf.agent.action.Action;
 import rescuecore2.messages.Message;
 import rescuecore2.misc.geometry.Vector2D;
 import rescuecore2.standard.entities.Blockade;
+import rescuecore2.standard.entities.StandardEntity;
 import rescuecore2.standard.messages.AKClear;
 import rescuecore2.standard.messages.AKClearArea;
 import rescuecore2.worldmodel.EntityID;
@@ -28,7 +30,7 @@ public class ActionClear extends Action
 		this(blockade.getID());
 	}
 
-	public ActionClear(Platoon agent, Vector2D vector)
+	public ActionClear(AgentInfo agent, Vector2D vector)
 	{
 		this((int)(agent.getX() + vector.getX()), (int)(agent.getY() + vector.getY()));
 	}

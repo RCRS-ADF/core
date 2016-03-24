@@ -35,6 +35,11 @@ public class ActionExtinguish extends Action
 		return this.power;
 	}
 
+	public EntityID getTarget()
+	{
+		return this.target;
+	}
+
 	@Override
 	public Message getCommand(EntityID agentID, int time)
 	{
