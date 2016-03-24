@@ -125,6 +125,7 @@ public final class PrecomputeData
 		}
 		catch (IOException e)
 		{
+            e.printStackTrace();;
 			return false;
 		}
 	}
