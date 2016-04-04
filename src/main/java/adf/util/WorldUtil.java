@@ -18,14 +18,15 @@ public class WorldUtil {
         return entityIDs.stream().map(world::getEntity).collect(Collectors.toList());
     }
 
-    public static Building reflectedMessage(WorldInfo worldInfo, MessageBuilding message) {
+
+    public static Building reflectMessage(WorldInfo worldInfo, MessageBuilding message) {
         Building building = (Building)worldInfo.getEntity(message.getBuildingID());
         building.setFieryness(message.getFieryness());
         building.setBrokenness(message.getBrokenness());
         return building;
     }
 
-    public static AmbulanceTeam reflectedMessage(WorldInfo worldInfo, MessageAmbulanceTeam message) {
+    public static AmbulanceTeam reflectMessage(WorldInfo worldInfo, MessageAmbulanceTeam message) {
         AmbulanceTeam ambulanceteam = (AmbulanceTeam) worldInfo.getEntity(message.getAgentID());
         if (ambulanceteam == null) {
             worldInfo.addEntity(new AmbulanceTeam(message.getAgentID()));
@@ -38,7 +39,7 @@ public class WorldUtil {
         return ambulanceteam;
     }
 
-    public static Civilian reflectedMessage(WorldInfo worldInfo, MessageCivilian message) {
+    public static Civilian reflectMessage(WorldInfo worldInfo, MessageCivilian message) {
         Civilian civilian = (Civilian)worldInfo.getEntity(message.getAgentID());
         if (civilian == null) {
             worldInfo.addEntity(new Civilian(message.getAgentID()));
@@ -51,7 +52,7 @@ public class WorldUtil {
         return civilian;
     }
 
-    public static FireBrigade reflectedMessage(WorldInfo worldInfo, MessageFireBrigade message) {
+    public static FireBrigade reflectMessage(WorldInfo worldInfo, MessageFireBrigade message) {
         FireBrigade firebrigade = (FireBrigade) worldInfo.getEntity(message.getAgentID());
         if (firebrigade == null) {
             worldInfo.addEntity(new FireBrigade(message.getTargetID()));
@@ -65,7 +66,7 @@ public class WorldUtil {
         return firebrigade;
     }
 
-    public static PoliceForce reflectedMessage(WorldInfo worldInfo, MessagePoliceForce message) {
+    public static PoliceForce reflectMessage(WorldInfo worldInfo, MessagePoliceForce message) {
         PoliceForce policeforce = (PoliceForce) worldInfo.getEntity(message.getAgentID());
         if (policeforce == null) {
             worldInfo.addEntity(new PoliceForce(message.getTargetID()));
@@ -78,7 +79,7 @@ public class WorldUtil {
         return policeforce;
     }
 
-    public static Blockade reflectedMessage(WorldInfo worldInfo, MessageRoad message) {
+    public static Blockade reflectMessage(WorldInfo worldInfo, MessageRoad message) {
         Blockade blockade = (Blockade) worldInfo.getEntity(message.getBlockadeID());
         if (blockade == null) {
             worldInfo.addEntity(new Blockade(message.getBlockadeID()));
@@ -87,5 +88,59 @@ public class WorldUtil {
         blockade.setPosition(message.getRoadID());
         blockade.setRepairCost(message.getRepairCost());
         return blockade;
+    }
+
+    /**
+     * @deprecated rename method
+     * @see WorldUtil#reflectMessage(WorldInfo, MessageBuilding)
+     */
+    @Deprecated
+    public static Building reflectedMessage(WorldInfo worldInfo, MessageBuilding message) {
+        return reflectMessage(worldInfo, message);
+    }
+
+    /**
+     * @deprecated rename method
+     * @see WorldUtil#reflectMessage(WorldInfo, MessageAmbulanceTeam)
+     */
+    @Deprecated
+    public static AmbulanceTeam reflectedMessage(WorldInfo worldInfo, MessageAmbulanceTeam message) {
+        return reflectMessage(worldInfo, message);
+    }
+
+    /**
+     * @deprecated rename method
+     * @see WorldUtil#reflectMessage(WorldInfo, MessageCivilian)
+     */
+    @Deprecated
+    public static Civilian reflectedMessage(WorldInfo worldInfo, MessageCivilian message) {
+        return reflectMessage(worldInfo, message);
+    }
+
+    /**
+     * @deprecated rename method
+     * @see WorldUtil#reflectMessage(WorldInfo, MessageFireBrigade)
+     */
+    @Deprecated
+    public static FireBrigade reflectedMessage(WorldInfo worldInfo, MessageFireBrigade message) {
+        return reflectMessage(worldInfo, message);
+    }
+
+    /**
+     * @deprecated rename method
+     * @see WorldUtil#reflectMessage(WorldInfo, MessagePoliceForce)
+     */
+    @Deprecated
+    public static PoliceForce reflectedMessage(WorldInfo worldInfo, MessagePoliceForce message) {
+        return reflectMessage(worldInfo, message);
+    }
+
+    /**
+     * @deprecated rename method
+     * @see WorldUtil#reflectMessage(WorldInfo, MessageRoad)
+     */
+    @Deprecated
+    public static Blockade reflectedMessage(WorldInfo worldInfo, MessageRoad message) {
+        return reflectMessage(worldInfo, message);
     }
 }
