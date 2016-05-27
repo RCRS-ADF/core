@@ -37,7 +37,7 @@ public class ConnectorPoliceForce implements Connector
 					tacticsPolice = loader.getTacticsPolice();
 				}
 				boolean isPrecompute = config.getBooleanValue(ConfigKey.KEY_PRECOMPUTE, false);
-				launcher.connect(new PlatoonPolice(tacticsPolice, isPrecompute));
+				launcher.connect(new PlatoonPolice(tacticsPolice, config.getValue(ConfigKey.KEY_MODULE_CONFIG_FILE_NAME), isPrecompute));
 				//System.out.println(name);
 				connected++;
 			}

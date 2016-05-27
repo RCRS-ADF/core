@@ -8,9 +8,9 @@ import java.util.EnumSet;
 
 public class OfficeAmbulance extends Office<Building>
 {
-	public OfficeAmbulance(ControlAmbulance control, boolean isPrecompute)
+	public OfficeAmbulance(ControlAmbulance control, String moduleConfigFileName, boolean isPrecompute)
 	{
-		super(control, isPrecompute, DATASTORAGE_FILE_NAME_AMBULANCE);
+		super(control, moduleConfigFileName, isPrecompute, DATASTORAGE_FILE_NAME_AMBULANCE);
 	}
 
 	@Override

@@ -8,9 +8,9 @@ import java.util.EnumSet;
 
 public class OfficePolice extends Office<Building>
 {
-	public OfficePolice(ControlPolice control, boolean isPrecompute)
+	public OfficePolice(ControlPolice control, String moduleConfigFileName, boolean isPrecompute)
 	{
-		super(control, isPrecompute, DATASTORAGE_FILE_NAME_POLICE);
+		super(control, moduleConfigFileName, isPrecompute, DATASTORAGE_FILE_NAME_POLICE);
 	}
 
 	@Override

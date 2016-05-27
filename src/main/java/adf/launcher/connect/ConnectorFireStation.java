@@ -36,7 +36,7 @@ public class ConnectorFireStation implements Connector
 					controlFire = loader.getControlFire();
 				}
 				boolean isPrecompute = config.getBooleanValue(ConfigKey.KEY_PRECOMPUTE, false);
-				launcher.connect(new OfficeFire(controlFire, isPrecompute));
+				launcher.connect(new OfficeFire(controlFire, config.getValue(ConfigKey.KEY_MODULE_CONFIG_FILE_NAME), isPrecompute));
 				//System.out.println(name);
 				connected++;
 			}

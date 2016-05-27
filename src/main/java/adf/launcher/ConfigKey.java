@@ -5,6 +5,8 @@ public final class ConfigKey {
     public static final String KEY_LOADER_CLASS = "adf.launcher.loader";
     //
     public static final String KEY_PRECOMPUTE = "adf.launcher.precompute";
+    //
+    public static final String KEY_MODULE_CONFIG_FILE_NAME = "adf.agent.moduleconfig";
 
     // Platoon
     public static final String KEY_AMBULANCE_TEAM_COUNT = "adf.team.platoon.ambulance.count";

@@ -35,7 +35,7 @@ public class ConnectorAmbulanceTeam implements Connector {
 					tacticsAmbulance = loader.getTacticsAmbulance();
 				}
 				boolean isPrecompute = config.getBooleanValue(ConfigKey.KEY_PRECOMPUTE, false);
-				launcher.connect(new PlatoonAmbulance(tacticsAmbulance, isPrecompute));
+				launcher.connect(new PlatoonAmbulance(tacticsAmbulance, config.getValue(ConfigKey.KEY_MODULE_CONFIG_FILE_NAME), isPrecompute));
 				//System.out.println(name);
 				connected++;
 			}

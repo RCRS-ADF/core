@@ -34,7 +34,7 @@ public class ConnectorAmbulanceCentre implements Connector {
 					controlAmbulance = loader.getControlAmbulance();
 				}
 				boolean isPrecompute = config.getBooleanValue(ConfigKey.KEY_PRECOMPUTE, false);
-				launcher.connect(new OfficeAmbulance(controlAmbulance, isPrecompute));
+				launcher.connect(new OfficeAmbulance(controlAmbulance, config.getValue(ConfigKey.KEY_MODULE_CONFIG_FILE_NAME), isPrecompute));
 				//System.out.println(name);
 				connected++;
 			}

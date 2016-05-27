@@ -10,9 +10,9 @@ public abstract class Platoon<E extends StandardEntity> extends Agent<E>
 {
 	Tactics rootTactics;
 
-	public Platoon(Tactics tactics, boolean isPrecompute, String dataStorageName)
+	public Platoon(Tactics tactics, String moduleConfigFileName, boolean isPrecompute, String dataStorageName)
 	{
-		super(isPrecompute, dataStorageName);
+		super(moduleConfigFileName, isPrecompute, dataStorageName);
 		this.rootTactics = tactics;
 	}
 

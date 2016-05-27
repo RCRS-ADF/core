@@ -37,7 +37,7 @@ public class ConnectorPoliceOffice implements Connector
 					controlPolice = loader.getControlPolice();
 				}
 				boolean isPrecompute = config.getBooleanValue(ConfigKey.KEY_PRECOMPUTE, false);
-				launcher.connect(new OfficePolice(controlPolice, isPrecompute));
+				launcher.connect(new OfficePolice(controlPolice, config.getValue(ConfigKey.KEY_MODULE_CONFIG_FILE_NAME), isPrecompute));
 				//System.out.println(name);
 				connected++;
 			}

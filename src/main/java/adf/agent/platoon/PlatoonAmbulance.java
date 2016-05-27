@@ -8,9 +8,9 @@ import java.util.EnumSet;
 
 public class PlatoonAmbulance extends Platoon<AmbulanceTeam>
 {
-	public PlatoonAmbulance(TacticsAmbulance tactics, boolean isPrecompute)
+	public PlatoonAmbulance(TacticsAmbulance tactics, String moduleConfigFileName, boolean isPrecompute)
 	{
-		super(tactics, isPrecompute, DATASTORAGE_FILE_NAME_AMBULANCE);
+		super(tactics, moduleConfigFileName, isPrecompute, DATASTORAGE_FILE_NAME_AMBULANCE);
 	}
 
 	@Override

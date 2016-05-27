@@ -9,8 +9,8 @@ public abstract class Office<E extends StandardEntity> extends Agent<E> {
 
 	Control rootControl;
 
-	public Office(Control control, boolean isPrecompute, String datastorageName) {
-		super(isPrecompute, datastorageName);
+	public Office(Control control, String moduleConfigFileName, boolean isPrecompute, String datastorageName) {
+		super(moduleConfigFileName, isPrecompute, datastorageName);
 		this.rootControl = control;
 	}
 

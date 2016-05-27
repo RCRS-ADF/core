@@ -8,9 +8,9 @@ import java.util.EnumSet;
 
 public class OfficeFire extends Office<Building>
 {
-	public OfficeFire(ControlFire control, boolean isPrecompute)
+	public OfficeFire(ControlFire control, String moduleConfigFileName, boolean isPrecompute)
 	{
-		super(control, isPrecompute, DATASTORAGE_FILE_NAME_FIRE);
+		super(control, moduleConfigFileName, isPrecompute, DATASTORAGE_FILE_NAME_FIRE);
 	}
 
 	@Override

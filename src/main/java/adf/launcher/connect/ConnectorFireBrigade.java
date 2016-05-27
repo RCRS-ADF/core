@@ -34,7 +34,7 @@ public class ConnectorFireBrigade implements Connector {
 					tacticsFire = loader.getTacticsFire();
 				}
 				boolean isPrecompute = config.getBooleanValue(ConfigKey.KEY_PRECOMPUTE, false);
-				launcher.connect(new PlatoonFire(tacticsFire, isPrecompute));
+				launcher.connect(new PlatoonFire(tacticsFire, config.getValue(ConfigKey.KEY_MODULE_CONFIG_FILE_NAME), isPrecompute));
 				//System.out.println(name);
 				connected++;
 			}

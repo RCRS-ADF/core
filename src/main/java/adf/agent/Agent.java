@@ -35,7 +35,7 @@ public abstract class Agent<E extends StandardEntity> extends AbstractAgent<Stan
 	protected  boolean isPrecompute;
 	int ignoreTime;
 
-	public Agent(boolean isPrecompute, String dataStorageName)
+	public Agent(String moduleConfigFileName, boolean isPrecompute, String dataStorageName)
 	{
 		this.isPrecompute = isPrecompute;
 
