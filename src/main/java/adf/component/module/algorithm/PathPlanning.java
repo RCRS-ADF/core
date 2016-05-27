@@ -1,4 +1,4 @@
-package adf.component.algorithm;
+package adf.component.module.algorithm;
 
 
 import adf.agent.info.AgentInfo;
