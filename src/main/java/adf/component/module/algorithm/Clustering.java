@@ -1,62 +1,23 @@
 package adf.component.module.algorithm;
 
+import adf.agent.communication.MessageManager;
 import adf.agent.info.AgentInfo;
 import adf.agent.info.ScenarioInfo;
 import adf.agent.info.WorldInfo;
 import adf.agent.precompute.PrecomputeData;
+import adf.component.module.AbstractModule;
 import rescuecore2.standard.entities.StandardEntity;
 import rescuecore2.worldmodel.EntityID;
 
 import java.util.Collection;
 
-public abstract class Clustering{
+public abstract class Clustering extends AbstractModule{
 
-    public static final int DEFAULT_SIZE = 10;
-
-    protected WorldInfo worldInfo;
-    protected AgentInfo agentInfo;
-    protected ScenarioInfo scenarioInfo;
-
-    protected int clusterSize;
-
-    protected Collection<StandardEntity> entities;
-
-    public Clustering(AgentInfo ai, WorldInfo wi, ScenarioInfo si, Collection<StandardEntity> elements) {
-        this(ai, wi, si, elements, DEFAULT_SIZE);
+    public Clustering(AgentInfo ai, WorldInfo wi, ScenarioInfo si) {
+        super(ai, wi, si);
     }
 
-    public Clustering(AgentInfo ai, WorldInfo wi, ScenarioInfo si, Collection<StandardEntity> elements, int size) {
-        this.worldInfo = wi;
-        this.agentInfo = ai;
-        this.scenarioInfo = si;
-        this.clusterSize = size;
-        this.entities = elements;
-    }
-
-    public Clustering precompute(PrecomputeData precomputeData) {
-        return this;
-    }
-
-    public Clustering resume(PrecomputeData precomputeData) {
-        return this;
-    }
-
-    public Clustering preparate()
-    {
-        return this;
-    }
-
-    public Clustering updateInfo() {
-        return this;
-    }
-
-    public Clustering calc() {
-        return this;
-    }
-
-    public int getClusterNumber() {
-        return this.clusterSize;
-    }
+    public abstract int getClusterNumber();
 
     public abstract int getClusterIndex(StandardEntity entity);
 
@@ -65,4 +26,22 @@ public abstract class Clustering{
     public abstract Collection<StandardEntity> getClusterEntities(int index);
 
     public abstract Collection<EntityID> getClusterEntityIDs(int index);
+
+    @Override
+    public abstract Clustering precompute(PrecomputeData precomputeData);
+
+    @Override
+    public abstract Clustering resume(PrecomputeData precomputeData);
+
+    @Override
+    public abstract Clustering preparate();
+
+    @Override
+    public Clustering updateInfo(MessageManager messageManager) {
+        super.updateInfo(messageManager);
+        return this;
+    }
+
+    @Override
+    public abstract Clustering calc();
 }

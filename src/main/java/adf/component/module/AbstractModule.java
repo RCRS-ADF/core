@@ -17,13 +17,14 @@ public abstract class AbstractModule {
         this.scenarioInfo = si;
     }
 
-    public abstract void precompute(PrecomputeData precomputeData);
+    public abstract AbstractModule precompute(PrecomputeData precomputeData);
 
-    public abstract void resume(PrecomputeData precomputeData);
+    public abstract AbstractModule resume(PrecomputeData precomputeData);
 
-    public abstract void preparate();
+    public abstract AbstractModule preparate();
 
-    public void updateInfo(MessageManager messageManager){
+    public AbstractModule updateInfo(MessageManager messageManager){
+        return this;
     }
 
     public abstract AbstractModule calc();
