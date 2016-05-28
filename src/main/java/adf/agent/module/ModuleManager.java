@@ -39,12 +39,12 @@ public class ModuleManager {
     }
 
     @SuppressWarnings("unchecked")
-    public final AbstractModule getModuleInstance(String moduleClass) throws ClassNotFoundException {
-        Class<?> c = Class.forName(moduleClass);
-        if(AbstractModule.class.isAssignableFrom(c)) {
-            return this.getModuleInstance((Class<AbstractModule>) c);
+    public final AbstractModule getModuleInstance(String moduleClassStr) throws ClassNotFoundException {
+        Class<?> moduleClass = Class.forName(moduleClassStr);
+        if(AbstractModule.class.isAssignableFrom(moduleClass)) {
+            return this.getModuleInstance((Class<AbstractModule>) moduleClass);
         }
-        throw new ClassCastException(moduleClass);
+        throw new ClassCastException(moduleClassStr);
     }
 
     @SuppressWarnings("unchecked")
@@ -57,20 +57,20 @@ public class ModuleManager {
             return instance;
         }
         //default Module
-        String defaultModule = this.config.getValue(moduleClass.getCanonicalName());
-        if(defaultModule != null) {
+        String defaultModuleStr = this.config.getValue(moduleClass.getCanonicalName());
+        if(defaultModuleStr != null) {
             try {
-                Class<?> c = Class.forName(defaultModule);
-                if(AbstractModule.class.isAssignableFrom(c)) {
-                    Class<AbstractModule> clazz = (Class<AbstractModule>) c;
-                    Constructor<AbstractModule> constructor = clazz.getConstructor(AgentInfo.class, WorldInfo.class, ScenarioInfo.class, ModuleManager.class);
+                Class<?> tmpClass = Class.forName(defaultModuleStr);
+                if(AbstractModule.class.isAssignableFrom(tmpClass)) {
+                    Class<AbstractModule> defaultClass = (Class<AbstractModule>) tmpClass;
+                    Constructor<AbstractModule> constructor = defaultClass.getConstructor(AgentInfo.class, WorldInfo.class, ScenarioInfo.class, ModuleManager.class);
                     instance = constructor.newInstance(this.agentInfo, this.worldInfo, this.scenarioInfo, this);
                     this.moduleMap.put(moduleClass, instance);
-                    this.moduleMap.put(clazz, instance);
+                    this.moduleMap.put(defaultClass, instance);
                     return instance;
                 }
                 else {
-                    throw new ClassCastException(defaultModule);
+                    throw new ClassCastException(defaultModuleStr);
                 }
             } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
                 e.printStackTrace();
