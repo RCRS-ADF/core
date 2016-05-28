@@ -4,13 +4,14 @@ import adf.agent.communication.MessageManager;
 import adf.agent.info.AgentInfo;
 import adf.agent.info.ScenarioInfo;
 import adf.agent.info.WorldInfo;
+import adf.agent.module.ModuleManager;
 import adf.agent.precompute.PrecomputeData;
 import rescuecore2.standard.entities.Blockade;
 
 public abstract class BlockadeSelector extends TargetSelector<Blockade> {
 
-    public BlockadeSelector(AgentInfo ai, WorldInfo wi, ScenarioInfo si) {
-        super(ai, wi, si);
+    public BlockadeSelector(AgentInfo ai, WorldInfo wi, ScenarioInfo si, ModuleManager moduleManager) {
+        super(ai, wi, si, moduleManager);
     }
 
     @Override

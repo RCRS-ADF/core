@@ -4,6 +4,7 @@ import adf.agent.communication.MessageManager;
 import adf.agent.info.AgentInfo;
 import adf.agent.info.ScenarioInfo;
 import adf.agent.info.WorldInfo;
+import adf.agent.module.ModuleManager;
 import adf.agent.precompute.PrecomputeData;
 import adf.component.module.AbstractModule;
 import rescuecore2.standard.entities.StandardEntity;
@@ -13,8 +14,8 @@ import java.util.Collection;
 
 public abstract class Clustering extends AbstractModule{
 
-    public Clustering(AgentInfo ai, WorldInfo wi, ScenarioInfo si) {
-        super(ai, wi, si);
+    public Clustering(AgentInfo ai, WorldInfo wi, ScenarioInfo si, ModuleManager moduleManager) {
+        super(ai, wi, si, moduleManager);
     }
 
     public abstract int getClusterNumber();

@@ -5,6 +5,7 @@ import adf.agent.communication.MessageManager;
 import adf.agent.info.AgentInfo;
 import adf.agent.info.ScenarioInfo;
 import adf.agent.info.WorldInfo;
+import adf.agent.module.ModuleManager;
 import adf.agent.precompute.PrecomputeData;
 import adf.component.module.AbstractModule;
 import rescuecore2.worldmodel.EntityID;
@@ -15,8 +16,8 @@ import java.util.List;
 
 public abstract class PathPlanning extends AbstractModule{
 
-    public PathPlanning(AgentInfo ai, WorldInfo wi, ScenarioInfo si) {
-        super(ai, wi, si);
+    public PathPlanning(AgentInfo ai, WorldInfo wi, ScenarioInfo si, ModuleManager moduleManager) {
+        super(ai, wi, si, moduleManager);
     }
 
     public abstract List<EntityID> getResult();
