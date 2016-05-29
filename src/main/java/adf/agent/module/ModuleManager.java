@@ -17,7 +17,7 @@ public class ModuleManager {
 
     private static final File moduleConfigPath = new File(System.getProperty("user.dir"), "config" + File.separator + "module.cfg");
 
-    private Map<Class<? extends AbstractModule>, AbstractModule> moduleMap;
+    private Map<String, AbstractModule> moduleMap;
 
     private AgentInfo agentInfo;
     private WorldInfo worldInfo;
@@ -40,6 +40,10 @@ public class ModuleManager {
 
     @SuppressWarnings("unchecked")
     public final AbstractModule getModuleInstance(String moduleClassStr) throws ClassNotFoundException {
+        AbstractModule instance = this.moduleMap.get(moduleClassStr);
+        if(instance != null) {
+            return instance;
+        }
         Class<?> moduleClass = Class.forName(moduleClassStr);
         if(AbstractModule.class.isAssignableFrom(moduleClass)) {
             return this.getModuleInstance((Class<AbstractModule>) moduleClass);
@@ -49,13 +53,6 @@ public class ModuleManager {
 
     @SuppressWarnings("unchecked")
     private AbstractModule getModuleInstance(Class<AbstractModule> moduleClass) throws ClassNotFoundException {
-        if(moduleClass == null) {
-            throw new NullPointerException();
-        }
-        AbstractModule instance = this.moduleMap.get(moduleClass);
-        if(instance != null) {
-            return instance;
-        }
         //default Module
         String defaultModuleStr = this.config.getValue(moduleClass.getCanonicalName());
         if(defaultModuleStr != null) {
@@ -64,9 +61,9 @@ public class ModuleManager {
                 if(AbstractModule.class.isAssignableFrom(tmpClass)) {
                     Class<AbstractModule> defaultClass = (Class<AbstractModule>) tmpClass;
                     Constructor<AbstractModule> constructor = defaultClass.getConstructor(AgentInfo.class, WorldInfo.class, ScenarioInfo.class, ModuleManager.class);
-                    instance = constructor.newInstance(this.agentInfo, this.worldInfo, this.scenarioInfo, this);
-                    this.moduleMap.put(moduleClass, instance);
-                    this.moduleMap.put(defaultClass, instance);
+                    AbstractModule instance = constructor.newInstance(this.agentInfo, this.worldInfo, this.scenarioInfo, this);
+                    this.moduleMap.put(moduleClass.getCanonicalName(), instance);
+                    this.moduleMap.put(defaultModuleStr, instance);
                     return instance;
                 }
                 else {
@@ -79,8 +76,8 @@ public class ModuleManager {
             //other module
             try {
                 Constructor<AbstractModule> constructor = moduleClass.getConstructor(AgentInfo.class, WorldInfo.class, ScenarioInfo.class, ModuleManager.class);
-                instance = constructor.newInstance(this.agentInfo, this.worldInfo, this.scenarioInfo, this);
-                this.moduleMap.put(moduleClass, instance);
+                AbstractModule instance = constructor.newInstance(this.agentInfo, this.worldInfo, this.scenarioInfo, this);
+                this.moduleMap.put(moduleClass.getCanonicalName(), instance);
                 return instance;
 
             } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
