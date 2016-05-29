@@ -48,7 +48,7 @@ public class ModuleManager {
     }
 
     @SuppressWarnings("unchecked")
-    public final AbstractModule getModuleInstance(Class<AbstractModule> moduleClass) throws ClassNotFoundException {
+    private AbstractModule getModuleInstance(Class<AbstractModule> moduleClass) throws ClassNotFoundException {
         if(moduleClass == null) {
             throw new NullPointerException();
         }
