@@ -57,7 +57,7 @@ public abstract class Agent<E extends StandardEntity> extends AbstractAgent<Stan
 		catch (ConfigException e)
 		{
 			e.printStackTrace();
-			System.exit(1);
+			throw new RuntimeException("ModuleConfig file is not found : " + moduleConfigFileName);
 		}
 
 		precomputeData = new PrecomputeData(dataStorageName);

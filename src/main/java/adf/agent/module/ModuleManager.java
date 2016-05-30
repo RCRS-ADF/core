@@ -33,31 +33,30 @@ public class ModuleManager
     }
 
     @SuppressWarnings("unchecked")
-    public final AbstractModule getModuleInstance(String moduleStr) {
-        AbstractModule instance = this.moduleMap.get(moduleStr);
+    public final AbstractModule getModuleInstance(String moduleName) {
+        AbstractModule instance = this.moduleMap.get(moduleName);
         if(instance != null) {
             return instance;
         }
         try {
-            String defaultModuleStr = this.moduleConfig.getValue(moduleStr);
+            String defaultModuleStr = this.moduleConfig.getValue(moduleName);
             if (defaultModuleStr != null) {
                 Class<?> moduleClass = Class.forName(defaultModuleStr);
                 if (AbstractModule.class.isAssignableFrom(moduleClass)) {
                     instance = this.getModuleInstance((Class<AbstractModule>) moduleClass);
-                    this.moduleMap.put(moduleStr, instance);
+                    this.moduleMap.put(moduleName, instance);
                     return instance;
                 }
             } else {
-                Class<?> moduleClass = Class.forName(moduleStr);
+                Class<?> moduleClass = Class.forName(moduleName);
                 if (AbstractModule.class.isAssignableFrom(moduleClass)) {
                     return this.getModuleInstance((Class<AbstractModule>) moduleClass);
                 }
             }
         }catch (ClassNotFoundException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Error : Bad moduleStr");
+            throw new RuntimeException(e);
         }
-        throw new RuntimeException("Error : Bad moduleStr");
+        throw new IllegalArgumentException("Module name is not found : " + moduleName);
     }
 
     @SuppressWarnings("unchecked")
@@ -69,8 +68,7 @@ public class ModuleManager
             return instance;
 
         } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Error : can't make instance");
+            throw new RuntimeException(e);
         }
     }
 
