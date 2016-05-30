@@ -1,5 +1,6 @@
 package adf.agent.module;
 
+import adf.agent.config.ModuleConfig;
 import adf.agent.info.AgentInfo;
 import adf.agent.info.ScenarioInfo;
 import adf.agent.info.WorldInfo;
@@ -13,33 +14,28 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ModuleManager {
-
-    private static final File moduleConfigPath = new File(System.getProperty("user.dir"), "config" + File.separator + "module.cfg");
-
+public class ModuleManager
+{
     private Map<String, AbstractModule> moduleMap;
 
     private AgentInfo agentInfo;
     private WorldInfo worldInfo;
     private ScenarioInfo scenarioInfo;
 
-    private Config config;
+    private ModuleConfig moduleConfig;
     //private boolean debugMode;
 
-    public ModuleManager(AgentInfo ai, WorldInfo wi, ScenarioInfo si) {
-        this.agentInfo = ai;
-        this.worldInfo = wi;
-        this.scenarioInfo = si;
+    public ModuleManager(AgentInfo agentInfo, WorldInfo worldInfo, ScenarioInfo scenarioInfo, ModuleConfig moduleConfig) {
+        this.agentInfo = agentInfo;
+        this.worldInfo = worldInfo;
+        this.scenarioInfo = scenarioInfo;
+        this.moduleConfig = moduleConfig;
         this.moduleMap = new HashMap<>();
-        try {
-            this.config = new Config(moduleConfigPath);
-        } catch (ConfigException e) {
-            e.printStackTrace();
-        }
     }
 
     @SuppressWarnings("unchecked")
-    public final AbstractModule getModuleInstance(String moduleClassStr) throws ClassNotFoundException {
+    public final AbstractModule getModuleInstance(String moduleClassStr) throws ClassNotFoundException
+    {
         AbstractModule instance = this.moduleMap.get(moduleClassStr);
         if(instance != null) {
             return instance;
@@ -52,9 +48,9 @@ public class ModuleManager {
     }
 
     @SuppressWarnings("unchecked")
-    private AbstractModule getModuleInstance(Class<AbstractModule> moduleClass) throws ClassNotFoundException {
+    private AbstractModule getModuleInstance(Class<AbstractModule> moduleClass) {
         //default Module
-        String defaultModuleStr = this.config.getValue(moduleClass.getCanonicalName());
+        String defaultModuleStr = this.moduleConfig.getValue(moduleClass.getCanonicalName());
         if(defaultModuleStr != null) {
             try {
                 Class<?> tmpClass = Class.forName(defaultModuleStr);
@@ -69,8 +65,9 @@ public class ModuleManager {
                 else {
                     throw new ClassCastException(defaultModuleStr);
                 }
-            } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
+            } catch (ClassCastException | ClassNotFoundException | NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
                 e.printStackTrace();
+                System.exit(1);
             }
         } else {
             //other module
@@ -87,6 +84,8 @@ public class ModuleManager {
         throw new NullPointerException();
     }
 
-
-
+    public ModuleConfig getModuleConfig()
+    {
+        return this.moduleConfig;
+    }
 }

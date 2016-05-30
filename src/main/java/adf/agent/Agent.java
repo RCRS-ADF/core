@@ -3,12 +3,15 @@ package adf.agent;
 import adf.agent.communication.MessageManager;
 import adf.agent.communication.standard.StandardCommunicationModule;
 import adf.agent.communication.standard.bundle.StandardMessageBundle;
+import adf.agent.config.ModuleConfig;
 import adf.agent.info.AgentInfo;
+import adf.agent.module.ModuleManager;
 import adf.agent.precompute.PrecomputeData;
 import adf.agent.info.ScenarioInfo;
 import adf.agent.info.WorldInfo;
 import adf.component.communication.CommunicationModule;
 import rescuecore2.components.AbstractAgent;
+import rescuecore2.config.ConfigException;
 import rescuecore2.messages.Command;
 import rescuecore2.messages.Message;
 import rescuecore2.standard.entities.StandardEntity;
@@ -29,10 +32,12 @@ public abstract class Agent<E extends StandardEntity> extends AbstractAgent<Stan
 	public AgentInfo agentInfo;
 	public WorldInfo worldInfo;
 	public ScenarioInfo scenarioInfo;
+	protected ModuleConfig moduleConfig;
+	protected ModuleManager moduleManager;
 	protected PrecomputeData precomputeData;
 	protected MessageManager messageManager;
 	protected CommunicationModule communicationModule;
-	protected  boolean isPrecompute;
+	protected boolean isPrecompute;
 	int ignoreTime;
 
 	public Agent(String moduleConfigFileName, boolean isPrecompute, String dataStorageName)
@@ -43,6 +48,16 @@ public abstract class Agent<E extends StandardEntity> extends AbstractAgent<Stan
 		{
 			this.precomputeData.removeData(dataStorageName);
 			this.mode = ScenarioInfo.Mode.PRECOMPUTATION_PHASE;
+		}
+
+		try
+		{
+			moduleConfig = new ModuleConfig(moduleConfigFileName);
+		}
+		catch (ConfigException e)
+		{
+			e.printStackTrace();
+			System.exit(1);
 		}
 
 		precomputeData = new PrecomputeData(dataStorageName);
