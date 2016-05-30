@@ -23,7 +23,6 @@ public class ModuleManager
     private ScenarioInfo scenarioInfo;
 
     private ModuleConfig moduleConfig;
-    //private boolean debugMode;
 
     public ModuleManager(AgentInfo agentInfo, WorldInfo worldInfo, ScenarioInfo scenarioInfo, ModuleConfig moduleConfig) {
         this.agentInfo = agentInfo;
@@ -34,54 +33,45 @@ public class ModuleManager
     }
 
     @SuppressWarnings("unchecked")
-    public final AbstractModule getModuleInstance(String moduleClassStr) throws ClassNotFoundException
-    {
-        AbstractModule instance = this.moduleMap.get(moduleClassStr);
+    public final AbstractModule getModuleInstance(String moduleStr) {
+        AbstractModule instance = this.moduleMap.get(moduleStr);
         if(instance != null) {
             return instance;
         }
-        Class<?> moduleClass = Class.forName(moduleClassStr);
-        if(AbstractModule.class.isAssignableFrom(moduleClass)) {
-            return this.getModuleInstance((Class<AbstractModule>) moduleClass);
+        try {
+            String defaultModuleStr = this.moduleConfig.getValue(moduleStr);
+            if (defaultModuleStr != null) {
+                Class<?> moduleClass = Class.forName(defaultModuleStr);
+                if (AbstractModule.class.isAssignableFrom(moduleClass)) {
+                    instance = this.getModuleInstance((Class<AbstractModule>) moduleClass);
+                    this.moduleMap.put(moduleStr, instance);
+                    return instance;
+                }
+            } else {
+                Class<?> moduleClass = Class.forName(moduleStr);
+                if (AbstractModule.class.isAssignableFrom(moduleClass)) {
+                    return this.getModuleInstance((Class<AbstractModule>) moduleClass);
+                }
+            }
+        }catch (ClassNotFoundException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error : Bad moduleStr");
         }
-        throw new ClassCastException(moduleClassStr);
+        throw new RuntimeException("Error : Bad moduleStr");
     }
 
     @SuppressWarnings("unchecked")
     private AbstractModule getModuleInstance(Class<AbstractModule> moduleClass) {
-        //default Module
-        String defaultModuleStr = this.moduleConfig.getValue(moduleClass.getCanonicalName());
-        if(defaultModuleStr != null) {
-            try {
-                Class<?> tmpClass = Class.forName(defaultModuleStr);
-                if(AbstractModule.class.isAssignableFrom(tmpClass)) {
-                    Class<AbstractModule> defaultClass = (Class<AbstractModule>) tmpClass;
-                    Constructor<AbstractModule> constructor = defaultClass.getConstructor(AgentInfo.class, WorldInfo.class, ScenarioInfo.class, ModuleManager.class);
-                    AbstractModule instance = constructor.newInstance(this.agentInfo, this.worldInfo, this.scenarioInfo, this);
-                    this.moduleMap.put(moduleClass.getCanonicalName(), instance);
-                    this.moduleMap.put(defaultModuleStr, instance);
-                    return instance;
-                }
-                else {
-                    throw new ClassCastException(defaultModuleStr);
-                }
-            } catch (ClassCastException | ClassNotFoundException | NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
-                e.printStackTrace();
-                System.exit(1);
-            }
-        } else {
-            //other module
-            try {
-                Constructor<AbstractModule> constructor = moduleClass.getConstructor(AgentInfo.class, WorldInfo.class, ScenarioInfo.class, ModuleManager.class);
-                AbstractModule instance = constructor.newInstance(this.agentInfo, this.worldInfo, this.scenarioInfo, this);
-                this.moduleMap.put(moduleClass.getCanonicalName(), instance);
-                return instance;
+        try {
+            Constructor<AbstractModule> constructor = moduleClass.getConstructor(AgentInfo.class, WorldInfo.class, ScenarioInfo.class, ModuleManager.class);
+            AbstractModule instance = constructor.newInstance(this.agentInfo, this.worldInfo, this.scenarioInfo, this);
+            this.moduleMap.put(moduleClass.getCanonicalName(), instance);
+            return instance;
 
-            } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
-                e.printStackTrace();
-            }
+        } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error : can't make instance");
         }
-        throw new NullPointerException();
     }
 
     public ModuleConfig getModuleConfig()
