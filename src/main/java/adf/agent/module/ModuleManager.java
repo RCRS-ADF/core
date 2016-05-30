@@ -4,11 +4,9 @@ import adf.agent.config.ModuleConfig;
 import adf.agent.info.AgentInfo;
 import adf.agent.info.ScenarioInfo;
 import adf.agent.info.WorldInfo;
+import adf.component.extaction.ExtAction;
 import adf.component.module.AbstractModule;
-import rescuecore2.config.Config;
-import rescuecore2.config.ConfigException;
 
-import java.io.File;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
@@ -17,6 +15,7 @@ import java.util.Map;
 public class ModuleManager
 {
     private Map<String, AbstractModule> moduleMap;
+    private Map<String, ExtAction> actionMap;
 
     private AgentInfo agentInfo;
     private WorldInfo worldInfo;
@@ -30,10 +29,11 @@ public class ModuleManager
         this.scenarioInfo = scenarioInfo;
         this.moduleConfig = moduleConfig;
         this.moduleMap = new HashMap<>();
+        this.actionMap = new HashMap<>();
     }
 
     @SuppressWarnings("unchecked")
-    public final AbstractModule getModuleInstance(String moduleName) {
+    public final AbstractModule getModule(String moduleName) {
         AbstractModule instance = this.moduleMap.get(moduleName);
         if(instance != null) {
             return instance;
@@ -43,14 +43,14 @@ public class ModuleManager
             if (defaultModuleStr != null) {
                 Class<?> moduleClass = Class.forName(defaultModuleStr);
                 if (AbstractModule.class.isAssignableFrom(moduleClass)) {
-                    instance = this.getModuleInstance((Class<AbstractModule>) moduleClass);
+                    instance = this.getModule((Class<AbstractModule>) moduleClass);
                     this.moduleMap.put(moduleName, instance);
                     return instance;
                 }
             } else {
                 Class<?> moduleClass = Class.forName(moduleName);
                 if (AbstractModule.class.isAssignableFrom(moduleClass)) {
-                    return this.getModuleInstance((Class<AbstractModule>) moduleClass);
+                    return this.getModule((Class<AbstractModule>) moduleClass);
                 }
             }
         }catch (ClassNotFoundException e) {
@@ -60,13 +60,51 @@ public class ModuleManager
     }
 
     @SuppressWarnings("unchecked")
-    private AbstractModule getModuleInstance(Class<AbstractModule> moduleClass) {
+    private AbstractModule getModule(Class<AbstractModule> moduleClass) {
         try {
             Constructor<AbstractModule> constructor = moduleClass.getConstructor(AgentInfo.class, WorldInfo.class, ScenarioInfo.class, ModuleManager.class);
             AbstractModule instance = constructor.newInstance(this.agentInfo, this.worldInfo, this.scenarioInfo, this);
             this.moduleMap.put(moduleClass.getCanonicalName(), instance);
             return instance;
+        } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
+    @SuppressWarnings("unchecked")
+    public final ExtAction getExtAction(String actionName) {
+        ExtAction instance = this.actionMap.get(actionName);
+        if(instance != null) {
+            return instance;
+        }
+        try {
+            String defaultStr = this.moduleConfig.getValue(actionName);
+            if (defaultStr != null) {
+                Class<?> actionClass = Class.forName(defaultStr);
+                if (ExtAction.class.isAssignableFrom(actionClass)) {
+                    instance = this.getExtAction((Class<ExtAction>) actionClass);
+                    this.actionMap.put(actionName, instance);
+                    return instance;
+                }
+            } else {
+                Class<?> actionClass = Class.forName(actionName);
+                if (ExtAction.class.isAssignableFrom(actionClass)) {
+                    return this.getExtAction((Class<ExtAction>) actionClass);
+                }
+            }
+        }catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        throw new IllegalArgumentException("ExtAction name is not found : " + actionName);
+    }
+
+    @SuppressWarnings("unchecked")
+    private ExtAction getExtAction(Class<ExtAction> actionClass) {
+        try {
+            Constructor<ExtAction> constructor = actionClass.getConstructor(AgentInfo.class, WorldInfo.class, ScenarioInfo.class, ModuleManager.class);
+            ExtAction instance = constructor.newInstance(this.agentInfo, this.worldInfo, this.scenarioInfo, this);
+            this.actionMap.put(actionClass.getCanonicalName(), instance);
+            return instance;
         } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
             throw new RuntimeException(e);
         }
