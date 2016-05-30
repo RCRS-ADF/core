@@ -13,7 +13,7 @@ public class Main
 
     public static void main(String... args)
     {
-        System.out.println("[ RCRS ADK Framework Version " + VERSION_CODE + " ]\n");
+        System.out.println("[ RCRS ADF Version " + VERSION_CODE + " ]\n");
         List<String> launcherArguments = new ArrayList<>();
         launcherArguments.addAll(Arrays.asList(args));
         LaunchSupporter.delegate(launcherArguments);
