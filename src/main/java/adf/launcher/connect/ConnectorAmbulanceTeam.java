@@ -1,5 +1,6 @@
 package adf.launcher.connect;
 
+import adf.agent.config.ModuleConfig;
 import adf.agent.platoon.PlatoonAmbulance;
 import adf.component.tactics.TacticsAmbulance;
 import adf.component.AbstractLoader;
@@ -35,7 +36,7 @@ public class ConnectorAmbulanceTeam implements Connector {
 					tacticsAmbulance = loader.getTacticsAmbulance();
 				}
 				boolean isPrecompute = config.getBooleanValue(ConfigKey.KEY_PRECOMPUTE, false);
-				launcher.connect(new PlatoonAmbulance(tacticsAmbulance, config.getValue(ConfigKey.KEY_MODULE_CONFIG_FILE_NAME), isPrecompute));
+				launcher.connect(new PlatoonAmbulance(tacticsAmbulance, config.getValue(ConfigKey.KEY_MODULE_CONFIG_FILE_NAME, ModuleConfig.DEFAULT_CONFIG_FILE_NAME), isPrecompute));
 				//System.out.println(name);
 				connected++;
 			}

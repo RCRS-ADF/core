@@ -1,5 +1,6 @@
 package adf.launcher.connect;
 
+import adf.agent.config.ModuleConfig;
 import adf.agent.office.OfficeFire;
 import adf.component.control.ControlFire;
 import adf.component.AbstractLoader;
@@ -36,7 +37,7 @@ public class ConnectorFireStation implements Connector
 					controlFire = loader.getControlFire();
 				}
 				boolean isPrecompute = config.getBooleanValue(ConfigKey.KEY_PRECOMPUTE, false);
-				launcher.connect(new OfficeFire(controlFire, config.getValue(ConfigKey.KEY_MODULE_CONFIG_FILE_NAME), isPrecompute));
+				launcher.connect(new OfficeFire(controlFire, config.getValue(ConfigKey.KEY_MODULE_CONFIG_FILE_NAME, ModuleConfig.DEFAULT_CONFIG_FILE_NAME), isPrecompute));
 				//System.out.println(name);
 				connected++;
 			}

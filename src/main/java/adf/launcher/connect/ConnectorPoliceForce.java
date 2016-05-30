@@ -1,5 +1,6 @@
 package adf.launcher.connect;
 
+import adf.agent.config.ModuleConfig;
 import adf.agent.platoon.PlatoonPolice;
 import adf.component.tactics.TacticsPolice;
 import adf.component.AbstractLoader;
@@ -37,7 +38,7 @@ public class ConnectorPoliceForce implements Connector
 					tacticsPolice = loader.getTacticsPolice();
 				}
 				boolean isPrecompute = config.getBooleanValue(ConfigKey.KEY_PRECOMPUTE, false);
-				launcher.connect(new PlatoonPolice(tacticsPolice, config.getValue(ConfigKey.KEY_MODULE_CONFIG_FILE_NAME), isPrecompute));
+				launcher.connect(new PlatoonPolice(tacticsPolice, config.getValue(ConfigKey.KEY_MODULE_CONFIG_FILE_NAME, ModuleConfig.DEFAULT_CONFIG_FILE_NAME), isPrecompute));
 				//System.out.println(name);
 				connected++;
 			}

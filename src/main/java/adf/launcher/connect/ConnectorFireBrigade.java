@@ -1,5 +1,6 @@
 package adf.launcher.connect;
 
+import adf.agent.config.ModuleConfig;
 import adf.agent.platoon.PlatoonFire;
 import adf.component.tactics.TacticsFire;
 import adf.component.AbstractLoader;
@@ -34,7 +35,7 @@ public class ConnectorFireBrigade implements Connector {
 					tacticsFire = loader.getTacticsFire();
 				}
 				boolean isPrecompute = config.getBooleanValue(ConfigKey.KEY_PRECOMPUTE, false);
-				launcher.connect(new PlatoonFire(tacticsFire, config.getValue(ConfigKey.KEY_MODULE_CONFIG_FILE_NAME), isPrecompute));
+				launcher.connect(new PlatoonFire(tacticsFire, config.getValue(ConfigKey.KEY_MODULE_CONFIG_FILE_NAME, ModuleConfig.DEFAULT_CONFIG_FILE_NAME), isPrecompute));
 				//System.out.println(name);
 				connected++;
 			}
