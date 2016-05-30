@@ -33,10 +33,10 @@ public class ModuleManager
     }
 
     @SuppressWarnings("unchecked")
-    public final AbstractModule getModule(String moduleName) {
+    public final <T extends AbstractModule> T getModule(String moduleName) {
         AbstractModule instance = this.moduleMap.get(moduleName);
         if(instance != null) {
-            return instance;
+            return (T)instance;
         }
         try {
             String defaultModuleStr = this.moduleConfig.getValue(moduleName);
@@ -45,12 +45,12 @@ public class ModuleManager
                 if (AbstractModule.class.isAssignableFrom(moduleClass)) {
                     instance = this.getModule((Class<AbstractModule>) moduleClass);
                     this.moduleMap.put(moduleName, instance);
-                    return instance;
+                    return (T)instance;
                 }
             } else {
                 Class<?> moduleClass = Class.forName(moduleName);
                 if (AbstractModule.class.isAssignableFrom(moduleClass)) {
-                    return this.getModule((Class<AbstractModule>) moduleClass);
+                    return (T) this.getModule((Class<AbstractModule>) moduleClass);
                 }
             }
         }catch (ClassNotFoundException e) {
