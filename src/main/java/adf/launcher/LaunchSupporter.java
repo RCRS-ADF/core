@@ -67,6 +67,7 @@ public class LaunchSupporter
         System.out.println("-s:[HOST]\t\t\t\tRCRS server host and port");
         System.out.println("-h:[HOST]\t\t\t\tRCRS server host (port:7000)");
         System.out.println("-pre:[0|1]\t\t\t\tPrecompute flag");
+        System.out.println("-mc:[FILE]\t\t\t\tModuleConfig file name");
         System.out.println("-compile\t\t\t\trun compile");
         System.out.println("-autocp\t\t\t\t\tauto load class path form " + DIRECTORY_LIBRARY);
         System.out.println("-autolc\t\t\t\t\tauto load loader class form " + DIRECTORY_BUILD);
