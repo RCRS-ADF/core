@@ -33,13 +33,13 @@ public class ModuleManager
     }
 
     @SuppressWarnings("unchecked")
-    public final <T extends AbstractModule> T getModule(String moduleName) {
+    public final <T extends AbstractModule> T getModule(String moduleName, String defaultName) {
         AbstractModule instance = this.moduleMap.get(moduleName);
         if(instance != null) {
             return (T)instance;
         }
         try {
-            String defaultModuleStr = this.moduleConfig.getValue(moduleName);
+            String defaultModuleStr = (defaultName != null ? this.moduleConfig.getValue(moduleName, defaultName) : this.moduleConfig.getValue(moduleName));
             if (defaultModuleStr != null) {
                 Class<?> moduleClass = Class.forName(defaultModuleStr);
                 if (AbstractModule.class.isAssignableFrom(moduleClass)) {
@@ -60,8 +60,8 @@ public class ModuleManager
     }
 
     @SuppressWarnings("unchecked")
-    public final <T extends AbstractModule> T getModule(String moduleName, String defaultName) {
-        return this.getModule(this.moduleConfig.getValue(moduleName, defaultName));
+    public final <T extends AbstractModule> T getModule(String moduleName) {
+        return this.getModule(this.moduleConfig.getValue(moduleName, null));
     }
 
     @SuppressWarnings("unchecked")
@@ -77,13 +77,13 @@ public class ModuleManager
     }
 
     @SuppressWarnings("unchecked")
-    public final ExtAction getExtAction(String actionName) {
+    public final ExtAction getExtAction(String actionName, String defaultName) {
         ExtAction instance = this.actionMap.get(actionName);
         if(instance != null) {
             return instance;
         }
         try {
-            String defaultStr = this.moduleConfig.getValue(actionName);
+            String defaultStr = (defaultName != null ? this.moduleConfig.getValue(actionName, defaultName) : this.moduleConfig.getValue(actionName));
             if (defaultStr != null) {
                 Class<?> actionClass = Class.forName(defaultStr);
                 if (ExtAction.class.isAssignableFrom(actionClass)) {
@@ -104,8 +104,8 @@ public class ModuleManager
     }
 
     @SuppressWarnings("unchecked")
-    public final ExtAction getExtAction(String actionName, String defaultName) {
-        return this.getExtAction(this.moduleConfig.getValue(actionName, defaultName));
+    public final ExtAction getExtAction(String actionName) {
+        return getExtAction(actionName, null);
     }
 
     @SuppressWarnings("unchecked")
