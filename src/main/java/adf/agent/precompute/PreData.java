@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public final class PreDatas
+public final class PreData
 {
 	public Map<String, Integer> intValues;
 	public Map<String, Double> doubleValues;
@@ -20,8 +20,9 @@ public final class PreDatas
 	public Map<String, List<Boolean>> boolLists;
 
 	public boolean isReady;
+	public String readyID;
 
-	public PreDatas()
+	public PreData()
 	{
 		this.intValues = new HashMap<>();
 		this.doubleValues = new HashMap<>();
@@ -34,22 +35,24 @@ public final class PreDatas
 		this.idLists = new HashMap<>();
 		this.boolLists = new HashMap<>();
 		this.isReady = false;
+		this.readyID = "";
 	}
 
-	public PreDatas copy()
+	public PreData copy()
 	{
-		PreDatas preDatas = new PreDatas();
-		preDatas.intValues = new HashMap<>(this.intValues);
-		preDatas.doubleValues = new HashMap<>(this.doubleValues);
-		preDatas.stringValues = new HashMap<>(this.stringValues);
-		preDatas.idValues = new HashMap<>(this.idValues);
-		preDatas.boolValues = new HashMap<>(this.boolValues);
-		preDatas.intLists = new HashMap<>(this.intLists);
-		preDatas.doubleLists = new HashMap<>(this.doubleLists);
-		preDatas.stringLists = new HashMap<>(this.stringLists);
-		preDatas.idLists = new HashMap<>(this.idLists);
-		preDatas.boolLists = new HashMap<>(this.boolLists);
-		preDatas.isReady = this.isReady;
-		return preDatas;
+		PreData preData = new PreData();
+		preData.intValues = new HashMap<>(this.intValues);
+		preData.doubleValues = new HashMap<>(this.doubleValues);
+		preData.stringValues = new HashMap<>(this.stringValues);
+		preData.idValues = new HashMap<>(this.idValues);
+		preData.boolValues = new HashMap<>(this.boolValues);
+		preData.intLists = new HashMap<>(this.intLists);
+		preData.doubleLists = new HashMap<>(this.doubleLists);
+		preData.stringLists = new HashMap<>(this.stringLists);
+		preData.idLists = new HashMap<>(this.idLists);
+		preData.boolLists = new HashMap<>(this.boolLists);
+		preData.isReady = this.isReady;
+		preData.readyID = this.readyID;
+		return preData;
 	}
 }

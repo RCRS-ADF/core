@@ -66,10 +66,27 @@ public class AgentLauncher {
 		int port = this.config.getIntValue(Constants.KERNEL_PORT_NUMBER_KEY, Constants.DEFAULT_KERNEL_PORT_NUMBER);
 		ComponentLauncher launcher = new TCPComponentLauncher(host, port, this.config);
 		System.out.println("[START ] Connect Server (host:" + host + ", port:" + port + ")");
+
+		List<Thread> threadList = new ArrayList<>();
 		
 		for (Connector connector : this.connectors) {
-			connector.connect(launcher, this.config, loader);
+			threadList.add(
+					new Thread(()->{
+						connector.connect(launcher, this.config, loader);
+					})
+			);
 		}
+
+		for (Thread thread : threadList)
+		{ thread.start(); }
+
+		try {
+			for (Thread thread : threadList)
+			{ thread.join(); }
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+
 		System.out.println("[END   ] Success Connect Server");
 
 		if (this.config.getBooleanValue(ConfigKey.KEY_PRECOMPUTE, false)) {

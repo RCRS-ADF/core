@@ -37,7 +37,7 @@ public abstract class Platoon<E extends StandardEntity> extends Agent<E>
 				break;
 			case PRECOMPUTATION_PHASE:
 				rootTactics.precompute(agentInfo, worldInfo, scenarioInfo, this.moduleManager, precomputeData);
-				precomputeData.setReady(true);
+				precomputeData.setReady(true, worldInfo);
 				if (!precomputeData.write())
 				{
 					System.out.println("[ERROR ] Failed write PrecomputeData.");

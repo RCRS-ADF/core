@@ -1,7 +1,9 @@
 package adf.agent.precompute;
 
+import adf.agent.info.WorldInfo;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.msgpack.jackson.dataformat.MessagePackFactory;
+import rescuecore2.standard.entities.StandardEntityURN;
 import rescuecore2.worldmodel.EntityID;
 
 import java.io.*;
@@ -17,7 +19,7 @@ public final class PrecomputeData
 
 	private String fileName;
 
-	private PreDatas datas;
+	private PreData data;
 
 	public PrecomputeData()
 	{
@@ -30,10 +32,10 @@ public final class PrecomputeData
 		this.init();
 	}
 
-	private PrecomputeData(String name, PreDatas precomputeDatas)
+	private PrecomputeData(String name, PreData precomputeDatas)
 	{
 		this.fileName = name;
-		this.datas = precomputeDatas;
+		this.data = precomputeDatas;
 	}
 
 	public static void removeData(String name)
@@ -57,19 +59,19 @@ public final class PrecomputeData
 
 	public PrecomputeData copy()
 	{
-		return new PrecomputeData(this.fileName, this.datas.copy());
+		return new PrecomputeData(this.fileName, this.data.copy());
 	}
 
 	private void init()
 	{
-		this.datas = this.read(this.fileName);
-		if (this.datas == null)
+		this.data = this.read(this.fileName);
+		if (this.data == null)
 		{
-			this.datas = new PreDatas();
+			this.data = new PreData();
 		}
 	}
 
-	private PreDatas read(String name)
+	private PreData read(String name)
 	{
 		try
 		{
@@ -97,7 +99,7 @@ public final class PrecomputeData
 			}
 			binary = bout.toByteArray();
 			ObjectMapper om = new ObjectMapper(new MessagePackFactory());
-			PreDatas ds = om.readValue(binary, PreDatas.class);
+			PreData ds = om.readValue(binary, PreData.class);
 			bis.close();
 			fis.close();
 			return ds;
@@ -118,7 +120,7 @@ public final class PrecomputeData
 				{ return false; }
 			}
 			ObjectMapper om = new ObjectMapper(new MessagePackFactory());
-			byte[] binary = om.writeValueAsBytes(this.datas);
+			byte[] binary = om.writeValueAsBytes(this.data);
 			FileOutputStream fos = new FileOutputStream(new File(PRECOMP_DATA_DIR, this.fileName));
 			fos.write(binary);
 			fos.close();
@@ -137,41 +139,41 @@ public final class PrecomputeData
 
 	public Integer setInteger(String name, int value)
 	{
-		return this.datas.intValues.put(name, value);
+		return this.data.intValues.put(name, value);
 	}
 
 	public Double setDouble(String name, double value)
 	{
-		return this.datas.doubleValues.put(name, value);
+		return this.data.doubleValues.put(name, value);
 	}
 
 	public Boolean setBoolean(String name, boolean value) {
-		return this.datas.boolValues.put(name, value);
+		return this.data.boolValues.put(name, value);
 	}
 
 	public String setString(String name, String value)
 	{
-		return this.datas.stringValues.put(name, value);
+		return this.data.stringValues.put(name, value);
 	}
 
 	public EntityID setEntityID(String name, EntityID value) {
-		Integer id = this.datas.idValues.put(name, value.getValue());
+		Integer id = this.data.idValues.put(name, value.getValue());
 		return id == null ? null : new EntityID(id);
 	}
 
 	public List<Integer> setIntegerList(String name, List<Integer> list)
 	{
-		return this.datas.intLists.put(name, list);
+		return this.data.intLists.put(name, list);
 	}
 
 	public List<Double> setDoubleList(String name, List<Double> list)
 	{
-		return this.datas.doubleLists.put(name, list);
+		return this.data.doubleLists.put(name, list);
 	}
 
 	public List<String> setStringList(String name, List<String> list)
 	{
-		return this.datas.stringLists.put(name, list);
+		return this.data.stringLists.put(name, list);
 	}
 
 	public List<EntityID> setEntityIDList(String name, List<EntityID> list)
@@ -181,73 +183,80 @@ public final class PrecomputeData
 		{
 			cvtList.add(id.getValue());
 		}
-		cvtList = this.datas.idLists.put(name, cvtList);
+		cvtList = this.data.idLists.put(name, cvtList);
 		return cvtList == null ? null : cvtList.stream().map(EntityID::new).collect(Collectors.toList());
 	}
 
 	public List<Boolean> setBooleanList(String name, List<Boolean> list)
 	{
-		return this.datas.boolLists.put(name, list);
+		return this.data.boolLists.put(name, list);
 	}
 
-	public boolean setReady(boolean isReady)
+	public boolean setReady(boolean isReady, WorldInfo worldInfo)
 	{
-		return (this.datas.isReady = isReady);
+		this.data.isReady = isReady;
+		this.data.readyID = makeReadyID(worldInfo);
+		return (this.data.isReady && this.data.readyID.equals(this.makeReadyID(worldInfo)));
 	}
 
 	public Integer getInteger(String name)
 	{
-		return this.datas.intValues.get(name);
+		return this.data.intValues.get(name);
 	}
 
 	public Double getDouble(String name)
 	{
-		return this.datas.doubleValues.get(name);
+		return this.data.doubleValues.get(name);
 	}
 
 	public Boolean getBoolean(String name) {
-		return this.datas.boolValues.get(name);
+		return this.data.boolValues.get(name);
 	}
 
 	public String getString(String name)
 	{
-		return this.datas.stringValues.get(name);
+		return this.data.stringValues.get(name);
 	}
 
 	public EntityID getEntityID(String name)
 	{
-		Integer id = this.datas.idValues.get(name);
+		Integer id = this.data.idValues.get(name);
 		return id == null ? null : new EntityID(id);
 	}
 
 	public List<Integer> getIntegerList(String name)
 	{
-		return this.datas.intLists.get(name);
+		return this.data.intLists.get(name);
 	}
 
 	public List<Double> getDoubleList(String name)
 	{
-		return this.datas.doubleLists.get(name);
+		return this.data.doubleLists.get(name);
 	}
 
 	public List<String> getStringList(String name)
 	{
-		return this.datas.stringLists.get(name);
+		return this.data.stringLists.get(name);
 	}
 
 	public List<EntityID> getEntityIDList(String name)
 	{
-		List<Integer> cvtList = this.datas.idLists.get(name);
+		List<Integer> cvtList = this.data.idLists.get(name);
 		return cvtList == null ? null : cvtList.stream().map(EntityID::new).collect(Collectors.toList());
 	}
 
 	public List<Boolean> getBooleanList(String name)
 	{
-		return this.datas.boolLists.get(name);
+		return this.data.boolLists.get(name);
 	}
 
-	public boolean isReady()
+	public boolean isReady(WorldInfo worldInfo)
 	{
-		return this.datas.isReady;
+		return (this.data.isReady && this.data.readyID.equals(this.makeReadyID(worldInfo)));
+	}
+
+	private String makeReadyID(WorldInfo worldInfo)
+	{
+		return "" + worldInfo.getBounds().getX() + "" + worldInfo.getBounds().getY();
 	}
 }

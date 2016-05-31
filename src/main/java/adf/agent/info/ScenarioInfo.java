@@ -1,5 +1,6 @@
 package adf.agent.info;
 
+import adf.launcher.ConfigKey;
 import rescuecore2.config.Config;
 
 public class ScenarioInfo
@@ -169,5 +170,9 @@ public class ScenarioInfo
 
 	public int getFireTankRefillRate() {
         return this.config.getIntValue("fire.tank.refill-rate", 500);
+	}
+
+	public boolean isDebugMode() {
+		return this.config.getBooleanValue(ConfigKey.KEY_DEBUG_FLAG, false);
 	}
 }

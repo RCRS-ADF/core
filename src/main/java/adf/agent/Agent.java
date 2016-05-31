@@ -62,18 +62,6 @@ public abstract class Agent<E extends StandardEntity> extends AbstractAgent<Stan
 
 		precomputeData = new PrecomputeData(dataStorageName);
 		messageManager = new MessageManager();
-
-		if (!isPrecompute)
-		{
-			if (precomputeData.isReady())
-			{
-				this.mode = ScenarioInfo.Mode.PRECOMPUTED;
-			}
-			else
-			{
-				this.mode = ScenarioInfo.Mode.NON_PRECOMPUTE;
-			}
-		}
 	}
 
 	@Override
@@ -109,8 +97,16 @@ public abstract class Agent<E extends StandardEntity> extends AbstractAgent<Stan
 		this.ignoreTime = config.getIntValue(kernel.KernelConstants.IGNORE_AGENT_COMMANDS_KEY);
 
 		this.worldInfo = new WorldInfo(model);
-		this.scenarioInfo = new ScenarioInfo(config, mode);
 
+		if (!isPrecompute)
+		{
+			if (precomputeData.isReady(worldInfo))
+			{ this.mode = ScenarioInfo.Mode.PRECOMPUTED; }
+			else
+			{ this.mode = ScenarioInfo.Mode.NON_PRECOMPUTE; }
+		}
+
+		this.scenarioInfo = new ScenarioInfo(config, mode);
 		this.communicationModule = null;
 
 		switch (scenarioInfo.getMode())
