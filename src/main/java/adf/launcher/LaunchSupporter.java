@@ -21,14 +21,13 @@ public class LaunchSupporter
     private static final String DIRECTORY_BUILD = "build";
     private static final String CLASSNAME_LOADERPARENT = "adf.component.AbstractLoader";
 
-    private static String javacFullPath = "";
-
     public static void delegate(List<String> args)
     {
         alias(args, "-auto", "-autocp", "-autolc");
         alias(args, "-local", "-h:localhost");
         alias(args, "-all", "-t:-1:-1:-1:-1:-1:-1");
         alias(args, "-precompute", "-pre:true");
+        alias(args, "-debug", "-d:true");
 
 
         if (args.contains(OPTION_COMPILE))
@@ -73,10 +72,12 @@ public class LaunchSupporter
         System.out.println("-compile\t\t\t\trun compile");
         System.out.println("-autocp\t\t\t\t\tauto load class path form " + DIRECTORY_LIBRARY);
         System.out.println("-autolc\t\t\t\t\tauto load loader class form " + DIRECTORY_BUILD);
+        System.out.println("-d:[0|1]\t\t\t\tDebug flag");
         System.out.println("-auto\t\t\t\t\t[alias] -autocp -autolc");
         System.out.println("-all\t\t\t\t\t[alias] -t:-1:-1:-1:-1:-1:-1");
         System.out.println("-local\t\t\t\t\t[alias] -h:localhost");
         System.out.println("-precompute\t\t\t\t[alias] -pre:true");
+        System.out.println("-debug\t\t\t\t\t[alias] -d:true");
         System.out.println();
     }
 
