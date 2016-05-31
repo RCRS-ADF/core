@@ -21,6 +21,8 @@ public class LaunchSupporter
     private static final String DIRECTORY_BUILD = "build";
     private static final String CLASSNAME_LOADERPARENT = "adf.component.AbstractLoader";
 
+    private static String javacFullPath = "";
+
     public static void delegate(List<String> args)
     {
         alias(args, "-auto", "-autocp", "-autolc");

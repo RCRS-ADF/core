@@ -61,22 +61,7 @@ public class ModuleManager
 
     @SuppressWarnings("unchecked")
     public final <T extends AbstractModule> T getModule(String moduleName, String defaultName) {
-        AbstractModule instance = this.moduleMap.get(moduleName);
-        if(instance != null) {
-            return (T)instance;
-        }
-        try {
-            String configValue = this.moduleConfig.getValue(moduleName);
-            Class<?> moduleClass = Class.forName(configValue != null ? configValue : defaultName);
-            if (AbstractModule.class.isAssignableFrom(moduleClass)) {
-                instance = this.getModule((Class<AbstractModule>) moduleClass);
-                this.moduleMap.put(moduleName, instance);
-                return (T)instance;
-            }
-        }catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-        throw new IllegalArgumentException("Module name is not found : " + moduleName);
+        return this.getModule(this.moduleConfig.getValue(moduleName, defaultName));
     }
 
     @SuppressWarnings("unchecked")
@@ -116,6 +101,11 @@ public class ModuleManager
             throw new RuntimeException(e);
         }
         throw new IllegalArgumentException("ExtAction name is not found : " + actionName);
+    }
+
+    @SuppressWarnings("unchecked")
+    public final ExtAction getExtAction(String actionName, String defaultName) {
+        return this.getExtAction(this.moduleConfig.getValue(actionName, defaultName));
     }
 
     @SuppressWarnings("unchecked")
