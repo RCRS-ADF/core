@@ -29,13 +29,22 @@ public abstract class Clustering extends AbstractModule{
     public abstract Collection<EntityID> getClusterEntityIDs(int index);
 
     @Override
-    public abstract Clustering precompute(PrecomputeData precomputeData);
+    public Clustering precompute(PrecomputeData precomputeData) {
+        super.precompute(precomputeData);
+        return this;
+    }
 
     @Override
-    public abstract Clustering resume(PrecomputeData precomputeData);
+    public Clustering resume(PrecomputeData precomputeData) {
+        super.resume(precomputeData);
+        return this;
+    }
 
     @Override
-    public abstract Clustering preparate();
+    public Clustering preparate() {
+        super.preparate();
+        return this;
+    }
 
     @Override
     public Clustering updateInfo(MessageManager messageManager) {

@@ -6,38 +6,40 @@ import adf.agent.info.ScenarioInfo;
 import adf.agent.info.WorldInfo;
 import adf.agent.module.ModuleManager;
 import adf.agent.precompute.PrecomputeData;
-import rescuecore2.standard.entities.Building;
+import rescuecore2.standard.entities.Blockade;
+import rescuecore2.standard.entities.Road;
 
-public abstract class BuildingSelector extends TargetSelector<Building> {
+public abstract class RoadSelector extends TargetSelector<Road> {
 
-    public BuildingSelector(AgentInfo ai, WorldInfo wi, ScenarioInfo si, ModuleManager moduleManager) {
+    public RoadSelector(AgentInfo ai, WorldInfo wi, ScenarioInfo si, ModuleManager moduleManager) {
         super(ai, wi, si, moduleManager);
     }
 
     @Override
-    public BuildingSelector precompute(PrecomputeData precomputeData) {
+    public RoadSelector precompute(PrecomputeData precomputeData) {
         super.precompute(precomputeData);
         return this;
     }
 
     @Override
-    public BuildingSelector resume(PrecomputeData precomputeData) {
+    public RoadSelector resume(PrecomputeData precomputeData) {
         super.resume(precomputeData);
         return this;
     }
 
     @Override
-    public BuildingSelector preparate() {
+    public RoadSelector preparate() {
         super.preparate();
         return this;
     }
 
     @Override
-    public BuildingSelector updateInfo(MessageManager messageManager) {
+    public RoadSelector updateInfo(MessageManager messageManager) {
         super.updateInfo(messageManager);
         return this;
     }
 
     @Override
-    public abstract BuildingSelector calc();
+    public abstract RoadSelector calc();
 }
+

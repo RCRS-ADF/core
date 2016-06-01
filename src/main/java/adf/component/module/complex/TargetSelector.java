@@ -20,13 +20,22 @@ public abstract class TargetSelector<E extends StandardEntity> extends AbstractM
     public abstract EntityID getTarget();
 
     @Override
-    public abstract TargetSelector<E> precompute(PrecomputeData precomputeData);
+    public TargetSelector<E> precompute(PrecomputeData precomputeData) {
+        super.precompute(precomputeData);
+        return this;
+    }
 
     @Override
-    public abstract TargetSelector<E> resume(PrecomputeData precomputeData);
+    public TargetSelector<E> resume(PrecomputeData precomputeData) {
+        super.resume(precomputeData);
+        return this;
+    }
 
     @Override
-    public abstract TargetSelector<E> preparate();
+    public TargetSelector<E> preparate() {
+        super.preparate();
+        return this;
+    }
 
     @Override
     public TargetSelector<E> updateInfo(MessageManager messageManager) {

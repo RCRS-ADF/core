@@ -15,13 +15,22 @@ public abstract class Search extends TargetSelector<Area> {
     }
 
     @Override
-    public abstract Search precompute(PrecomputeData precomputeData);
+    public Search precompute(PrecomputeData precomputeData) {
+        super.precompute(precomputeData);
+        return this;
+    }
 
     @Override
-    public abstract Search resume(PrecomputeData precomputeData);
+    public Search resume(PrecomputeData precomputeData) {
+        super.resume(precomputeData);
+        return this;
+    }
 
     @Override
-    public abstract Search preparate();
+    public Search preparate() {
+        super.preparate();
+        return this;
+    }
 
     @Override
     public Search updateInfo(MessageManager messageManager) {

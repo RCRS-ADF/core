@@ -16,13 +16,22 @@ public abstract class HumanSelector extends TargetSelector<Human> {
     }
 
     @Override
-    public abstract HumanSelector precompute(PrecomputeData precomputeData);
+    public HumanSelector precompute(PrecomputeData precomputeData) {
+        super.precompute(precomputeData);
+        return this;
+    }
 
     @Override
-    public abstract HumanSelector resume(PrecomputeData precomputeData);
+    public HumanSelector resume(PrecomputeData precomputeData) {
+        super.resume(precomputeData);
+        return this;
+    }
 
     @Override
-    public abstract HumanSelector preparate();
+    public HumanSelector preparate() {
+        super.preparate();
+        return this;
+    }
 
     @Override
     public HumanSelector updateInfo(MessageManager messageManager) {

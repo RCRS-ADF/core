@@ -31,13 +31,22 @@ public abstract class PathPlanning extends AbstractModule{
     }
 
     @Override
-    public abstract PathPlanning precompute(PrecomputeData precomputeData);
+    public PathPlanning precompute(PrecomputeData precomputeData) {
+        super.precompute(precomputeData);
+        return this;
+    }
 
     @Override
-    public abstract PathPlanning resume(PrecomputeData precomputeData);
+    public PathPlanning resume(PrecomputeData precomputeData) {
+        super.resume(precomputeData);
+        return this;
+    }
 
     @Override
-    public abstract PathPlanning preparate();
+    public PathPlanning preparate() {
+        super.preparate();
+        return this;
+    }
 
     @Override
     public PathPlanning updateInfo(MessageManager messageManager){
