@@ -47,4 +47,16 @@ public abstract class AbstractModule {
     }
 
     public abstract AbstractModule calc();
+
+    public int getCountPrecompute() {
+        return this.countPrecompute;
+    }
+
+    public int getCountResume() {
+        return this.countResume;
+    }
+
+    public int getCountPreparate() {
+        return this.countPreparate;
+    }
 }
