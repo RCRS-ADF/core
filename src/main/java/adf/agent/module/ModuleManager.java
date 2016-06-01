@@ -61,7 +61,7 @@ public class ModuleManager
 
     @SuppressWarnings("unchecked")
     public final <T extends AbstractModule> T getModule(String moduleName) {
-        return this.getModule(this.moduleConfig.getValue(moduleName, null));
+        return this.getModule(this.moduleConfig.getValue(moduleName), null);
     }
 
     @SuppressWarnings("unchecked")
