@@ -53,7 +53,8 @@ public class ConfigInitializer {
 		registerOption(options, new OptionServer());
 		registerOption(options, new OptionHost());
 		registerOption(options, new OptionPrecompute());
-        registerOption(options, new OptionModuleConfig());
+		registerOption(options, new OptionModuleConfig());
+		registerOption(options, new OptionDebug());
 		registerOption(options, new OptionTeam());
 		registerOption(options, new OptionAmbulanceTeam());
 		registerOption(options, new OptionFireBrigade());
