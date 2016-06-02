@@ -8,6 +8,7 @@ import adf.agent.info.WorldInfo;
 import adf.agent.module.ModuleManager;
 import adf.agent.precompute.PrecomputeData;
 import adf.component.module.AbstractModule;
+import rescuecore2.misc.Pair;
 import rescuecore2.worldmodel.EntityID;
 
 import java.util.Arrays;
@@ -56,4 +57,32 @@ public abstract class PathPlanning extends AbstractModule{
 
     @Override
     public abstract PathPlanning calc();
+
+    public double getDistance()
+    {
+        double sum = 0.0;
+        List<EntityID> path = getResult();
+        if (path == null || path.size() <= 1)
+        { return sum; }
+
+        Pair<Integer, Integer> prevPoint = null;
+        for (EntityID id : path)
+        {
+            Pair<Integer, Integer> point = worldInfo.getLocation(worldInfo.getEntity(id));
+            if (prevPoint != null)
+            {
+                int x = prevPoint.first() - point.first();
+                int y = prevPoint.second() - point.second();
+                sum += x*x + y*y;
+            }
+            prevPoint = point;
+        }
+
+        return Math.sqrt(sum);
+    }
+
+    public double getDistance(EntityID from, EntityID dest)
+    {
+        return this.setFrom(from).setDestination(dest).calc().getDistance();
+    }
 }
