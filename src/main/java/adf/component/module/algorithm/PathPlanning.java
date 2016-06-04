@@ -81,8 +81,10 @@ public abstract class PathPlanning extends AbstractModule{
         return Math.sqrt(sum);
     }
 
+    // Alias
     public double getDistance(EntityID from, EntityID dest)
-    {
-        return this.setFrom(from).setDestination(dest).calc().getDistance();
-    }
+    { return this.setFrom(from).setDestination(dest).calc().getDistance(); }
+
+    public List<EntityID> getResult(EntityID from, EntityID dest)
+    { return this.setFrom(from).setDestination(dest).calc().getResult(); }
 }
