@@ -1,3 +1,6 @@
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+
 apply plugin: 'java'
 apply plugin: 'idea'
 
@@ -30,6 +33,7 @@ jar {
     //manifest.attributes("Main-Class", "adf.Main")
     manifest {
         attributes "Main-Class": "adf.Main"
+        attributes "Build-Timestamp": getBuildTime();
     }
 }
 
@@ -63,4 +67,11 @@ task start (type: JavaExec) {
 
 task wrapper(type: Wrapper) {
     gradleVersion = '2.8'
+}
+
+def getBuildTime() {
+    def calender = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+    def dateFormat = new SimpleDateFormat("yyyyMMdd'T'HHmmss'Z'");
+    dateFormat.setTimeZone(calender.getTimeZone());
+    return dateFormat.format(calender.getTime());
 }
