@@ -133,7 +133,8 @@ public abstract class Agent<E extends StandardEntity> extends AbstractAgent<Stan
 		{
 			if (this.communicationModule != null)
 			{
-				System.out.println("This agent's CommunicationModule is modified - " + this);
+				System.out.println("[ERROR ] Loader is not found.");
+				System.out.println("[NOTICE] CommunicationModule is modified - " + this);
 			}
 			else
 			{

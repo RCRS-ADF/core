@@ -39,7 +39,7 @@ public class MessageManager
         if (messageClassMap.containsKey(index))
         {
             //throw new IllegalArgumentException("index(" + index + ") is already registrated");
-            System.out.println("index(" + index + ") is already registrated/"+ messageClass.getName() +" is ignored");
+            System.out.println("index(" + index + ") is already registered/"+ messageClass.getName() +" is ignored");
             return false;
         }
 

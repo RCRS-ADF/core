@@ -27,7 +27,7 @@ public class Main
             connector.start();
         }
         catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
-            System.out.println("[ERROR ] Loader not found.");
+            System.out.println("[ERROR ] Loader is not found.");
             e.printStackTrace();
         }
     }

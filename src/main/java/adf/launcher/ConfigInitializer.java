@@ -44,7 +44,7 @@ public class ConfigInitializer {
             return config;
         }
         else {
-            throw new ArrayIndexOutOfBoundsException("input Loader Class!!");
+            throw new ArrayIndexOutOfBoundsException("Not specified a Loader Class!!");
         }
     }
     

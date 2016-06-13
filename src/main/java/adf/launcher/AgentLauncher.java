@@ -65,7 +65,7 @@ public class AgentLauncher {
 		String host = this.config.getValue(Constants.KERNEL_HOST_NAME_KEY, Constants.DEFAULT_KERNEL_HOST_NAME);
 		int port = this.config.getIntValue(Constants.KERNEL_PORT_NUMBER_KEY, Constants.DEFAULT_KERNEL_PORT_NUMBER);
 		ComponentLauncher launcher = new TCPComponentLauncher(host, port, this.config);
-		System.out.println("[START ] Connect Server (host:" + host + ", port:" + port + ")");
+		System.out.println("[START ] Connect to server (host:" + host + ", port:" + port + ")");
 
 		List<Thread> threadList = new ArrayList<>();
 		
@@ -87,7 +87,7 @@ public class AgentLauncher {
 			e.printStackTrace();
 		}
 
-		System.out.println("[END   ] Success Connect Server");
+		System.out.println("[END   ] Done Connecting to server");
 
 		if (this.config.getBooleanValue(ConfigKey.KEY_PRECOMPUTE, false)) {
 			System.exit(0);

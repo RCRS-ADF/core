@@ -40,7 +40,7 @@ public abstract class Platoon<E extends StandardEntity> extends Agent<E>
 				precomputeData.setReady(true, worldInfo);
 				if (!precomputeData.write())
 				{
-					System.out.println("[ERROR ] Failed write PrecomputeData.");
+					System.out.println("[ERROR ] Failed to write PrecomputeData.");
 				}
 				break;
 			case PRECOMPUTED:
