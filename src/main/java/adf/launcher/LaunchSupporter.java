@@ -206,7 +206,7 @@ public class LaunchSupporter
                 String filePath = file.getPath();
                 if ( filePath.endsWith(".class") && !filePath.contains("$") )
                 {
-                    loaderClass = filePath.substring(base.length()+1, filePath.length()-6).replace("/", ".");
+                    loaderClass = filePath.substring(base.length()+1, filePath.length()-6).replace(File.separator, ".");
                     try {
                         if (ClassLoader.getSystemClassLoader().loadClass(loaderClass).getSuperclass().getName().equals(CLASSNAME_LOADERPARENT))
                         {
