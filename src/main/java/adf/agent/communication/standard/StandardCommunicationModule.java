@@ -134,7 +134,7 @@ public class StandardCommunicationModule extends CommunicationModule
             }
             else
             {
-                final int messageSize = bitOutputStream.size();
+                final int messageSize = (int)Math.ceil(((double)bitOutputStream.size()) / 8.0);
                 if (messageSize <= voiceMessageLeft)
                 {
                     byte[] messageData = bitOutputStream.toByteArray();
