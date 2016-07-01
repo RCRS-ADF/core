@@ -155,9 +155,9 @@ public class StandardCommunicationModule extends CommunicationModule
                     }
                 }
             }
-
-            messages[0] = new AKSay(agent.getID(), agent.agentInfo.getTime(), voiceMessageStream.toByteArray());
-            agent.send(messages);
         }
+
+        messages[0] = new AKSay(agent.getID(), agent.agentInfo.getTime(), voiceMessageStream.toByteArray());
+        agent.send(messages);
     }
 }
