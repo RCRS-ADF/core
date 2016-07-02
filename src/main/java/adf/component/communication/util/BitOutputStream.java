@@ -1,6 +1,7 @@
 package adf.component.communication.util;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 
 public class BitOutputStream extends ByteArrayOutputStream {
 
@@ -15,6 +16,12 @@ public class BitOutputStream extends ByteArrayOutputStream {
 		this.buf = 0;
 		this.cnt = 8;
 		this.now_size = 0;
+	}
+
+	@Override
+	public synchronized void write(int b)
+	{
+		this.writeBits(b, 8);
 	}
 
 	public synchronized void writeBits(int value, int len) {
@@ -42,9 +49,10 @@ public class BitOutputStream extends ByteArrayOutputStream {
 	public synchronized void writeBits(BitOutputStream bos) {
 		//書き出し済みバイト列の転記
 		byte[] byteArray = bos.toByteArray();
-		for (int i = 0, n = bos.size(); i < n; i++) {
-			int value = (byteArray[i / 8] >>> (7 - i % 8) & 0x1);
-			this.writeBits(value);
+		for (int i = 0, n = byteArray.length; i < n; i++) {
+			//int value = (byteArray[i / 8] >>> (7 - i % 8) & 0x1);
+			//this.writeBits(value);
+			this.write(byteArray[i]);
 		}
 	}
 

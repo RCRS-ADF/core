@@ -12,11 +12,13 @@ import rescuecore2.standard.messages.AKSay;
 import rescuecore2.standard.messages.AKSpeak;
 import rescuecore2.worldmodel.EntityID;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.Collection;
 
 public class StandardCommunicationModule extends CommunicationModule
 {
-    final private int ESCAPE_CHAR = 0xFE;
+    final private int ESCAPE_CHAR = 0x41;
     final private int SIZE_ID = 5;
     final private int SIZE_TTL = 3;
 
@@ -97,7 +99,7 @@ public class StandardCommunicationModule extends CommunicationModule
 
         int messageTTL = (isRadio ? -1 : bitStreamReader.getBits(SIZE_TTL));
 
-        Object[] args = {Boolean.valueOf(true), Integer.valueOf(senderID.getValue()), Integer.valueOf(messageTTL), bitStreamReader};
+        Object[] args = {Boolean.valueOf(isRadio), Integer.valueOf(senderID.getValue()), Integer.valueOf(messageTTL), bitStreamReader};
         try {
             messageManager.addReceivedMessage(
                     messageManager.getMessageClass(messageClassIndex).getConstructor(standardMessageArgTypes).newInstance(args)
@@ -116,7 +118,9 @@ public class StandardCommunicationModule extends CommunicationModule
     {
         final int voiceLimitBytes = agent.scenarioInfo.getVoiceMessagesSize();
         int voiceMessageLeft = voiceLimitBytes;
-        BitOutputStream voiceMessageStream = new BitOutputStream();
+        //BitOutputStream voiceMessageStream = new BitOutputStream();
+        ByteArrayOutputStream voiceMessageStream = new ByteArrayOutputStream();
+
         Message[] messages = new Message[1];
 
         for (CommunicationMessage message : messageManager.getSendMessageList())
@@ -134,11 +138,11 @@ public class StandardCommunicationModule extends CommunicationModule
             }
             else
             {
-                final int messageSize = (int)Math.ceil(((double)bitOutputStream.size()) / 8.0);
+                int messageSize = (int)Math.ceil(((double)bitOutputStream.size()) / 8.0);
                 if (messageSize <= voiceMessageLeft)
                 {
                     byte[] messageData = bitOutputStream.toByteArray();
-                    BitOutputStream escapedMessage = new BitOutputStream();
+                    ByteArrayOutputStream escapedMessage = new ByteArrayOutputStream();
                     for (int i = 0; i < messageSize; i++)
                     {
                         if (messageData[i] == ESCAPE_CHAR)
@@ -147,17 +151,26 @@ public class StandardCommunicationModule extends CommunicationModule
                         }
                         escapedMessage.write(messageData[i]);
                     }
+                    escapedMessage.toByteArray();
                     escapedMessage.write(ESCAPE_CHAR);
                     if (escapedMessage.size() <= voiceMessageLeft)
                     {
-                        voiceMessageLeft += escapedMessage.size();
-                        voiceMessageStream.writeBits(escapedMessage);
+                        voiceMessageLeft -= escapedMessage.size();
+                        try
+                        {
+                            voiceMessageStream.write(escapedMessage.toByteArray());
+                        }
+                        catch (IOException e) { e.printStackTrace(); }
                     }
                 }
             }
         }
 
-        messages[0] = new AKSay(agent.getID(), agent.agentInfo.getTime(), voiceMessageStream.toByteArray());
-        agent.send(messages);
+        //messages[0] = new AKSay(agent.getID(), agent.agentInfo.getTime(), voiceMessageStream.toByteArray());
+        if (voiceMessageStream.size() > 0)
+        {
+            messages[0] = new AKSpeak(agent.getID(), agent.agentInfo.getTime(), 0, voiceMessageStream.toByteArray());
+            agent.send(messages);
+        }
     }
 }

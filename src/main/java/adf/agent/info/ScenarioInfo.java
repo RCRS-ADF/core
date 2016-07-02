@@ -172,6 +172,10 @@ public class ScenarioInfo
         return this.config.getIntValue("fire.tank.refill-rate", 500);
 	}
 
+	public int getKernelTimesteps() {
+        return this.config.getIntValue("kernel.timesteps");
+	}
+
 	public boolean isDebugMode() {
 		return this.config.getBooleanValue(ConfigKey.KEY_DEBUG_FLAG, false);
 	}
