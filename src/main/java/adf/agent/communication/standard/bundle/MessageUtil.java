@@ -1,23 +1,10 @@
-package adf.util;
+package adf.agent.communication.standard.bundle;
 
 import adf.agent.communication.standard.bundle.information.*;
 import adf.agent.info.WorldInfo;
 import rescuecore2.standard.entities.*;
-import rescuecore2.worldmodel.EntityID;
 
-import java.util.Collection;
-import java.util.stream.Collectors;
-
-public class WorldUtil {
-
-    public static Collection<EntityID> convertToID(Collection<StandardEntity> entities) {
-        return entities.stream().map(StandardEntity::getID).collect(Collectors.toList());
-    }
-
-    public static Collection<StandardEntity> convertToEntity(Collection<EntityID> entityIDs, WorldInfo world) {
-        return entityIDs.stream().map(world::getEntity).collect(Collectors.toList());
-    }
-
+public class MessageUtil {
 
     public static Building reflectMessage(WorldInfo worldInfo, MessageBuilding message) {
         Building building = (Building)worldInfo.getEntity(message.getBuildingID());
@@ -88,59 +75,5 @@ public class WorldUtil {
         blockade.setPosition(message.getRoadID());
         blockade.setRepairCost(message.getRepairCost());
         return blockade;
-    }
-
-    /**
-     * @deprecated rename method
-     * @see WorldUtil#reflectMessage(WorldInfo, MessageBuilding)
-     */
-    @Deprecated
-    public static Building reflectedMessage(WorldInfo worldInfo, MessageBuilding message) {
-        return reflectMessage(worldInfo, message);
-    }
-
-    /**
-     * @deprecated rename method
-     * @see WorldUtil#reflectMessage(WorldInfo, MessageAmbulanceTeam)
-     */
-    @Deprecated
-    public static AmbulanceTeam reflectedMessage(WorldInfo worldInfo, MessageAmbulanceTeam message) {
-        return reflectMessage(worldInfo, message);
-    }
-
-    /**
-     * @deprecated rename method
-     * @see WorldUtil#reflectMessage(WorldInfo, MessageCivilian)
-     */
-    @Deprecated
-    public static Civilian reflectedMessage(WorldInfo worldInfo, MessageCivilian message) {
-        return reflectMessage(worldInfo, message);
-    }
-
-    /**
-     * @deprecated rename method
-     * @see WorldUtil#reflectMessage(WorldInfo, MessageFireBrigade)
-     */
-    @Deprecated
-    public static FireBrigade reflectedMessage(WorldInfo worldInfo, MessageFireBrigade message) {
-        return reflectMessage(worldInfo, message);
-    }
-
-    /**
-     * @deprecated rename method
-     * @see WorldUtil#reflectMessage(WorldInfo, MessagePoliceForce)
-     */
-    @Deprecated
-    public static PoliceForce reflectedMessage(WorldInfo worldInfo, MessagePoliceForce message) {
-        return reflectMessage(worldInfo, message);
-    }
-
-    /**
-     * @deprecated rename method
-     * @see WorldUtil#reflectMessage(WorldInfo, MessageRoad)
-     */
-    @Deprecated
-    public static Blockade reflectedMessage(WorldInfo worldInfo, MessageRoad message) {
-        return reflectMessage(worldInfo, message);
     }
 }

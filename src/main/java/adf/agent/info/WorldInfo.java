@@ -1,6 +1,5 @@
 package adf.agent.info;
 
-import adf.util.WorldUtil;
 import rescuecore2.misc.Pair;
 import rescuecore2.standard.entities.Human;
 import rescuecore2.standard.entities.StandardEntity;
@@ -14,6 +13,7 @@ import rescuecore2.worldmodel.WorldModel;
 import java.awt.geom.Rectangle2D;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.stream.Collectors;
 
 public class WorldInfo implements Iterable<StandardEntity> {
 	private StandardWorldModel world;
@@ -41,27 +41,27 @@ public class WorldInfo implements Iterable<StandardEntity> {
 	}
 
 	public Collection<EntityID> getObjectIDsInRange(EntityID entity, int range) {
-		return WorldUtil.convertToID(this.world.getObjectsInRange(entity, range));
+		return this.convertToID(this.world.getObjectsInRange(entity, range));
 	}
 
 	public Collection<EntityID> getObjectIDsInRange(StandardEntity entity, int range) {
-		return WorldUtil.convertToID(this.world.getObjectsInRange(entity, range));
+		return this.convertToID(this.world.getObjectsInRange(entity, range));
 	}
 
 	public Collection<EntityID> getObjectIDsInRange(int x, int y, int range) {
-		return WorldUtil.convertToID(this.world.getObjectsInRange(x,y,range));
+		return this.convertToID(this.world.getObjectsInRange(x,y,range));
 	}
 
 	public Collection<EntityID> getObjectIDsInRectangle(int x1, int y1, int x2, int y2) {
-		return WorldUtil.convertToID(this.world.getObjectsInRectangle(x1, y1, x2, y2));
+		return this.convertToID(this.world.getObjectsInRectangle(x1, y1, x2, y2));
 	}
 
 	public Collection<EntityID> getEntityIDsOfType(StandardEntityURN urn) {
-		return WorldUtil.convertToID(this.world.getEntitiesOfType(urn));
+		return this.convertToID(this.world.getEntitiesOfType(urn));
 	}
 
 	public Collection<EntityID> getEntityIDsOfType(StandardEntityURN... urns) {
-		return WorldUtil.convertToID(this.world.getEntitiesOfType(urns));
+		return this.convertToID(this.world.getEntitiesOfType(urns));
 	}
 
     public StandardEntity getPosition(Human entity) {
@@ -163,4 +163,8 @@ public class WorldInfo implements Iterable<StandardEntity> {
     public Iterator<StandardEntity> iterator() {
         return this.world.iterator();
     }
+
+	private Collection<EntityID> convertToID(Collection<StandardEntity> entities) {
+		return entities.stream().map(StandardEntity::getID).collect(Collectors.toList());
+	}
 }
