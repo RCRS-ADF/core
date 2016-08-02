@@ -9,6 +9,7 @@ import rescuecore2.worldmodel.EntityID;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ThreadFactory;
 import java.util.stream.Collectors;
 
 public final class PrecomputeData
@@ -133,63 +134,101 @@ public final class PrecomputeData
 		}
 	}
 
-    /*public String getFileName() {
-				return this.fileName;
-    }*/
-
-	public Integer setInteger(String name, int value)
-	{
-		return this.data.intValues.put(name, value);
+	public Integer setInteger(String name, int value)  {
+	    StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
+        if(stackTraceElements == null || stackTraceElements.length == 0) {
+            return null;
+        }
+		String callClassName = stackTraceElements[2].getClassName();
+		return this.data.intValues.put(callClassName + ":" + name, value);
 	}
 
-	public Double setDouble(String name, double value)
-	{
-		return this.data.doubleValues.put(name, value);
+	public Double setDouble(String name, double value) {
+        StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
+        if(stackTraceElements == null || stackTraceElements.length == 0) {
+            return null;
+        }
+        String callClassName = stackTraceElements[2].getClassName();
+		return this.data.doubleValues.put(callClassName + ":" + name, value);
 	}
 
 	public Boolean setBoolean(String name, boolean value) {
-		return this.data.boolValues.put(name, value);
+        StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
+        if(stackTraceElements == null || stackTraceElements.length == 0) {
+            return null;
+        }
+        String callClassName = stackTraceElements[2].getClassName();
+		return this.data.boolValues.put(callClassName + ":" + name, value);
 	}
 
-	public String setString(String name, String value)
-	{
-		return this.data.stringValues.put(name, value);
+	public String setString(String name, String value) {
+        StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
+        if(stackTraceElements == null || stackTraceElements.length == 0) {
+            return null;
+        }
+        String callClassName = stackTraceElements[2].getClassName();
+		return this.data.stringValues.put(callClassName + ":" + name, value);
 	}
 
 	public EntityID setEntityID(String name, EntityID value) {
-		Integer id = this.data.idValues.put(name, value.getValue());
+        StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
+        if(stackTraceElements == null || stackTraceElements.length == 0) {
+            return null;
+        }
+        String callClassName = stackTraceElements[2].getClassName();
+		Integer id = this.data.idValues.put(callClassName + ":" + name, value.getValue());
 		return id == null ? null : new EntityID(id);
 	}
 
-	public List<Integer> setIntegerList(String name, List<Integer> list)
-	{
-		return this.data.intLists.put(name, list);
+	public List<Integer> setIntegerList(String name, List<Integer> list) {
+        StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
+        if(stackTraceElements == null || stackTraceElements.length == 0) {
+            return null;
+        }
+        String callClassName = stackTraceElements[2].getClassName();
+		return this.data.intLists.put(callClassName + ":" + name, list);
 	}
 
-	public List<Double> setDoubleList(String name, List<Double> list)
-	{
-		return this.data.doubleLists.put(name, list);
+	public List<Double> setDoubleList(String name, List<Double> list) {
+        StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
+        if(stackTraceElements == null || stackTraceElements.length == 0) {
+            return null;
+        }
+        String callClassName = stackTraceElements[2].getClassName();
+		return this.data.doubleLists.put(callClassName + ":" + name, list);
 	}
 
-	public List<String> setStringList(String name, List<String> list)
-	{
-		return this.data.stringLists.put(name, list);
+	public List<String> setStringList(String name, List<String> list) {
+        StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
+        if(stackTraceElements == null || stackTraceElements.length == 0) {
+            return null;
+        }
+        String callClassName = stackTraceElements[2].getClassName();
+		return this.data.stringLists.put(callClassName + ":" + name, list);
 	}
 
-	public List<EntityID> setEntityIDList(String name, List<EntityID> list)
-	{
+	public List<EntityID> setEntityIDList(String name, List<EntityID> list) {
+        StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
+        if(stackTraceElements == null || stackTraceElements.length == 0) {
+            return null;
+        }
+        String callClassName = stackTraceElements[2].getClassName();
 		List<Integer> cvtList = new ArrayList<>();
 		for (EntityID id : list)
 		{
 			cvtList.add(id.getValue());
 		}
-		cvtList = this.data.idLists.put(name, cvtList);
+		cvtList = this.data.idLists.put(callClassName + ":" + name, cvtList);
 		return cvtList == null ? null : cvtList.stream().map(EntityID::new).collect(Collectors.toList());
 	}
 
-	public List<Boolean> setBooleanList(String name, List<Boolean> list)
-	{
-		return this.data.boolLists.put(name, list);
+	public List<Boolean> setBooleanList(String name, List<Boolean> list) {
+        StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
+        if(stackTraceElements == null || stackTraceElements.length == 0) {
+            return null;
+        }
+        String callClassName = stackTraceElements[2].getClassName();
+		return this.data.boolLists.put(callClassName + ":" + name, list);
 	}
 
 	public boolean setReady(boolean isReady, WorldInfo worldInfo)
@@ -199,55 +238,96 @@ public final class PrecomputeData
 		return (this.data.isReady && this.data.readyID.equals(this.makeReadyID(worldInfo)));
 	}
 
-	public Integer getInteger(String name)
-	{
-		return this.data.intValues.get(name);
+	public Integer getInteger(String name) {
+        StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
+        if(stackTraceElements == null || stackTraceElements.length == 0) {
+            return null;
+        }
+        String callClassName = stackTraceElements[2].getClassName();
+		return this.data.intValues.get(callClassName + ":" + name);
 	}
 
-	public Double getDouble(String name)
-	{
-		return this.data.doubleValues.get(name);
+	public Double getDouble(String name) {
+        StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
+        if(stackTraceElements == null || stackTraceElements.length == 0) {
+            return null;
+        }
+        String callClassName = stackTraceElements[2].getClassName();
+		return this.data.doubleValues.get(callClassName + ":" + name);
 	}
 
 	public Boolean getBoolean(String name) {
-		return this.data.boolValues.get(name);
+        StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
+        if(stackTraceElements == null || stackTraceElements.length == 0) {
+            return null;
+        }
+        String callClassName = stackTraceElements[2].getClassName();
+		return this.data.boolValues.get(callClassName + ":" + name);
 	}
 
-	public String getString(String name)
-	{
-		return this.data.stringValues.get(name);
+	public String getString(String name) {
+        StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
+        if(stackTraceElements == null || stackTraceElements.length == 0) {
+            return null;
+        }
+        String callClassName = stackTraceElements[2].getClassName();
+		return this.data.stringValues.get(callClassName + ":" + name);
 	}
 
-	public EntityID getEntityID(String name)
-	{
-		Integer id = this.data.idValues.get(name);
+	public EntityID getEntityID(String name) {
+        StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
+        if(stackTraceElements == null || stackTraceElements.length == 0) {
+            return null;
+        }
+        String callClassName = stackTraceElements[2].getClassName();
+		Integer id = this.data.idValues.get(callClassName + ":" + name);
 		return id == null ? null : new EntityID(id);
 	}
 
-	public List<Integer> getIntegerList(String name)
-	{
-		return this.data.intLists.get(name);
+	public List<Integer> getIntegerList(String name) {
+        StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
+        if(stackTraceElements == null || stackTraceElements.length == 0) {
+            return null;
+        }
+        String callClassName = stackTraceElements[2].getClassName();
+		return this.data.intLists.get(callClassName + ":" + name);
 	}
 
-	public List<Double> getDoubleList(String name)
-	{
-		return this.data.doubleLists.get(name);
+	public List<Double> getDoubleList(String name) {
+        StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
+        if(stackTraceElements == null || stackTraceElements.length == 0) {
+            return null;
+        }
+        String callClassName = stackTraceElements[2].getClassName();
+		return this.data.doubleLists.get(callClassName + ":" + name);
 	}
 
-	public List<String> getStringList(String name)
-	{
-		return this.data.stringLists.get(name);
+	public List<String> getStringList(String name) {
+        StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
+        if(stackTraceElements == null || stackTraceElements.length == 0) {
+            return null;
+        }
+        String callClassName = stackTraceElements[2].getClassName();
+		return this.data.stringLists.get(callClassName + ":" + name);
 	}
 
-	public List<EntityID> getEntityIDList(String name)
-	{
-		List<Integer> cvtList = this.data.idLists.get(name);
+	public List<EntityID> getEntityIDList(String name) {
+        StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
+        if(stackTraceElements == null || stackTraceElements.length == 0) {
+            return null;
+        }
+        String callClassName = stackTraceElements[2].getClassName();
+		List<Integer> cvtList = this.data.idLists.get(callClassName + ":" + name);
 		return cvtList == null ? null : cvtList.stream().map(EntityID::new).collect(Collectors.toList());
 	}
 
-	public List<Boolean> getBooleanList(String name)
-	{
-		return this.data.boolLists.get(name);
+	public List<Boolean> getBooleanList(String name) {
+        StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
+        if(stackTraceElements == null || stackTraceElements.length == 0) {
+            return null;
+        }
+        String callClassName = stackTraceElements[2].getClassName();
+		return this.data.boolLists.get(callClassName + ":" + name);
 	}
 
 	public boolean isReady(WorldInfo worldInfo)
