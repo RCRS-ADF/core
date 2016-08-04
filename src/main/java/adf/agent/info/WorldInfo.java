@@ -2,7 +2,6 @@ package adf.agent.info;
 
 import rescuecore2.misc.Pair;
 import rescuecore2.standard.entities.*;
-import static rescuecore2.standard.entities.StandardEntityURN.*;
 import rescuecore2.worldmodel.ChangeSet;
 import rescuecore2.worldmodel.Entity;
 import rescuecore2.worldmodel.EntityID;
@@ -12,12 +11,17 @@ import java.awt.geom.Rectangle2D;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static rescuecore2.standard.entities.StandardEntityURN.*;
+
 public class WorldInfo implements Iterable<StandardEntity> {
 	private StandardWorldModel world;
 	private ChangeSet changed;
+    private int time;
 
-	public WorldInfo(StandardWorldModel world) {
+    public WorldInfo(StandardWorldModel world) {
 		this.setWorld(world);
+        this.time = -1;
+		this.updateTimeOfBuriedMap = -1;
 	}
 
 	public void setWorld(StandardWorldModel world)
@@ -190,5 +194,50 @@ public class WorldInfo implements Iterable<StandardEntity> {
         return this.getFireBuildingSet().stream().map(Building::getID).collect(Collectors.toList());
     }
 
+	public int getNumberOfBuried(EntityID entityID) {
+		int value = 0;
+		for(StandardEntity entity : this.getEntitiesOfType(CIVILIAN, AMBULANCE_TEAM, FIRE_BRIGADE, POLICE_FORCE)) {
+			Human human = (Human)entity;
+			if(this.getPosition(human).getID().getValue() == entityID.getValue()) {
+				if(human.isBuriednessDefined() && human.getBuriedness() > 0) {
+					value++;
+				}
+			}
+		}
+		return value;
+	}
 
+	private Map<Integer, Map<EntityID, Set<EntityID>>> buriedMap;
+	private int updateTimeOfBuriedMap;
+
+	public int getNumberOfBuried(int time, EntityID entityID) {
+		this.updateBuriedMap();
+		Map<EntityID, Set<EntityID>> targetTimeBuriedMap =  this.buriedMap.get(time > 0 ? time : this.time + time);
+		if(targetTimeBuriedMap == null) return -1;
+		Set<EntityID> buriedList = targetTimeBuriedMap.get(entityID);
+		if(buriedList == null) return -1;
+		return buriedList.size();
+	}
+
+    private void updateBuriedMap() {
+    	if(this.updateTimeOfBuriedMap != this.time) {
+			Map<EntityID, Set<EntityID>> currentMap = this.buriedMap.get(this.time);
+			if(currentMap == null) currentMap = new HashMap<>();
+			for(StandardEntity entity : this.getEntitiesOfType(CIVILIAN, AMBULANCE_TEAM, FIRE_BRIGADE, POLICE_FORCE)) {
+				Human human = (Human)entity;
+				if(human.isBuriednessDefined() && human.getBuriedness() > 0) {
+					EntityID position = human.getPosition();
+					Set<EntityID> buriedSet = currentMap.get(position);
+					if(buriedSet == null) buriedSet = new HashSet<>();
+					buriedSet.add(human.getID());
+					currentMap.put(position, buriedSet);
+				}
+			}
+			this.buriedMap.put(this.time, currentMap);
+		}
+	}
+
+    public void setTime(int time) {
+        this.time = time;
+    }
 }

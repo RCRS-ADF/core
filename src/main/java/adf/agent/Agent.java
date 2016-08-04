@@ -128,6 +128,7 @@ public abstract class Agent<E extends StandardEntity> extends AbstractAgent<Stan
 	protected void think(int time, ChangeSet changed, Collection<Command> heard)
 	{
 		this.agentInfo.setTime(time);
+		this.worldInfo.setTime(time);
 
 		if ( 1 == time )
 		{
