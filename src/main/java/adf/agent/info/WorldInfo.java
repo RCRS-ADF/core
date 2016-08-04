@@ -22,6 +22,7 @@ public class WorldInfo implements Iterable<StandardEntity> {
 		this.setWorld(world);
         this.time = -1;
 		this.updateTimeOfBuriedMap = -1;
+		this.buriedMap = new HashMap<>();
 	}
 
 	public void setWorld(StandardWorldModel world)
@@ -240,4 +241,36 @@ public class WorldInfo implements Iterable<StandardEntity> {
     public void setTime(int time) {
         this.time = time;
     }
+
+	private Map<EntityID, StandardEntity> cache;
+	private Map<Integer, Map<EntityID, StandardEntity>> rollbackData;
+
+	private void createCache() {
+		this.cache.clear();
+		for(StandardEntity entity : this) {
+			StandardEntityURN urn = entity.getStandardURN();
+			if(urn == ROAD) this.cache.put(entity.getID(), new Road((Road)entity));
+			else if(urn == BUILDING) this.cache.put(entity.getID(), new Building((Building) entity));
+			else if(urn == CIVILIAN) this.cache.put(entity.getID(), new Civilian((Civilian) entity));
+			else if(urn == BLOCKADE) this.cache.put(entity.getID(), new Blockade((Blockade)entity));
+			else if(urn == FIRE_BRIGADE) this.cache.put(entity.getID(), new FireBrigade((FireBrigade) entity));
+			else if(urn == AMBULANCE_TEAM) this.cache.put(entity.getID(), new AmbulanceTeam((AmbulanceTeam)entity));
+			else if(urn == POLICE_FORCE) this.cache.put(entity.getID(), new PoliceForce((PoliceForce) entity));
+			else if(urn == HYDRANT) this.cache.put(entity.getID(), new Hydrant((Hydrant) entity));
+			else if(urn == REFUGE) this.cache.put(entity.getID(), new Refuge((Refuge) entity));
+			else if(urn == GAS_STATION) this.cache.put(entity.getID(), new GasStation((GasStation)entity));
+			else if(urn == FIRE_STATION) this.cache.put(entity.getID(), new FireStation((FireStation) entity));
+			else if(urn == AMBULANCE_CENTRE) this.cache.put(entity.getID(), new AmbulanceCentre((AmbulanceCentre) entity));
+			else if(urn == POLICE_OFFICE) this.cache.put(entity.getID(), new PoliceOffice((PoliceOffice) entity));
+			else if(urn == WORLD) this.cache.put(entity.getID(), new World((World) entity));
+		}
+	}
+
+	public void createRollbackData() {
+		Map<EntityID, StandardEntity> data = new HashMap<>();
+		for(EntityID entityID : this.changed.getChangedEntities()) {
+			data.put(entityID, this.cache.get(entityID));
+		}
+		this.rollbackData.put(this.time - 1, data);
+	}
 }
