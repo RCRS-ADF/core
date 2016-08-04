@@ -14,6 +14,7 @@ import rescuecore2.components.AbstractAgent;
 import rescuecore2.config.ConfigException;
 import rescuecore2.messages.Command;
 import rescuecore2.messages.Message;
+import rescuecore2.messages.control.KASense;
 import rescuecore2.standard.entities.StandardEntity;
 import rescuecore2.standard.entities.StandardEntityURN;
 import rescuecore2.standard.entities.StandardWorldModel;
@@ -122,6 +123,17 @@ public abstract class Agent<E extends StandardEntity> extends AbstractAgent<Stan
 				break;
 			default:
 		}
+	}
+
+	@Override
+	protected void processSense(KASense sense) {
+		int time = sense.getTime();
+		ChangeSet changed = sense.getChangeSet();
+		this.worldInfo.createRollbackFirst(time, changed);
+		this.model.merge(sense.getChangeSet());
+		this.worldInfo.createRollbackSecond(time, changed);
+		Collection<Command> heard = sense.getHearing();
+		think(time, changed, heard);
 	}
 
 	@Override
