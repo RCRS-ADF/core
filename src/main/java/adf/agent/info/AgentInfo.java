@@ -1,6 +1,7 @@
 package adf.agent.info;
 
 import adf.agent.Agent;
+import adf.agent.action.Action;
 import rescuecore2.config.Config;
 import rescuecore2.messages.Command;
 import rescuecore2.standard.entities.*;
@@ -8,6 +9,8 @@ import rescuecore2.worldmodel.ChangeSet;
 import rescuecore2.worldmodel.EntityID;
 
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 public class AgentInfo {
 	private Agent agent;
@@ -17,11 +20,14 @@ public class AgentInfo {
 	private ChangeSet changed;
 	private Collection<Command> heard;
 
+    private Map<Integer, Action> actionHistory;
+
 	public AgentInfo(Agent agent, StandardWorldModel world, Config config) {
 		this.agent = agent;
 		this.world = world;
 		this.config = config;
 		this.time = 0;
+        this.actionHistory = new HashMap<>();
 	}
 
 	public void setTime(int time)
@@ -105,4 +111,14 @@ public class AgentInfo {
         }
 		return 0;
 	}
+
+	public Action getExecutedAction(int time) {
+	    if(time > 0) return this.actionHistory.get(time);
+        return this.actionHistory.get(this.getTime() + time);
+    }
+
+    public void setExecutedAction(int time, Action action) {
+        if(time > 0) this.actionHistory.put(time, action);
+        this.actionHistory.put(this.getTime() + time, action);
+    }
 }

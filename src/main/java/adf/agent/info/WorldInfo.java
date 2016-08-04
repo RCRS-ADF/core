@@ -1,18 +1,15 @@
 package adf.agent.info;
 
 import rescuecore2.misc.Pair;
-import rescuecore2.standard.entities.Human;
-import rescuecore2.standard.entities.StandardEntity;
-import rescuecore2.standard.entities.StandardEntityURN;
-import rescuecore2.standard.entities.StandardWorldModel;
+import rescuecore2.standard.entities.*;
+import static rescuecore2.standard.entities.StandardEntityURN.*;
 import rescuecore2.worldmodel.ChangeSet;
 import rescuecore2.worldmodel.Entity;
 import rescuecore2.worldmodel.EntityID;
 import rescuecore2.worldmodel.WorldModel;
 
 import java.awt.geom.Rectangle2D;
-import java.util.Collection;
-import java.util.Iterator;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class WorldInfo implements Iterable<StandardEntity> {
@@ -68,10 +65,18 @@ public class WorldInfo implements Iterable<StandardEntity> {
         return entity.getPosition(this.world);
     }
 
+    public StandardEntity getPosition(EntityID entityID) {
+        StandardEntity entity = this.getEntity(entityID);
+        return (entity instanceof Human) ? this.getPosition((Human)entity) : null;
+    }
+
     public Pair<Integer, Integer> getLocation(StandardEntity entity) {
         return entity.getLocation(this.world);
     }
 
+    public Pair<Integer, Integer> getLocation(EntityID entityID) {
+        return this.getLocation(this.getEntity(entityID));
+    }
 
     //org
 
@@ -167,4 +172,23 @@ public class WorldInfo implements Iterable<StandardEntity> {
 	private Collection<EntityID> convertToID(Collection<StandardEntity> entities) {
 		return entities.stream().map(StandardEntity::getID).collect(Collectors.toList());
 	}
+
+	private Set<Building> getFireBuildingSet() {
+	    Set<Building> fireBuildings = new HashSet<>();
+        for(StandardEntity entity : this.getEntitiesOfType(BUILDING, GAS_STATION, AMBULANCE_CENTRE, FIRE_STATION, POLICE_OFFICE)) {
+            Building building = (Building)entity;
+            if(building.isOnFire()) fireBuildings.add(building);
+        }
+        return fireBuildings;
+    }
+
+    public List<Building> getFireBuildings() {
+        return new ArrayList<>(this.getFireBuildingSet());
+    }
+
+    public List<EntityID> getFireBuildingIDs() {
+        return this.getFireBuildingSet().stream().map(Building::getID).collect(Collectors.toList());
+    }
+
+
 }

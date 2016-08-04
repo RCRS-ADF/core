@@ -54,6 +54,7 @@ public abstract class Platoon<E extends StandardEntity> extends Agent<E>
 	{
 		Action action = rootTactics.think(agentInfo, worldInfo, scenarioInfo, this.moduleManager, this.messageManager);
 		if(action != null) {
+			this.agentInfo.setExecutedAction(this.agentInfo.getTime(), action);
 			send(action.getCommand(this.getID(), this.agentInfo.getTime()));
 		}
 	}
