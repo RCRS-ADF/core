@@ -13,6 +13,7 @@ public class MessageBuilding extends StandardMessage
 	private static final int SIZE_BROKENNESS = 32;
 	private static final int SIZE_FIERYNESS = 32;
 	private static final int SIZE_TEMPERATURE = 32;
+
 	protected int rawBuildingID;
 	protected EntityID buildingID;
 	protected int buildingBrokenness;
@@ -23,22 +24,20 @@ public class MessageBuilding extends StandardMessage
 	{
 		super(isRadio);
 		this.buildingID = building.getID();
-		this.buildingBrokenness  = building.getBrokenness();
-		this.buildingFieryness  = building.getFieryness();
-		this.buildingTemperature  = building.getTemperature();
+		this.buildingBrokenness = building.isBrokennessDefined() ? building.getBrokenness() : -1;
+		this.buildingFieryness = building.isFierynessDefined() ? building.getFieryness() : -1;
+		this.buildingTemperature = building.isTemperatureDefined() ? building.getTemperature() : -1;
 	}
 
-	public MessageBuilding(boolean isRadio, int from, int ttl, BitStreamReader bitStreamReader)
-	{
+	public MessageBuilding(boolean isRadio, int from, int ttl, BitStreamReader bitStreamReader) {
 		super(isRadio, from, ttl, bitStreamReader);
-		rawBuildingID = bitStreamReader.getBits(SIZE_ID);
-		buildingBrokenness = bitStreamReader.getBits(SIZE_BROKENNESS);
-		buildingFieryness = bitStreamReader.getBits(SIZE_FIERYNESS);
-		buildingTemperature = bitStreamReader.getBits(SIZE_TEMPERATURE);
+		this.rawBuildingID = bitStreamReader.getBits(SIZE_ID);
+		this.buildingBrokenness = (bitStreamReader.getBits(1) == 1) ? bitStreamReader.getBits(SIZE_BROKENNESS) : -1;
+		this.buildingFieryness = (bitStreamReader.getBits(1) == 1) ? bitStreamReader.getBits(SIZE_FIERYNESS) : -1;
+		this.buildingTemperature = (bitStreamReader.getBits(1) == 1) ? bitStreamReader.getBits(SIZE_TEMPERATURE) : -1;
 	}
 
-	public EntityID getBuildingID()
-	{
+	public EntityID getBuildingID() {
 		if (this.buildingID == null) {
             this.buildingID = new EntityID(this.rawBuildingID);
         }
@@ -60,7 +59,7 @@ public class MessageBuilding extends StandardMessage
 	@Override
 	public int getByteArraySize()
 	{
-		return toBitOutputStream().size();
+		return this.toBitOutputStream().size();
 	}
 
 	@Override
@@ -69,14 +68,35 @@ public class MessageBuilding extends StandardMessage
 	}
 
 	@Override
-	public BitOutputStream toBitOutputStream()
-	{
+	public BitOutputStream toBitOutputStream() {
 		BitOutputStream bitOutputStream = new BitOutputStream();
-		bitOutputStream.writeBits(buildingID.getValue(), SIZE_ID);
-		bitOutputStream.writeBits(buildingBrokenness, SIZE_BROKENNESS);
-		bitOutputStream.writeBits(buildingFieryness, SIZE_FIERYNESS);
-		bitOutputStream.writeBits(buildingTemperature, SIZE_TEMPERATURE);
+		bitOutputStream.writeBits(this.buildingID.getValue(), SIZE_ID);
+		if (this.buildingBrokenness != -1) {
+			bitOutputStream.writeBitsWithExistFlag(this.buildingBrokenness, SIZE_BROKENNESS);
+		} else {
+			bitOutputStream.writeNullFlag();
+		}
+		if (this.buildingFieryness != -1) {
+			bitOutputStream.writeBits(buildingFieryness, SIZE_FIERYNESS);
+		} else {
+			bitOutputStream.writeNullFlag();
+		}
+		if (this.buildingTemperature != -1) {
+			bitOutputStream.writeBits(buildingTemperature, SIZE_TEMPERATURE);
+		} else {
+			bitOutputStream.writeNullFlag();
+		}
 		return bitOutputStream;
+	}
+
+	public boolean isBrokennessDefined() {
+		return this.buildingBrokenness != -1;
+	}
+	public boolean isFierynessDefined() {
+		return this.buildingFieryness != -1;
+	}
+	public boolean isTemperatureDefined() {
+		return this.buildingTemperature != -1;
 	}
 }
 

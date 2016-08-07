@@ -31,6 +31,15 @@ public class BitOutputStream extends ByteArrayOutputStream {
 		}
 	}
 
+	public synchronized void writeBitsWithExistFlag(int value, int len) {
+		this.writeBits(1);
+		this.writeBits(value, len);
+	}
+
+	public synchronized void writeNullFlag() {
+		this.writeBits(0);
+	}
+
 	private synchronized void writeBits(int value) {
 		this.buf = this.buf | (value << --this.cnt);
 		now_size++;

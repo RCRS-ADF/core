@@ -9,16 +9,14 @@ public class MessageReport extends StandardMessage
 	private static final int SIZE_DONE = 1;
 	private boolean reportDone;
 
-	public MessageReport(boolean isRadio, boolean isDone)
-	{
+	public MessageReport(boolean isRadio, boolean isDone) {
 		super(isRadio);
-		reportDone = isDone;
+		this.reportDone = isDone;
 	}
 
-	public MessageReport(boolean isRadio, int from, int ttl, BitStreamReader bitStreamReader)
-	{
+	public MessageReport(boolean isRadio, int from, int ttl, BitStreamReader bitStreamReader) {
 		super(isRadio, from, ttl, bitStreamReader);
-		reportDone = (0 == bitStreamReader.getBits(SIZE_DONE)?false:true);
+		this.reportDone = (0 != bitStreamReader.getBits(SIZE_DONE));
 	}
 
 	public boolean isDone()
@@ -30,7 +28,7 @@ public class MessageReport extends StandardMessage
 	@Override
 	public int getByteArraySize()
 	{
-		return toBitOutputStream().size();
+		return this.toBitOutputStream().size();
 	}
 
 	@Override
@@ -42,7 +40,7 @@ public class MessageReport extends StandardMessage
 	public BitOutputStream toBitOutputStream()
 	{
 		BitOutputStream bitOutputStream = new BitOutputStream();
-		bitOutputStream.writeBits((reportDone?1:0), SIZE_DONE);
+		bitOutputStream.writeBits((this.reportDone?1:0), SIZE_DONE);
 		return bitOutputStream;
 	}
 }

@@ -16,9 +16,9 @@ public class MessageFireBrigade extends StandardMessage
 	public static final int ACTION_REFILL = 3;
 
 	private static final int SIZE_ID = 32;
-	private static final int SIZE_HP = 32;
-	private static final int SIZE_BURIEDNESS = 32;
-	private static final int SIZE_DAMAGE = 32;
+	private static final int SIZE_HP = 14;
+	private static final int SIZE_BURIEDNESS = 13;
+	private static final int SIZE_DAMAGE = 14;
 	private static final int SIZE_POSITION = 32;
 	private static final int SIZE_TARGET = 32;
 	private static final int SIZE_WATER = 32;
@@ -33,33 +33,33 @@ public class MessageFireBrigade extends StandardMessage
 	protected EntityID humanPosition;
 	protected int rawTargetID;
 	protected EntityID myTargetID;
-	private int myAction;
-	private int fireBrigadeWater;
+	protected int myAction;
+	protected int fireBrigadeWater;
 
 	public MessageFireBrigade(boolean isRadio, FireBrigade fireBrigade, int action, EntityID target)
 	{
 		super(isRadio);
-		agentID = fireBrigade.getID();
-		humanHP = fireBrigade.getHP();
-		humanBuriedness = fireBrigade.getBuriedness();
-        humanDamage = fireBrigade.getDamage();
-		humanPosition = fireBrigade.getPosition();
+		this.agentID = fireBrigade.getID();
+		this.humanHP = fireBrigade.isHPDefined() ? fireBrigade.getHP() : -1;
+		this.humanBuriedness = fireBrigade.isBuriednessDefined() ? fireBrigade.getBuriedness() : -1;
+		this.humanDamage = fireBrigade.isDamageDefined() ? fireBrigade.getDamage() : -1;
+		this.humanPosition = fireBrigade.isPositionDefined() ? fireBrigade.getPosition() : null;
 		this.myTargetID = target;
 		this.myAction = action;
-		this.fireBrigadeWater = fireBrigade.getWater();
+		this.fireBrigadeWater = fireBrigade.isWaterDefined() ? fireBrigade.getWater() : -1;
 	}
 
 	public MessageFireBrigade(boolean isRadio, int from, int ttl, BitStreamReader bitStreamReader)
 	{
         super(isRadio, from, ttl, bitStreamReader);
-		rawAgentID = bitStreamReader.getBits(SIZE_ID);
-		humanHP = bitStreamReader.getBits(SIZE_HP);
-		humanBuriedness = bitStreamReader.getBits(SIZE_BURIEDNESS);
-		humanDamage = bitStreamReader.getBits(SIZE_DAMAGE);
-		rawHumanPosition = bitStreamReader.getBits(SIZE_POSITION);
-		rawTargetID = bitStreamReader.getBits(SIZE_TARGET);
-		myAction = bitStreamReader.getBits(SIZE_ACTION);
-		this.fireBrigadeWater = bitStreamReader.getBits(SIZE_WATER);
+		this.rawAgentID = bitStreamReader.getBits(SIZE_ID);
+		this.humanHP = (bitStreamReader.getBits(1) == 1) ? bitStreamReader.getBits(SIZE_HP) : -1;
+		this.humanBuriedness = (bitStreamReader.getBits(1) == 1) ? bitStreamReader.getBits(SIZE_BURIEDNESS) : -1;
+		this.humanDamage = (bitStreamReader.getBits(1) == 1) ? bitStreamReader.getBits(SIZE_DAMAGE) : -1;
+		this.rawHumanPosition = (bitStreamReader.getBits(1) == 1) ? bitStreamReader.getBits(SIZE_POSITION) : -1;
+		this.rawTargetID = (bitStreamReader.getBits(1) == 1) ? bitStreamReader.getBits(SIZE_TARGET) : -1;
+		this.myAction = bitStreamReader.getBits(SIZE_ACTION);
+		this.fireBrigadeWater = (bitStreamReader.getBits(1) == 1) ? bitStreamReader.getBits(SIZE_WATER) : -1;
 	}
 
 	public EntityID getAgentID()
@@ -73,19 +73,19 @@ public class MessageFireBrigade extends StandardMessage
 	public int getWater() { return this.fireBrigadeWater; }
 
 	public int getAction()
-	{ return myAction; }
+	{ return this.myAction; }
 
-	public EntityID getTargetID()
-	{
-		if ( myTargetID == null )
-		{ myTargetID = new EntityID(rawTargetID); }
-		return myTargetID;
+	public EntityID getTargetID() {
+		if ( this.myTargetID == null ) {
+			if(this.rawTargetID != -1) this.myTargetID = new EntityID(this.rawTargetID);
+		}
+		return this.myTargetID;
 	}
 
 	@Override
 	public int getByteArraySize()
 	{
-		return toBitOutputStream().size();
+		return this.toBitOutputStream().size();
 	}
 
 	@Override
@@ -97,14 +97,42 @@ public class MessageFireBrigade extends StandardMessage
 	public BitOutputStream toBitOutputStream()
 	{
 		BitOutputStream bitOutputStream = new BitOutputStream();
-		bitOutputStream.writeBits(agentID.getValue(), SIZE_ID);
-		bitOutputStream.writeBits(humanHP, SIZE_HP);
-		bitOutputStream.writeBits(humanBuriedness, SIZE_BURIEDNESS);
-		bitOutputStream.writeBits(humanDamage, SIZE_DAMAGE);
-		bitOutputStream.writeBits(humanPosition.getValue(), SIZE_POSITION);
-		bitOutputStream.writeBits(myTargetID.getValue(), SIZE_TARGET);
-		bitOutputStream.writeBits(myAction, SIZE_ACTION);
-		bitOutputStream.writeBits(fireBrigadeWater, SIZE_WATER);
+		bitOutputStream.writeBits(this.agentID.getValue(), SIZE_ID);
+		if (this.humanHP != -1) {
+			bitOutputStream.writeBitsWithExistFlag(this.humanHP, SIZE_HP);
+		} else {
+			bitOutputStream.writeNullFlag();
+		}
+		if (this.humanBuriedness != -1) {
+			bitOutputStream.writeBitsWithExistFlag(this.humanBuriedness, SIZE_BURIEDNESS);
+		} else {
+			bitOutputStream.writeNullFlag();
+		}
+		if (this.humanDamage != -1) {
+			bitOutputStream.writeBitsWithExistFlag(this.humanDamage, SIZE_DAMAGE);
+		} else {
+			bitOutputStream.writeNullFlag();
+		}
+		if (this.humanPosition != null) {
+			bitOutputStream.writeBitsWithExistFlag(this.humanPosition.getValue(), SIZE_POSITION);
+		} else if(this.rawHumanPosition != -1) {
+			bitOutputStream.writeBitsWithExistFlag(this.rawHumanPosition, SIZE_POSITION);
+		}else {
+			bitOutputStream.writeNullFlag();
+		}
+		if(this.myTargetID != null) {
+			bitOutputStream.writeBitsWithExistFlag(this.myTargetID.getValue(), SIZE_TARGET);
+		} else if(this.rawTargetID != -1) {
+			bitOutputStream.writeBitsWithExistFlag(this.rawTargetID, SIZE_TARGET);
+		} else {
+			bitOutputStream.writeNullFlag();
+		}
+		bitOutputStream.writeBits(this.myAction, SIZE_ACTION);
+		if(this.fireBrigadeWater != -1) {
+			bitOutputStream.writeBitsWithExistFlag(this.fireBrigadeWater, SIZE_WATER);
+		} else	{
+			bitOutputStream.writeNullFlag();
+		}
 		return bitOutputStream;
 	}
 
@@ -114,11 +142,35 @@ public class MessageFireBrigade extends StandardMessage
 
 	public int getDamage() { return this.humanDamage; }
 
-	public EntityID getPosition()
-	{
-		if (this.humanPosition == null)
-		{ this.humanPosition = new EntityID(this.rawHumanPosition); }
+	public EntityID getPosition() {
+		if (this.humanPosition == null) {
+			if(this.rawHumanPosition != -1) this.humanPosition = new EntityID(this.rawHumanPosition);
+		}
 		return this.humanPosition;
+	}
+
+	public boolean isTargetDefined() {
+		return (this.myTargetID != null || this.rawTargetID != -1);
+	}
+
+	public boolean isHPDefined() {
+		return this.humanHP != -1;
+	}
+
+	public boolean isBuriednessDefined() {
+		return this.humanBuriedness != -1;
+	}
+
+	public boolean isDamageDefined() {
+		return this.humanDamage != -1;
+	}
+
+	public boolean isPositionDefined() {
+		return (this.humanPosition != null || this.rawHumanPosition != -1);
+	}
+
+	public boolean isWaterDefined() {
+		return this.fireBrigadeWater != -1;
 	}
 }
 

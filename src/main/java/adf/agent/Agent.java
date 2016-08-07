@@ -6,6 +6,7 @@ import adf.agent.communication.standard.bundle.StandardMessageBundle;
 import adf.agent.config.ModuleConfig;
 import adf.agent.info.AgentInfo;
 import adf.agent.module.ModuleManager;
+import adf.agent.precompute.DebugDataSet;
 import adf.agent.precompute.PrecomputeData;
 import adf.agent.info.ScenarioInfo;
 import adf.agent.info.WorldInfo;
@@ -36,17 +37,16 @@ public abstract class Agent<E extends StandardEntity> extends AbstractAgent<Stan
 	protected ModuleConfig moduleConfig;
 	protected ModuleManager moduleManager;
 	protected PrecomputeData precomputeData;
+	protected DebugDataSet debugDataSet;
 	protected MessageManager messageManager;
 	protected CommunicationModule communicationModule;
 	protected boolean isPrecompute;
 	int ignoreTime;
 
-	public Agent(String moduleConfigFileName, boolean isPrecompute, String dataStorageName)
-	{
+	public Agent(String moduleConfigFileName, boolean isPrecompute, String dataStorageName) {
 		this.isPrecompute = isPrecompute;
 
-		if (isPrecompute)
-		{
+		if (isPrecompute) {
 			this.precomputeData.removeData(dataStorageName);
 			this.mode = ScenarioInfo.Mode.PRECOMPUTATION_PHASE;
 		}
@@ -129,9 +129,13 @@ public abstract class Agent<E extends StandardEntity> extends AbstractAgent<Stan
 	protected void processSense(KASense sense) {
 		int time = sense.getTime();
 		ChangeSet changed = sense.getChangeSet();
-		this.worldInfo.createRollbackFirst(time, changed);
-		this.model.merge(sense.getChangeSet());
-		this.worldInfo.createRollbackSecond(time, changed);
+		if(this.worldInfo.needRollback()) {
+            this.worldInfo.createRollbackFirst(time, changed);
+            this.model.merge(sense.getChangeSet());
+            this.worldInfo.createRollbackSecond(time, changed);
+        } else {
+            this.model.merge(sense.getChangeSet());
+        }
 		Collection<Command> heard = sense.getHearing();
 		think(time, changed, heard);
 	}

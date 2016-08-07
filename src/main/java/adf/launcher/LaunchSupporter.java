@@ -8,7 +8,6 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
 
 public class LaunchSupporter
@@ -194,83 +193,78 @@ public class LaunchSupporter
 
     private static String getLoaderClass(String base, String path)
     {
-        String loaderClass = new String();
+        String loaderClass = "";
         File dir = new File(path);
         File[] files = dir.listFiles();
-        Arrays.sort(files, (a, b)->(int)(b.lastModified() - a.lastModified()));
-        for (int i = 0; i < files.length; i++)
-        {
-            File file = files[i];
-            if (file.isFile())
-            {
-                String filePath = file.getPath();
-                if ( filePath.endsWith(".class") && !filePath.contains("$") )
-                {
-                    loaderClass = filePath.substring(base.length()+1, filePath.length()-6).replace(File.separator, ".");
-                    try {
-                        if (ClassLoader.getSystemClassLoader().loadClass(loaderClass).getSuperclass().getName().equals(CLASSNAME_LOADERPARENT))
-                        {
-                            return loaderClass;
+        if (files != null) {
+            Arrays.sort(files, (a, b)->(int)(b.lastModified() - a.lastModified()));
+            for (File file : files) {
+                if (file.isFile()) {
+                    String filePath = file.getPath();
+                    if (filePath.endsWith(".class") && !filePath.contains("$")) {
+                        loaderClass = filePath.substring(base.length() + 1, filePath.length() - 6).replace(File.separator, ".");
+                        try {
+                            if (ClassLoader.getSystemClassLoader().loadClass(loaderClass).getSuperclass().getName().equals(CLASSNAME_LOADERPARENT)) {
+                                return loaderClass;
+                            }
+                        } catch (ClassNotFoundException e) {
+                            e.printStackTrace();
                         }
-                    }catch (ClassNotFoundException e) {
-                        e.printStackTrace();
                     }
                 }
             }
         }
         loaderClass = "";
 
-        for (int i = 0; i < files.length; i++)
-        {
-            File file = files[i];
-            if (file.isDirectory())
-            {
-                loaderClass = getLoaderClass(base, file.getPath());
-                if (!loaderClass.equals(""))
-                { return loaderClass; }
+        if (files != null) {
+            for (File file : files) {
+                if (file.isDirectory()) {
+                    loaderClass = getLoaderClass(base, file.getPath());
+                    if (!loaderClass.equals("")) {
+                        return loaderClass;
+                    }
+                }
             }
         }
 
         return loaderClass;
     }
 
-    private static String getClassPath(String path)
-    {
-        String classPath = new String();
+    private static String getClassPath(String path) {
+        String classPath = "";
         File dir = new File(path);
         File[] files = dir.listFiles();
-        for (int i = 0; i < files.length; i++)
-        {
-            File file = files[i];
-            if (file.isFile())
-            {
-                String filePath = file.getPath();
-                if ( filePath.endsWith(".jar") && !filePath.endsWith("-sources.jar") )
-                { classPath += filePath + System.getProperty("path.separator"); }
+        if (files != null) {
+            for (File file : files) {
+                if (file.isFile()) {
+                    String filePath = file.getPath();
+                    if (filePath.endsWith(".jar") && !filePath.endsWith("-sources.jar")) {
+                        classPath += filePath + System.getProperty("path.separator");
+                    }
+                } else if (file.isDirectory()) {
+                    classPath += getClassPath(file.getPath());
+                }
             }
-            else if (file.isDirectory())
-            { classPath += getClassPath(file.getPath()); }
         }
 
         return classPath;
     }
 
-    private static List<String> getJavaFilesText(String path)
-    {
+    private static List<String> getJavaFilesText(String path) {
         List<String> javaFilesText = new ArrayList<>();
         File dir = new File(path);
         File[] files = dir.listFiles();
-        for (int i = 0; i < files.length; i++)
-        {
-            File file = files[i];
-            if (file.isFile())
-            {
-                String filePath = file.getPath();
-                if (filePath.endsWith(".java"))
-                { javaFilesText.add(filePath); }
+        if (files != null) {
+            for (File file : files) {
+                if (file.isFile()) {
+                    String filePath = file.getPath();
+                    if (filePath.endsWith(".java")) {
+                        javaFilesText.add(filePath);
+                    }
+                } else if (file.isDirectory()) {
+                    javaFilesText.addAll(getJavaFilesText(file.getPath()));
+                }
             }
-            else if (file.isDirectory())
-            { javaFilesText.addAll(getJavaFilesText(file.getPath())); }
         }
 
         return javaFilesText;
@@ -278,16 +272,18 @@ public class LaunchSupporter
 
     private static void deleteFile(File file)
     {
-        if(file.exists() == false)
+        if(!file.exists())
         { return; }
 
-        if(file.isFile())
-        { file.delete(); }
-        else if(file.isDirectory())
-        {
+        if(file.isFile()) {
+            file.delete();
+        } else if(file.isDirectory()) {
             File[] files = file.listFiles();
-            for(int i=0; i<files.length; i++)
-            { deleteFile( files[i] ); }
+            if (files != null) {
+                for (File file1 : files) {
+                    deleteFile(file1);
+                }
+            }
             file.delete();
         }
     }
