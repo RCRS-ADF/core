@@ -74,16 +74,15 @@ public class WorldInfo implements Iterable<StandardEntity> {
 			targetTime = 1;
 		}
 
-		for(int i = this.time; i >= targetTime; i--) {
-			// check add entity
+		for(int i = this.time - 1; i >= targetTime; i--) {
 			Map<EntityID, StandardEntity> info = this.rollbackAddInfo.get(i);
 			if(info != null) {
 				StandardEntity entity = info.get(entityID);
 				if (entity != null) {
-					return i > targetTime && nullable ? null : entity;
+					if(i > targetTime && nullable) return null;
+					result = entity;
 				}
 			}
-			// check change entity
 			info = this.rollbackChangeInfo.get(i);
 			if(info != null) {
 				StandardEntity entity = info.get(entityID);
@@ -92,7 +91,6 @@ public class WorldInfo implements Iterable<StandardEntity> {
 					continue;
 				}
 			}
-			//check delete entity
 			info = this.rollbackRemoveInfo.get(i);
 			if(info != null) {
 				StandardEntity entity = info.get(entityID);
