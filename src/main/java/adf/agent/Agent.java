@@ -130,13 +130,9 @@ public abstract class Agent<E extends StandardEntity> extends AbstractAgent<Stan
 	protected void processSense(KASense sense) {
 		int time = sense.getTime();
 		ChangeSet changed = sense.getChangeSet();
-		if(this.worldInfo.needRollback()) {
-            this.worldInfo.createRollbackFirst(time, changed);
-            this.model.merge(sense.getChangeSet());
-            this.worldInfo.createRollbackSecond(time, changed);
-        } else {
-            this.model.merge(sense.getChangeSet());
-        }
+		this.worldInfo.createRollback(time, changed);
+		this.model.merge(sense.getChangeSet());
+
 		Collection<Command> heard = sense.getHearing();
 		think(time, changed, heard);
 	}

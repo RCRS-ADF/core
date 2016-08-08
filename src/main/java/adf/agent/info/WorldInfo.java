@@ -2,10 +2,7 @@ package adf.agent.info;
 
 import rescuecore2.misc.Pair;
 import rescuecore2.standard.entities.*;
-import rescuecore2.worldmodel.ChangeSet;
-import rescuecore2.worldmodel.Entity;
-import rescuecore2.worldmodel.EntityID;
-import rescuecore2.worldmodel.WorldModel;
+import rescuecore2.worldmodel.*;
 
 import java.awt.geom.Rectangle2D;
 import java.util.*;
@@ -18,14 +15,13 @@ public class WorldInfo implements Iterable<StandardEntity> {
 	private ChangeSet changed;
     private int time;
 
-	private boolean runRollback;
 	private Map<Integer, Map<EntityID, StandardEntity>> rollbackChangeInfo;
 	private Map<Integer, Map<EntityID, StandardEntity>> rollbackAddInfo;
-	private Map<Integer, Map<EntityID, StandardEntity>> rollbackDeleteInfo;
+	private Map<Integer, Map<EntityID, StandardEntity>> rollbackRemoveInfo;
 
 	public enum RollbackType {
 		ROLLBACK_CHANGE,
-		ROLLBACK_DELETE,
+        ROLLBACK_REMOVE,
 		ROLLBACK_ADD
 	}
 
@@ -34,8 +30,8 @@ public class WorldInfo implements Iterable<StandardEntity> {
         this.time = -1;
 		this.rollbackChangeInfo = new HashMap<>();
 		this.rollbackAddInfo = new HashMap<>();
-		this.rollbackDeleteInfo = new HashMap<>();
-        this.runRollback = false;
+		this.rollbackRemoveInfo = new HashMap<>();
+		this.world.addWorldModelListener(new RollbackListener());
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -46,15 +42,6 @@ public class WorldInfo implements Iterable<StandardEntity> {
 
 	public void index() {
 		this.world.index();
-	}
-
-	public WorldInfo requestRollback() {
-		this.runRollback = true;
-		return this;
-	}
-
-	public boolean needRollback() {
-		return this.runRollback;
 	}
 
 	public ChangeSet getChanged() {
@@ -106,7 +93,7 @@ public class WorldInfo implements Iterable<StandardEntity> {
 				}
 			}
 			//check delete entity
-			info = this.rollbackDeleteInfo.get(i);
+			info = this.rollbackRemoveInfo.get(i);
 			if(info != null) {
 				StandardEntity entity = info.get(entityID);
 				if(entity != null) {
@@ -302,8 +289,8 @@ public class WorldInfo implements Iterable<StandardEntity> {
 		return this.rollbackAddInfo.get(time);
 	}
 
-	public Map<EntityID, StandardEntity> getDeleteEntities(int time) {
-		return this.rollbackDeleteInfo.get(time);
+	public Map<EntityID, StandardEntity> getRemoveEntities(int time) {
+		return this.rollbackRemoveInfo.get(time);
 	}
 
 	public Collection<Building> getFireBuildingSet() {
@@ -419,31 +406,29 @@ public class WorldInfo implements Iterable<StandardEntity> {
 	}
 
 	public void setRollbackEntity(int targetTime, RollbackType type, StandardEntity entity) {
-		if(this.runRollback) {
-			if(targetTime <= 0) targetTime = this.time + targetTime;
+		if(targetTime <= 0) targetTime = this.time + targetTime;
 
-			if(type == RollbackType.ROLLBACK_CHANGE) {
-				Map<EntityID, StandardEntity> changeInfo = this.rollbackChangeInfo.get(targetTime);
-				StandardEntity target = changeInfo.get(entity.getID());
-				if(target == null) {
-					changeInfo.put(entity.getID(), (StandardEntity) entity.copy());
-				}
-				this.rollbackChangeInfo.put(targetTime, changeInfo);
-			} else if(type == RollbackType.ROLLBACK_ADD) {
-				Map<EntityID, StandardEntity> addInfo = this.rollbackAddInfo.get(targetTime);
-				StandardEntity target = addInfo.get(entity.getID());
-				if(target == null) {
-					addInfo.put(entity.getID(), entity);
-				}
-				this.rollbackAddInfo.put(targetTime, addInfo);
-			} else if(type == RollbackType.ROLLBACK_DELETE) {
-				Map<EntityID, StandardEntity> deleteInfo = this.rollbackDeleteInfo.get(targetTime);
-				StandardEntity target = deleteInfo.get(entity.getID());
-				if (target == null) {
-					deleteInfo.put(entity.getID(), entity);
-				}
-				this.rollbackDeleteInfo.put(targetTime, deleteInfo);
+		if(type == RollbackType.ROLLBACK_CHANGE) {
+			Map<EntityID, StandardEntity> changeInfo = this.rollbackChangeInfo.get(targetTime);
+			StandardEntity target = changeInfo.get(entity.getID());
+			if(target == null) {
+				changeInfo.put(entity.getID(), (StandardEntity) entity.copy());
 			}
+			this.rollbackChangeInfo.put(targetTime, changeInfo);
+		} else if(type == RollbackType.ROLLBACK_ADD) {
+			Map<EntityID, StandardEntity> addInfo = this.rollbackAddInfo.get(targetTime);
+			StandardEntity target = addInfo.get(entity.getID());
+			if(target == null) {
+				addInfo.put(entity.getID(), entity);
+			}
+			this.rollbackAddInfo.put(targetTime, addInfo);
+		} else if(type == RollbackType.ROLLBACK_REMOVE) {
+			Map<EntityID, StandardEntity> removeInfo = this.rollbackRemoveInfo.get(targetTime);
+			StandardEntity target = removeInfo.get(entity.getID());
+			if (target == null) {
+				removeInfo.put(entity.getID(), entity);
+			}
+			this.rollbackRemoveInfo.put(targetTime, removeInfo);
 		}
 	}
 
@@ -460,34 +445,33 @@ public class WorldInfo implements Iterable<StandardEntity> {
 		this.time = time;
 	}
 
-	public void createRollbackFirst(int time, ChangeSet changed) {
+	public void createRollback(int time, ChangeSet changed) {
+		this.setTime(time);
 		Map<EntityID, StandardEntity> changeInfo = new HashMap<>();
-		Map<EntityID, StandardEntity> addInfo = new HashMap<>();
-		Map<EntityID, StandardEntity> deleteInfo = new HashMap<>();
-
 		for(EntityID entityID : changed.getChangedEntities()) {
 			StandardEntity entity = this.getEntity(entityID);
-			if(entity != null) {
-				changeInfo.put(entityID, (StandardEntity)entity.copy());
-			} else {
-				addInfo.put(entityID, null);
-			}
-		}
-		for(EntityID entityID : changed.getDeletedEntities()){
-			deleteInfo.put(entityID, (StandardEntity) this.getEntity(entityID).copy());
+			if(entity != null) changeInfo.put(entityID, (StandardEntity) entity.copy());
 		}
 
 		this.rollbackChangeInfo.put(time - 1, changeInfo);
-		this.rollbackAddInfo.put(time, addInfo);
-		this.rollbackDeleteInfo.put(time - 1, deleteInfo);
+		this.rollbackAddInfo.put(time, new HashMap<>());
+		this.rollbackRemoveInfo.put(time, new HashMap<>());
 	}
 
-	public void createRollbackSecond(int time, ChangeSet changed) {
-		Map<EntityID, StandardEntity> addInfo = this.rollbackAddInfo.get(time);
-		for(EntityID entityID : addInfo.keySet()) {
-			addInfo.put(entityID, (StandardEntity) this.getEntity(entityID).copy());
+	private class RollbackListener implements WorldModelListener<StandardEntity> {
+		@Override
+		public void entityAdded(WorldModel<? extends StandardEntity> model, StandardEntity e) {
+			Map<EntityID, StandardEntity> addInfo = rollbackAddInfo.get(time);
+			addInfo.put(e.getID(), (StandardEntity)  e.copy());
+			rollbackAddInfo.put(time, addInfo);
 		}
-		this.rollbackAddInfo.put(time, addInfo);
+
+		@Override
+		public void entityRemoved(WorldModel<? extends StandardEntity> model, StandardEntity e) {
+			Map<EntityID, StandardEntity> removeInfo = rollbackRemoveInfo.get(time);
+			removeInfo.put(e.getID(), (StandardEntity)e.copy());
+			rollbackRemoveInfo.put(time, removeInfo);
+		}
 	}
 
     public void addEntity(Entity e) {
@@ -516,15 +500,5 @@ public class WorldInfo implements Iterable<StandardEntity> {
 
 	public void merge(ChangeSet changeSet) {
 		this.world.merge(changeSet);
-	}
-
-	public StandardWorldModel getRawWorld() {
-		System.out.println("[Warning] call method : WorldInfo.getRawWorld()");
-		return this.world;
-	}
-
-	public static StandardWorldModel createStandardWorldModel(WorldModel<? extends Entity> existing) {
-		System.out.println("[Warning] call method : WorldInfo.createStandardWorldModel()");
-		return StandardWorldModel.createStandardWorldModel(existing);
 	}
 }
