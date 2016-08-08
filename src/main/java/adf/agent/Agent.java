@@ -6,11 +6,12 @@ import adf.agent.communication.standard.bundle.StandardMessageBundle;
 import adf.agent.config.ModuleConfig;
 import adf.agent.info.AgentInfo;
 import adf.agent.module.ModuleManager;
-import adf.agent.precompute.DebugDataSet;
+import adf.agent.debug.DebugData;
 import adf.agent.precompute.PrecomputeData;
 import adf.agent.info.ScenarioInfo;
 import adf.agent.info.WorldInfo;
 import adf.component.communication.CommunicationModule;
+import adf.launcher.ConfigKey;
 import rescuecore2.components.AbstractAgent;
 import rescuecore2.config.ConfigException;
 import rescuecore2.messages.Command;
@@ -37,32 +38,33 @@ public abstract class Agent<E extends StandardEntity> extends AbstractAgent<Stan
 	protected ModuleConfig moduleConfig;
 	protected ModuleManager moduleManager;
 	protected PrecomputeData precomputeData;
-	protected DebugDataSet debugDataSet;
+	protected DebugData debugData;
 	protected MessageManager messageManager;
 	protected CommunicationModule communicationModule;
 	protected boolean isPrecompute;
-	int ignoreTime;
+	protected int ignoreTime;
+	protected boolean isDebugMode;
 
-	public Agent(String moduleConfigFileName, boolean isPrecompute, String dataStorageName) {
+	public Agent(String moduleConfigFileName, boolean isPrecompute, String dataStorageName, boolean isDebugMode, List<String> rawDebugData) {
 		this.isPrecompute = isPrecompute;
+		this.isDebugMode = isDebugMode;
 
 		if (isPrecompute) {
 			this.precomputeData.removeData(dataStorageName);
 			this.mode = ScenarioInfo.Mode.PRECOMPUTATION_PHASE;
 		}
 
-		try
-		{
-			moduleConfig = new ModuleConfig(moduleConfigFileName);
+		try {
+			this.moduleConfig = new ModuleConfig(moduleConfigFileName);
 		}
-		catch (ConfigException e)
-		{
+		catch (ConfigException e) {
 			e.printStackTrace();
 			throw new RuntimeException("ModuleConfig file is not found : " + moduleConfigFileName);
 		}
 
-		precomputeData = new PrecomputeData(dataStorageName);
-		messageManager = new MessageManager();
+		this.precomputeData = new PrecomputeData(dataStorageName);
+		this.debugData = new DebugData(isDebugMode, rawDebugData);
+		this.messageManager = new MessageManager();
 	}
 
 	@Override
@@ -107,6 +109,7 @@ public abstract class Agent<E extends StandardEntity> extends AbstractAgent<Stan
 			{ this.mode = ScenarioInfo.Mode.NON_PRECOMPUTE; }
 		}
 
+		this.config.setBooleanValue(ConfigKey.KEY_DEBUG_FLAG, this.isDebugMode);
 		this.scenarioInfo = new ScenarioInfo(config, mode);
 		this.communicationModule = null;
 

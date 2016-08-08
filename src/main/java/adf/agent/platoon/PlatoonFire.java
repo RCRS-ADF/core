@@ -5,12 +5,13 @@ import rescuecore2.standard.entities.FireBrigade;
 import rescuecore2.standard.entities.StandardEntityURN;
 
 import java.util.EnumSet;
+import java.util.List;
 
 public class PlatoonFire extends Platoon<FireBrigade>
 {
-	public PlatoonFire(TacticsFire tactics, String moduleConfigFileName, boolean isPrecompute)
+	public PlatoonFire(TacticsFire tactics, String moduleConfigFileName, boolean isPrecompute, boolean isDebugMode, List<String> rawDebugData)
 	{
-		super(tactics, moduleConfigFileName, isPrecompute, DATASTORAGE_FILE_NAME_FIRE);
+		super(tactics, moduleConfigFileName, isPrecompute, DATASTORAGE_FILE_NAME_FIRE, isDebugMode, rawDebugData);
 	}
 
 	@Override

@@ -68,7 +68,7 @@ public class AgentLauncher {
 		System.out.println("[START ] Connect to server (host:" + host + ", port:" + port + ")");
 
 		List<Thread> threadList = new ArrayList<>();
-		
+
 		for (Connector connector : this.connectors) {
 			threadList.add(
 					new Thread(()->{
@@ -86,6 +86,9 @@ public class AgentLauncher {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+
+		// remove debug data
+		//this.config.removeKey(ConfigKey.KEY_DEBUG_DATA);
 
 		System.out.println("[END   ] Done Connecting to server");
 

@@ -7,13 +7,15 @@ import adf.component.control.Control;
 import rescuecore2.config.ConfigException;
 import rescuecore2.standard.entities.StandardEntity;
 
+import java.util.List;
+
 public abstract class Office<E extends StandardEntity> extends Agent<E> {
 
 	Control rootControl;
 
-	public Office(Control control, String moduleConfigFileName, boolean isPrecompute, String datastorageName)
+	public Office(Control control, String moduleConfigFileName, boolean isPrecompute, String datastorageName, boolean isDebugMode, List<String> rawDebugData)
 	{
-		super(moduleConfigFileName, isPrecompute, datastorageName);
+		super(moduleConfigFileName, isPrecompute, datastorageName, isDebugMode, rawDebugData);
 		this.rootControl = control;
 	}
 
@@ -26,15 +28,15 @@ public abstract class Office<E extends StandardEntity> extends Agent<E> {
 		this.agentInfo = new AgentInfo(this, model, config);
 		this.moduleManager = new ModuleManager(this.agentInfo, this.worldInfo, this.scenarioInfo, this.moduleConfig);
 
-		rootControl.initialize(agentInfo, worldInfo, scenarioInfo, this.moduleManager, this.messageManager);
+		rootControl.initialize(agentInfo, worldInfo, scenarioInfo, this.moduleManager, this.messageManager, this.debugData);
 
 		switch (scenarioInfo.getMode())
 		{
 			case NON_PRECOMPUTE:
-				rootControl.preparate(agentInfo, worldInfo, scenarioInfo, this.moduleManager);
+				rootControl.preparate(agentInfo, worldInfo, scenarioInfo, this.moduleManager, this.debugData);
 				break;
 			case PRECOMPUTED:
-				rootControl.resume(agentInfo, worldInfo, scenarioInfo, this.moduleManager, precomputeData);
+				rootControl.resume(agentInfo, worldInfo, scenarioInfo, this.moduleManager, precomputeData, this.debugData);
 				break;
 			default:
 		}
@@ -42,6 +44,6 @@ public abstract class Office<E extends StandardEntity> extends Agent<E> {
 
 	protected void think()
 	{
-		rootControl.think(agentInfo, worldInfo, scenarioInfo, this.moduleManager, this.messageManager);
+		rootControl.think(agentInfo, worldInfo, scenarioInfo, this.moduleManager, this.messageManager, this.debugData);
 	}
 }

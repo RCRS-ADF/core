@@ -5,16 +5,16 @@ import adf.agent.action.Action;
 import adf.agent.info.AgentInfo;
 import adf.agent.module.ModuleManager;
 import adf.component.tactics.Tactics;
-import rescuecore2.config.ConfigException;
 import rescuecore2.standard.entities.StandardEntity;
 
-public abstract class Platoon<E extends StandardEntity> extends Agent<E>
-{
+import java.util.List;
+
+public abstract class Platoon<E extends StandardEntity> extends Agent<E> {
 	Tactics rootTactics;
 
-	public Platoon(Tactics tactics, String moduleConfigFileName, boolean isPrecompute, String dataStorageName)
+	public Platoon(Tactics tactics, String moduleConfigFileName, boolean isPrecompute, String dataStorageName, boolean isDebugMode, List<String> rawDebugData)
 	{
-		super(moduleConfigFileName, isPrecompute, dataStorageName);
+		super(moduleConfigFileName, isPrecompute, dataStorageName, isDebugMode, rawDebugData);
 		this.rootTactics = tactics;
 	}
 
@@ -28,15 +28,15 @@ public abstract class Platoon<E extends StandardEntity> extends Agent<E>
 		this.agentInfo = new AgentInfo(this, model, config);
 		this.moduleManager = new ModuleManager(this.agentInfo, this.worldInfo, this.scenarioInfo, this.moduleConfig);
 
-		rootTactics.initialize(agentInfo, worldInfo, scenarioInfo, this.moduleManager, this.messageManager);
+		rootTactics.initialize(agentInfo, worldInfo, scenarioInfo, this.moduleManager, this.messageManager, this.debugData);
 
 		switch (scenarioInfo.getMode())
 		{
 			case NON_PRECOMPUTE:
-				rootTactics.preparate(agentInfo, worldInfo, scenarioInfo, this.moduleManager);
+				rootTactics.preparate(agentInfo, worldInfo, scenarioInfo, this.moduleManager, this.debugData);
 				break;
 			case PRECOMPUTATION_PHASE:
-				rootTactics.precompute(agentInfo, worldInfo, scenarioInfo, this.moduleManager, precomputeData);
+				rootTactics.precompute(agentInfo, worldInfo, scenarioInfo, this.moduleManager, precomputeData, this.debugData);
 				precomputeData.setReady(true, worldInfo);
 				if (!precomputeData.write())
 				{
@@ -44,7 +44,7 @@ public abstract class Platoon<E extends StandardEntity> extends Agent<E>
 				}
 				break;
 			case PRECOMPUTED:
-				rootTactics.resume(agentInfo, worldInfo, scenarioInfo, this.moduleManager, precomputeData);
+				rootTactics.resume(agentInfo, worldInfo, scenarioInfo, this.moduleManager, precomputeData, this.debugData);
 				break;
 			default:
 		}
@@ -52,7 +52,7 @@ public abstract class Platoon<E extends StandardEntity> extends Agent<E>
 
 	protected void think()
 	{
-		Action action = rootTactics.think(agentInfo, worldInfo, scenarioInfo, this.moduleManager, this.messageManager);
+		Action action = rootTactics.think(agentInfo, worldInfo, scenarioInfo, this.moduleManager, this.messageManager, this.debugData);
 		if(action != null) {
 			this.agentInfo.setExecutedAction(this.agentInfo.getTime(), action);
 			send(action.getCommand(this.getID(), this.agentInfo.getTime()));

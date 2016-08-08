@@ -5,12 +5,13 @@ import rescuecore2.standard.entities.PoliceForce;
 import rescuecore2.standard.entities.StandardEntityURN;
 
 import java.util.EnumSet;
+import java.util.List;
 
 public class PlatoonPolice extends Platoon<PoliceForce>
 {
-	public PlatoonPolice(TacticsPolice tactics, String moduleConfigFileName, boolean isPrecompute)
+	public PlatoonPolice(TacticsPolice tactics, String moduleConfigFileName, boolean isPrecompute, boolean isDebugMode, List<String> rawDebugData)
 	{
-		super(tactics, moduleConfigFileName, isPrecompute, DATASTORAGE_FILE_NAME_POLICE);
+		super(tactics, moduleConfigFileName, isPrecompute, DATASTORAGE_FILE_NAME_POLICE, isDebugMode, rawDebugData);
 	}
 
 	@Override
