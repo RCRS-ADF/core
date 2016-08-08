@@ -12,9 +12,9 @@ import java.util.List;
 public abstract class Platoon<E extends StandardEntity> extends Agent<E> {
 	Tactics rootTactics;
 
-	public Platoon(Tactics tactics, String moduleConfigFileName, boolean isPrecompute, String dataStorageName, boolean isDebugMode, List<String> rawDebugData)
+	public Platoon(Tactics tactics, String moduleConfigFileName, boolean isPrecompute, String dataStorageName, boolean isDebugMode, String debugDataFileName, List<String> rawDebugData)
 	{
-		super(moduleConfigFileName, isPrecompute, dataStorageName, isDebugMode, rawDebugData);
+		super(moduleConfigFileName, isPrecompute, dataStorageName, isDebugMode, debugDataFileName, rawDebugData);
 		this.rootTactics = tactics;
 	}
 

@@ -43,11 +43,9 @@ public abstract class Agent<E extends StandardEntity> extends AbstractAgent<Stan
 	protected CommunicationModule communicationModule;
 	protected boolean isPrecompute;
 	protected int ignoreTime;
-	protected boolean isDebugMode;
 
-	public Agent(String moduleConfigFileName, boolean isPrecompute, String dataStorageName, boolean isDebugMode, List<String> rawDebugData) {
+	public Agent(String moduleConfigFileName, boolean isPrecompute, String dataStorageName, boolean isDebugMode, String debugDataFileName, List<String> rawDebugData) {
 		this.isPrecompute = isPrecompute;
-		this.isDebugMode = isDebugMode;
 
 		if (isPrecompute) {
 			this.precomputeData.removeData(dataStorageName);
@@ -63,7 +61,7 @@ public abstract class Agent<E extends StandardEntity> extends AbstractAgent<Stan
 		}
 
 		this.precomputeData = new PrecomputeData(dataStorageName);
-		this.debugData = new DebugData(isDebugMode, rawDebugData);
+		this.debugData = new DebugData(isDebugMode, debugDataFileName, rawDebugData);
 		this.messageManager = new MessageManager();
 	}
 
@@ -109,7 +107,7 @@ public abstract class Agent<E extends StandardEntity> extends AbstractAgent<Stan
 			{ this.mode = ScenarioInfo.Mode.NON_PRECOMPUTE; }
 		}
 
-		this.config.setBooleanValue(ConfigKey.KEY_DEBUG_FLAG, this.isDebugMode);
+		this.config.setBooleanValue(ConfigKey.KEY_DEBUG_FLAG, this.debugData.isDebugMode());
 		this.scenarioInfo = new ScenarioInfo(config, mode);
 		this.communicationModule = null;
 

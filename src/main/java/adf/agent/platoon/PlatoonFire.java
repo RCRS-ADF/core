@@ -9,9 +9,9 @@ import java.util.List;
 
 public class PlatoonFire extends Platoon<FireBrigade>
 {
-	public PlatoonFire(TacticsFire tactics, String moduleConfigFileName, boolean isPrecompute, boolean isDebugMode, List<String> rawDebugData)
+	public PlatoonFire(TacticsFire tactics, String moduleConfigFileName, boolean isPrecompute, boolean isDebugMode, String debugDataFileName, List<String> rawDebugData)
 	{
-		super(tactics, moduleConfigFileName, isPrecompute, DATASTORAGE_FILE_NAME_FIRE, isDebugMode, rawDebugData);
+		super(tactics, moduleConfigFileName, isPrecompute, DATASTORAGE_FILE_NAME_FIRE, isDebugMode, debugDataFileName, rawDebugData);
 	}
 
 	@Override

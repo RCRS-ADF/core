@@ -1,8 +1,12 @@
 package adf.agent.debug;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.*;
 
 public final class DebugData {
+    public static final String DEFAULT_FILE_NAME = "debug" +File.separator + "debug_data.txt";
     private static final String DATA_REGEX  = ":";
 
     private boolean debugFlag;
@@ -17,7 +21,7 @@ public final class DebugData {
     private Map<String, List<String>>  stringLists;
     private Map<String, List<Boolean>> boolLists;
 
-    public DebugData(boolean debugFlag) {
+    public DebugData(boolean debugFlag, String debugDataFileName, List<String> rawData) {
         this.debugFlag = debugFlag;
 
         this.intValues = new HashMap<>();
@@ -29,10 +33,6 @@ public final class DebugData {
         this.doubleLists = new HashMap<>();
         this.stringLists = new HashMap<>();
         this.boolLists = new HashMap<>();
-    }
-
-    public DebugData(boolean debugFlag, List<String> rawData) {
-        this(debugFlag);
         this.setRawData(rawData);
     }
 
@@ -197,6 +197,26 @@ public final class DebugData {
                 list.remove(0);
                 this.setStringList(array[0], list);
             }
+        }
+    }
+
+    private void setFileData(String debugDataFileName) {
+        if(debugDataFileName == null || debugDataFileName.equals("")) return;
+        try {
+            for(String str : Files.readAllLines((new File(debugDataFileName)).toPath())){
+                String[] array = str.split(DATA_REGEX);
+                if(array.length < 2) continue;
+                if(array.length == 2) {
+                    this.setString(array[0], array[1]);
+                } else {
+                    List<String> list = new ArrayList<>(array.length);
+                    Collections.addAll(list, array);
+                    list.remove(0);
+                    this.setStringList(array[0], list);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

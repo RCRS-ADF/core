@@ -9,9 +9,9 @@ import java.util.List;
 
 public class OfficeAmbulance extends Office<Building>
 {
-	public OfficeAmbulance(ControlAmbulance control, String moduleConfigFileName, boolean isPrecompute, boolean isDebugMode, List<String> rawDebugData)
+	public OfficeAmbulance(ControlAmbulance control, String moduleConfigFileName, boolean isPrecompute, boolean isDebugMode, String debugDataFileName, List<String> rawDebugData)
 	{
-		super(control, moduleConfigFileName, isPrecompute, DATASTORAGE_FILE_NAME_AMBULANCE, isDebugMode, rawDebugData);
+		super(control, moduleConfigFileName, isPrecompute, DATASTORAGE_FILE_NAME_AMBULANCE, isDebugMode, debugDataFileName, rawDebugData);
 	}
 
 	@Override

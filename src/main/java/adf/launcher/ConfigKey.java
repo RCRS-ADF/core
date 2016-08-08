@@ -7,6 +7,7 @@ public final class ConfigKey {
     public static final String KEY_MODULE_CONFIG_FILE_NAME = "adf.agent.moduleconfig";
     public static final String KEY_DEBUG_FLAG = "adf.debug.flag";
     public static final String KEY_DEBUG_DATA = "adf.debug.data";
+    public static final String KEY_DEBUG_DATA_FILE_NAME = "adf.debug.filename";
 
     // Platoon
     public static final String KEY_AMBULANCE_TEAM_COUNT = "adf.team.platoon.ambulance.count";
