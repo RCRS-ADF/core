@@ -77,12 +77,12 @@ public class MessageBuilding extends StandardMessage
 			bitOutputStream.writeNullFlag();
 		}
 		if (this.buildingFieryness != -1) {
-			bitOutputStream.writeBits(buildingFieryness, SIZE_FIERYNESS);
+			bitOutputStream.writeBitsWithExistFlag(buildingFieryness, SIZE_FIERYNESS);
 		} else {
 			bitOutputStream.writeNullFlag();
 		}
 		if (this.buildingTemperature != -1) {
-			bitOutputStream.writeBits(buildingTemperature, SIZE_TEMPERATURE);
+			bitOutputStream.writeBitsWithExistFlag(buildingTemperature, SIZE_TEMPERATURE);
 		} else {
 			bitOutputStream.writeNullFlag();
 		}
