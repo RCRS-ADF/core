@@ -1,6 +1,7 @@
 package adf.component.module;
 
 import adf.agent.communication.MessageManager;
+import adf.agent.debug.DebugData;
 import adf.agent.info.AgentInfo;
 import adf.agent.info.ScenarioInfo;
 import adf.agent.info.WorldInfo;
@@ -12,16 +13,18 @@ public abstract class AbstractModule {
     protected AgentInfo agentInfo;
     protected WorldInfo worldInfo;
     protected ModuleManager moduleManager;
+    protected DebugData debugData;
 
     protected int countPrecompute;
     protected int countResume;
     protected int countPreparate;
 
-    public AbstractModule(AgentInfo ai, WorldInfo wi, ScenarioInfo si, ModuleManager moduleManager) {
+    public AbstractModule(AgentInfo ai, WorldInfo wi, ScenarioInfo si, ModuleManager moduleManager, DebugData debugData) {
         this.worldInfo = wi;
         this.agentInfo = ai;
         this.scenarioInfo = si;
         this.moduleManager = moduleManager;
+        this.debugData = debugData;
         this.countPrecompute = 0;
         this.countResume = 0;
         this.countPreparate = 0;

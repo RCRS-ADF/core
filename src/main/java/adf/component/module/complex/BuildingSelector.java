@@ -1,6 +1,7 @@
 package adf.component.module.complex;
 
 import adf.agent.communication.MessageManager;
+import adf.agent.debug.DebugData;
 import adf.agent.info.AgentInfo;
 import adf.agent.info.ScenarioInfo;
 import adf.agent.info.WorldInfo;
@@ -10,8 +11,8 @@ import rescuecore2.standard.entities.Building;
 
 public abstract class BuildingSelector extends TargetSelector<Building> {
 
-    public BuildingSelector(AgentInfo ai, WorldInfo wi, ScenarioInfo si, ModuleManager moduleManager) {
-        super(ai, wi, si, moduleManager);
+    public BuildingSelector(AgentInfo ai, WorldInfo wi, ScenarioInfo si, ModuleManager moduleManager, DebugData debugData) {
+        super(ai, wi, si, moduleManager, debugData);
     }
 
     @Override

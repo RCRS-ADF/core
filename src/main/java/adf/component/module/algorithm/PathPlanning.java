@@ -2,6 +2,7 @@ package adf.component.module.algorithm;
 
 
 import adf.agent.communication.MessageManager;
+import adf.agent.debug.DebugData;
 import adf.agent.info.AgentInfo;
 import adf.agent.info.ScenarioInfo;
 import adf.agent.info.WorldInfo;
@@ -17,8 +18,8 @@ import java.util.List;
 
 public abstract class PathPlanning extends AbstractModule{
 
-    public PathPlanning(AgentInfo ai, WorldInfo wi, ScenarioInfo si, ModuleManager moduleManager) {
-        super(ai, wi, si, moduleManager);
+    public PathPlanning(AgentInfo ai, WorldInfo wi, ScenarioInfo si, ModuleManager moduleManager, DebugData debugData) {
+        super(ai, wi, si, moduleManager, debugData);
     }
 
     public abstract List<EntityID> getResult();
