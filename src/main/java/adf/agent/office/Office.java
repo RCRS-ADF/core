@@ -26,17 +26,16 @@ public abstract class Office<E extends StandardEntity> extends Agent<E> {
 		//distance = config.getIntValue(DISTANCE_KEY);
 
 		this.agentInfo = new AgentInfo(this, model, config);
-		this.moduleManager = new ModuleManager(this.agentInfo, this.worldInfo, this.scenarioInfo, this.moduleConfig);
+		this.moduleManager = new ModuleManager(this.agentInfo, this.worldInfo, this.scenarioInfo, this.moduleConfig, this.debugData);
 
-		rootControl.initialize(agentInfo, worldInfo, scenarioInfo, this.moduleManager, this.messageManager, this.debugData);
+		rootControl.initialize(this.agentInfo, this.worldInfo, this.scenarioInfo, this.moduleManager, this.messageManager, this.debugData);
 
-		switch (scenarioInfo.getMode())
-		{
+		switch (scenarioInfo.getMode()) {
 			case NON_PRECOMPUTE:
-				rootControl.preparate(agentInfo, worldInfo, scenarioInfo, this.moduleManager, this.debugData);
+				rootControl.preparate(this.agentInfo, this.worldInfo, this.scenarioInfo, this.moduleManager, this.debugData);
 				break;
 			case PRECOMPUTED:
-				rootControl.resume(agentInfo, worldInfo, scenarioInfo, this.moduleManager, precomputeData, this.debugData);
+				rootControl.resume(this.agentInfo, this.worldInfo, this.scenarioInfo, this.moduleManager, precomputeData, this.debugData);
 				break;
 			default:
 		}
@@ -44,8 +43,7 @@ public abstract class Office<E extends StandardEntity> extends Agent<E> {
 		this.worldInfo.registerListener();
 	}
 
-	protected void think()
-	{
-		rootControl.think(agentInfo, worldInfo, scenarioInfo, this.moduleManager, this.messageManager, this.debugData);
+	protected void think() {
+		this.rootControl.think(this.agentInfo, this.worldInfo, this.scenarioInfo, this.moduleManager, this.messageManager, this.debugData);
 	}
 }

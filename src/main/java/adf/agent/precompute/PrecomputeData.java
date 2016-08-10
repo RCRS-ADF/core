@@ -12,8 +12,7 @@ import java.util.List;
 import java.util.concurrent.ThreadFactory;
 import java.util.stream.Collectors;
 
-public final class PrecomputeData
-{
+public final class PrecomputeData {
 
 	public static final String DEFAULT_FILE_NAME = "data.bin";
 	public static final File PRECOMP_DATA_DIR = new File("precomp_data");

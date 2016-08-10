@@ -10,10 +10,9 @@ import rescuecore2.standard.entities.StandardEntity;
 import java.util.List;
 
 public abstract class Platoon<E extends StandardEntity> extends Agent<E> {
-	Tactics rootTactics;
+	private Tactics rootTactics;
 
-	public Platoon(Tactics tactics, String moduleConfigFileName, boolean isPrecompute, String dataStorageName, boolean isDebugMode, String debugDataFileName, List<String> rawDebugData)
-	{
+	Platoon(Tactics tactics, String moduleConfigFileName, boolean isPrecompute, String dataStorageName, boolean isDebugMode, String debugDataFileName, List<String> rawDebugData) {
 		super(moduleConfigFileName, isPrecompute, dataStorageName, isDebugMode, debugDataFileName, rawDebugData);
 		this.rootTactics = tactics;
 	}
@@ -25,36 +24,33 @@ public abstract class Platoon<E extends StandardEntity> extends Agent<E> {
 		//model.indexClass(StandardEntityURN.ROAD);
 		//distance = config.getIntValue(DISTANCE_KEY);
 
-		this.agentInfo = new AgentInfo(this, model, config);
-		this.moduleManager = new ModuleManager(this.agentInfo, this.worldInfo, this.scenarioInfo, this.moduleConfig);
+		this.agentInfo = new AgentInfo(this, this.model, this.config);
+		this.moduleManager = new ModuleManager(this.agentInfo, this.worldInfo, this.scenarioInfo, this.moduleConfig, this.debugData);
 
-		rootTactics.initialize(agentInfo, worldInfo, scenarioInfo, this.moduleManager, this.messageManager, this.debugData);
+		this.rootTactics.initialize(this.agentInfo, this.worldInfo, this.scenarioInfo, this.moduleManager, this.messageManager, this.debugData);
 
-		switch (scenarioInfo.getMode())
-		{
+		switch (this.scenarioInfo.getMode()) {
 			case NON_PRECOMPUTE:
-				rootTactics.preparate(agentInfo, worldInfo, scenarioInfo, this.moduleManager, this.debugData);
+				this.rootTactics.preparate(this.agentInfo, this.worldInfo, this.scenarioInfo, this.moduleManager, this.debugData);
                 this.worldInfo.registerListener();
 				break;
 			case PRECOMPUTATION_PHASE:
-				rootTactics.precompute(agentInfo, worldInfo, scenarioInfo, this.moduleManager, precomputeData, this.debugData);
-				precomputeData.setReady(true, worldInfo);
-				if (!precomputeData.write())
-				{
+				this.rootTactics.precompute(this.agentInfo, this.worldInfo, this.scenarioInfo, this.moduleManager, this.precomputeData, this.debugData);
+				this.precomputeData.setReady(true, this.worldInfo);
+				if (!this.precomputeData.write()) {
 					System.out.println("[ERROR ] Failed to write PrecomputeData.");
 				}
 				break;
 			case PRECOMPUTED:
-				rootTactics.resume(agentInfo, worldInfo, scenarioInfo, this.moduleManager, precomputeData, this.debugData);
+				this.rootTactics.resume(this.agentInfo, this.worldInfo, this.scenarioInfo, this.moduleManager, this.precomputeData, this.debugData);
                 this.worldInfo.registerListener();
 				break;
 			default:
 		}
 	}
 
-	protected void think()
-	{
-		Action action = rootTactics.think(agentInfo, worldInfo, scenarioInfo, this.moduleManager, this.messageManager, this.debugData);
+	protected void think() {
+		Action action = this.rootTactics.think(this.agentInfo, this.worldInfo, this.scenarioInfo, this.moduleManager, this.messageManager, this.debugData);
 		if(action != null) {
 			this.agentInfo.setExecutedAction(this.agentInfo.getTime(), action);
 			send(action.getCommand(this.getID(), this.agentInfo.getTime()));

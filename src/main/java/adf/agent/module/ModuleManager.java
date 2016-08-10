@@ -1,6 +1,7 @@
 package adf.agent.module;
 
 import adf.agent.config.ModuleConfig;
+import adf.agent.debug.DebugData;
 import adf.agent.info.AgentInfo;
 import adf.agent.info.ScenarioInfo;
 import adf.agent.info.WorldInfo;
@@ -23,11 +24,14 @@ public class ModuleManager
 
     private ModuleConfig moduleConfig;
 
-    public ModuleManager(AgentInfo agentInfo, WorldInfo worldInfo, ScenarioInfo scenarioInfo, ModuleConfig moduleConfig) {
+    private DebugData debugData;
+
+    public ModuleManager(AgentInfo agentInfo, WorldInfo worldInfo, ScenarioInfo scenarioInfo, ModuleConfig moduleConfig, DebugData debugData) {
         this.agentInfo = agentInfo;
         this.worldInfo = worldInfo;
         this.scenarioInfo = scenarioInfo;
         this.moduleConfig = moduleConfig;
+        this.debugData = debugData;
         this.moduleMap = new HashMap<>();
         this.actionMap = new HashMap<>();
     }
@@ -67,8 +71,8 @@ public class ModuleManager
     @SuppressWarnings("unchecked")
     private AbstractModule getModule(Class<AbstractModule> moduleClass) {
         try {
-            Constructor<AbstractModule> constructor = moduleClass.getConstructor(AgentInfo.class, WorldInfo.class, ScenarioInfo.class, ModuleManager.class);
-            AbstractModule instance = constructor.newInstance(this.agentInfo, this.worldInfo, this.scenarioInfo, this);
+            Constructor<AbstractModule> constructor = moduleClass.getConstructor(AgentInfo.class, WorldInfo.class, ScenarioInfo.class, ModuleManager.class, DebugData.class);
+            AbstractModule instance = constructor.newInstance(this.agentInfo, this.worldInfo, this.scenarioInfo, this, this.debugData);
             this.moduleMap.put(moduleClass.getCanonicalName(), instance);
             return instance;
         } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {

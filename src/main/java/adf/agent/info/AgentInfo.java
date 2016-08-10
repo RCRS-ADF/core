@@ -118,7 +118,6 @@ public class AgentInfo {
     }
 
     public void setExecutedAction(int time, Action action) {
-        if(time > 0) this.actionHistory.put(time, action);
-        this.actionHistory.put(this.getTime() + time, action);
+        this.actionHistory.put(time > 0 ? time : this.getTime() + time, action);
     }
 }
