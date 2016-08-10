@@ -34,6 +34,7 @@ public abstract class Platoon<E extends StandardEntity> extends Agent<E> {
 		{
 			case NON_PRECOMPUTE:
 				rootTactics.preparate(agentInfo, worldInfo, scenarioInfo, this.moduleManager, this.debugData);
+                this.worldInfo.registerListener();
 				break;
 			case PRECOMPUTATION_PHASE:
 				rootTactics.precompute(agentInfo, worldInfo, scenarioInfo, this.moduleManager, precomputeData, this.debugData);
@@ -45,6 +46,7 @@ public abstract class Platoon<E extends StandardEntity> extends Agent<E> {
 				break;
 			case PRECOMPUTED:
 				rootTactics.resume(agentInfo, worldInfo, scenarioInfo, this.moduleManager, precomputeData, this.debugData);
+                this.worldInfo.registerListener();
 				break;
 			default:
 		}

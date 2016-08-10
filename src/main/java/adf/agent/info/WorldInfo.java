@@ -15,21 +15,18 @@ public class WorldInfo implements Iterable<StandardEntity> {
 	private ChangeSet changed;
     private int time;
 
-	private Map<Integer, Map<EntityID, StandardEntity>> rollbackChangeInfo;
 	private Map<Integer, Map<EntityID, StandardEntity>> rollbackAddInfo;
-	private Map<Integer, Map<EntityID, StandardEntity>> rollbackRemoveInfo;
-
-    private boolean runRollback;
+	private Map<Integer, Map<EntityID, StandardEntity>> rollbackChangeInfo;
+	private Map<EntityID, Map<String, Object>> rollbackCache;
+	private boolean runRollback;
 
     public WorldInfo(StandardWorldModel world) {
 		this.setWorld(world);
         this.time = -1;
 		this.rollbackChangeInfo = new HashMap<>();
 		this.rollbackAddInfo = new HashMap<>();
-		this.rollbackRemoveInfo = new HashMap<>();
         this.runRollback = Boolean.FALSE;
-
-		this.world.addWorldModelListener(new RollbackListener());
+        this.rollbackCache = new HashMap<>();
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -88,7 +85,7 @@ public class WorldInfo implements Iterable<StandardEntity> {
 					continue;
 				}
 			}
-			info = this.rollbackRemoveInfo.get(i);
+			info = this.rollbackChangeInfo.get(i);
 			if(info != null) {
 				StandardEntity entity = info.get(entityID);
 				if(entity != null) {
@@ -285,7 +282,7 @@ public class WorldInfo implements Iterable<StandardEntity> {
 	}
 
 	public Map<EntityID, StandardEntity> getRemoveEntities(int time) {
-		return this.rollbackRemoveInfo.get(time);
+		return this.rollbackChangeInfo.get(time);
 	}
 
 	public Collection<Building> getFireBuildings() {
@@ -400,7 +397,7 @@ public class WorldInfo implements Iterable<StandardEntity> {
 		return this.world.iterator();
 	}
 
-	public void addRollbackEntity(EntityID entityID) {
+	/*public void addRollbackEntity(EntityID entityID) {
 	    this.addRollbackEntity(this.getEntity(entityID));
     }
 
@@ -411,7 +408,7 @@ public class WorldInfo implements Iterable<StandardEntity> {
 			changeInfo.put(entity.getID(), (StandardEntity) entity.copy());
 		}
 		this.rollbackChangeInfo.put(this.time, changeInfo);
-	}
+	}*/
 
 	public void setWorld(StandardWorldModel world)
 	{
@@ -426,43 +423,17 @@ public class WorldInfo implements Iterable<StandardEntity> {
 		this.time = time;
 	}
 
-	//remove !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-	public void createRollback(int time, ChangeSet changed) {
-		this.setTime(time);
-		Map<EntityID, StandardEntity> changeInfo = new HashMap<>();
-		for(EntityID entityID : changed.getChangedEntities()) {
-			StandardEntity entity = this.getEntity(entityID);
-			if(entity != null) changeInfo.put(entityID, (StandardEntity) entity.copy());
-		}
 
-		this.rollbackChangeInfo.put(time, changeInfo);
-		this.rollbackAddInfo.put(time, new HashMap<>());
-		this.rollbackRemoveInfo.put(time, new HashMap<>());
-	}
-	//remove!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-	private class RollbackListener implements WorldModelListener<StandardEntity> {
-		@Override
-		public void entityAdded(WorldModel<? extends StandardEntity> model, StandardEntity e) {
-			Map<EntityID, StandardEntity> addInfo = rollbackAddInfo.get(time);
-			addInfo.put(e.getID(), (StandardEntity)  e.copy());
-			rollbackAddInfo.put(time, addInfo);
-		}
-
-		@Override
-		public void entityRemoved(WorldModel<? extends StandardEntity> model, StandardEntity e) {
-			Map<EntityID, StandardEntity> removeInfo = rollbackRemoveInfo.get(time);
-			removeInfo.put(e.getID(), (StandardEntity)e.copy());
-			rollbackRemoveInfo.put(time, removeInfo);
-		}
-	}
 
     public void addEntity(Entity e) {
+        e.addEntityListener(new ChangeListener());
         this.world.addEntity(e);
     }
 
     public void addEntities(Collection<? extends Entity> e) {
-        this.world.addEntities(e);
+        for (Entity next : e) {
+            this.addEntity(next);
+        }
     }
 
     public void removeEntity(StandardEntity e) {
@@ -485,10 +456,360 @@ public class WorldInfo implements Iterable<StandardEntity> {
 		this.world.merge(changeSet);
 	}
 
-	private class ChangeListener implements EntityListener {
-        @Override
-        public void propertyChanged(Entity e, Property p, Object oldValue, Object newValue) {
-            EntityID id = e.getID();
+    public void registerListener() {
+        if(this.needRollback()) {
+            this.world.addWorldModelListener(new RollbackListener());
+
+            for (StandardEntity entity : this.getAllEntities()) {
+                entity.addEntityListener(new ChangeListener());
+            }
         }
+    }
+
+    public void registerEntityListener(Class<? extends EntityListener> listener) {
+        for (StandardEntity entity : this.getAllEntities()) {
+            try {
+                entity.addEntityListener(listener.newInstance());
+            } catch (InstantiationException | IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void registerWorldListener(Class<? extends WorldModelListener<StandardEntity>> listener) {
+        try {
+            this.world.addWorldModelListener(listener.newInstance());
+        } catch (InstantiationException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
+
+	public void setRollbackBase(int time) {
+		this.setTime(time);
+		this.rollbackAddInfo.put(time, new HashMap<>());
+		this.rollbackChangeInfo.put(time, new HashMap<>());
+        this.rollbackCache.clear();
+	}
+
+    private class RollbackListener implements WorldModelListener<StandardEntity> {
+        @Override
+        public void entityAdded(WorldModel<? extends StandardEntity> model, StandardEntity e) {
+            Map<EntityID, StandardEntity> addInfo = rollbackAddInfo.get(time);
+            addInfo.put(e.getID(), (StandardEntity)  e.copy());
+            rollbackAddInfo.put(time, addInfo);
+        }
+
+        @Override
+        public void entityRemoved(WorldModel<? extends StandardEntity> model, StandardEntity e) {
+            Map<EntityID, StandardEntity> removeInfo = rollbackChangeInfo.get(time);
+            removeInfo.put(e.getID(), (StandardEntity)e.copy());
+            rollbackChangeInfo.put(time, removeInfo);
+        }
+    }
+
+    private class ChangeListener implements EntityListener {
+        @Override
+        public void propertyChanged(Entity entity, Property property, Object oldValue, Object newValue) {
+            EntityID entityID = entity.getID();
+            Map<String, Object> cache = rollbackCache.get(entityID);
+            if(cache == null) cache = new HashMap<>();
+            cache.put(property.getURN(), oldValue);
+            rollbackCache.put(entityID, cache);
+        }
+    }
+
+	public void createRollbackInfo(){
+        Map<EntityID, StandardEntity> info = this.rollbackChangeInfo.get(this.time);
+	    EntityListener listener = new ChangeListener();
+	    for(EntityID id : this.rollbackCache.keySet()) {
+	        if(info.get(id) != null) continue;
+
+	        StandardEntity entity = this.getEntity(id);
+	        Map<String, Object> cache = this.rollbackCache.get(id);
+            StandardEntityURN urn = entity.getStandardURN();
+            if(BUILDING == urn) info.put(id, this.createRollbackBuilding(entity, cache, listener));
+            else if(ROAD == urn) info.put(id, this.createRollbackRoad(entity, cache, listener));
+            else if(BLOCKADE == urn) info.put(id, this.createRollbackBlockade(entity, cache, listener));
+            else if(CIVILIAN == urn) info.put(id, this.createRollbackHuman(entity, cache, listener));
+            else if(AMBULANCE_TEAM == urn) info.put(id, this.createRollbackHuman(entity, cache, listener));
+            else if(POLICE_FORCE == urn) info.put(id, this.createRollbackHuman(entity, cache, listener));
+            else if(FIRE_BRIGADE == urn) info.put(id, this.createRollbackFireBrigade(entity, cache, listener));
+            else if(HYDRANT == urn) info.put(id, this.createRollbackRoad(entity, cache, listener));
+            else if(REFUGE == urn) info.put(id, this.createRollbackBuilding(entity, cache, listener));
+            else if(GAS_STATION == urn) info.put(id, this.createRollbackBuilding(entity, cache, listener));
+            else if(AMBULANCE_CENTRE == urn) info.put(id, this.createRollbackBuilding(entity, cache, listener));
+            else if(FIRE_STATION == urn) info.put(id, this.createRollbackBuilding(entity, cache, listener));
+            else if(POLICE_OFFICE == urn) info.put(id, this.createRollbackBuilding(entity, cache, listener));
+            else if(WORLD == urn) info.put(id, this.createRollbackWorld(entity, cache, listener));
+        }
+        this.rollbackChangeInfo.put(this.time, info);
+    }
+
+    private Blockade createRollbackBlockade(StandardEntity entity, Map<String, Object> cache, EntityListener listener) {
+        Blockade copy = (Blockade)entity.copy();
+        copy.removeEntityListener(listener);
+        for(String urn : cache.keySet()) {
+            Object value = cache.get(urn);
+            StandardPropertyURN type = StandardPropertyURN.fromString(urn);
+            boolean isDefined = value != null;
+            switch (type) {
+                case X:
+                    if(isDefined) copy.setX((Integer)value);
+                    else copy.undefineX();
+                    break;
+                case Y:
+                    if(isDefined) copy.setY((Integer)value);
+                    else copy.undefineY();
+                    break;
+                case POSITION:
+                    if(isDefined) copy.setPosition((EntityID) value);
+                    else copy.undefinePosition();
+                    break;
+                case APEXES:
+                    if(isDefined) copy.setApexes((int[])value);
+                    else copy.undefineApexes();
+                    break;
+                case REPAIR_COST:
+                    if(isDefined) copy.setRepairCost((Integer)value);
+                    else copy.undefineRepairCost();
+                    break;
+                default:
+            }
+        }
+        return copy;
+    }
+
+    @SuppressWarnings("unchecked")
+    private Building createRollbackBuilding(StandardEntity entity, Map<String, Object> cache, EntityListener listener) {
+        Building copy = (Building)entity.copy();
+        copy.removeEntityListener(listener);
+        for(String urn : cache.keySet()) {
+            Object value = cache.get(urn);
+            StandardPropertyURN type = StandardPropertyURN.fromString(urn);
+            boolean isDefined = value != null;
+            switch (type) {
+                case X:
+                    if(isDefined) copy.setX((Integer)value);
+                    else copy.undefineX();
+                    break;
+                case Y:
+                    if(isDefined) copy.setY((Integer)value);
+                    else copy.undefineY();
+                    break;
+                case EDGES:
+                    if(isDefined) copy.setEdges((List<Edge>)value);
+                    else copy.undefineEdges();
+                case BLOCKADES:
+                    if(isDefined) copy.setBlockades((List<EntityID>)value);
+                    else copy.undefineBlockades();
+                case FLOORS:
+                    if(isDefined) copy.setFloors((Integer)value);
+                    else copy.undefineFloors();
+                case IGNITION:
+                    if(isDefined) copy.setIgnition((Boolean)value);
+                    else copy.undefineIgnition();
+                case FIERYNESS:
+                    if(isDefined) copy.setFieryness((Integer)value);
+                    else copy.undefineFieryness();
+                case BROKENNESS:
+                    if(isDefined) copy.setBrokenness((Integer)value);
+                    else copy.undefineBrokenness();
+                case BUILDING_CODE:
+                    if(isDefined) copy.setBuildingCode((Integer)value);
+                    else copy.undefineBuildingCode();
+                case BUILDING_ATTRIBUTES:
+                    if(isDefined) copy.setBuildingAttributes((Integer)value);
+                    else copy.undefineBuildingAttributes();
+                case BUILDING_AREA_GROUND:
+                    if(isDefined) copy.setGroundArea((Integer)value);
+                    else copy.undefineGroundArea();
+                case BUILDING_AREA_TOTAL:
+                    if(isDefined) copy.setTotalArea((Integer)value);
+                    else copy.undefineTotalArea();
+                case TEMPERATURE:
+                    if(isDefined) copy.setTemperature((Integer)value);
+                    else copy.undefineTemperature();
+                case IMPORTANCE:
+                    if(isDefined) copy.setImportance((Integer)value);
+                    else copy.undefineImportance();
+                default:
+            }
+        }
+        return copy;
+    }
+
+    @SuppressWarnings("unchecked")
+    private Road createRollbackRoad(StandardEntity entity, Map<String, Object> cache, EntityListener listener) {
+        Road copy = (Road)entity.copy();
+        copy.removeEntityListener(listener);
+        for(String urn : cache.keySet()) {
+            Object value = cache.get(urn);
+            StandardPropertyURN type = StandardPropertyURN.fromString(urn);
+            boolean isDefined = value != null;
+            switch (type) {
+                case X:
+                    if(isDefined) copy.setX((Integer)value);
+                    else copy.undefineX();
+                    break;
+                case Y:
+                    if(isDefined) copy.setY((Integer)value);
+                    else copy.undefineY();
+                    break;
+                case EDGES:
+                    if(isDefined) copy.setEdges((List<Edge>)value);
+                    else copy.undefineEdges();
+                case BLOCKADES:
+                    if(isDefined) copy.setBlockades((List<EntityID>)value);
+                    else copy.undefineBlockades();
+                default:
+            }
+        }
+        return copy;
+    }
+
+    private World createRollbackWorld(StandardEntity entity, Map<String, Object> cache, EntityListener listener) {
+        World copy = (World) entity.copy();
+        copy.removeEntityListener(listener);
+        for(String urn : cache.keySet()) {
+            Object value = cache.get(urn);
+            StandardPropertyURN type = StandardPropertyURN.fromString(urn);
+            boolean isDefined = value != null;
+            switch (type) {
+                case START_TIME:
+                    if(isDefined) copy.setStartTime((Integer)value);
+                    else copy.undefineStartTime();
+                    break;
+                case LONGITUDE:
+                    if(isDefined) copy.setLongitude((Integer)value);
+                    else copy.undefineLongitude();
+                    break;
+                case LATITUDE:
+                    if(isDefined) copy.setLatitude((Integer)value);
+                    else copy.undefineLatitude();
+                    break;
+                case WIND_FORCE:
+                    if(isDefined) copy.setWindForce((Integer)value);
+                    else copy.undefineWindForce();
+                    break;
+                case WIND_DIRECTION:
+                    if(isDefined) copy.setWindDirection((Integer)value);
+                    else copy.undefineWindDirection();
+                    break;
+                default:
+            }
+        }
+        return copy;
+    }
+
+    private Human createRollbackHuman(StandardEntity entity, Map<String, Object> cache, EntityListener listener) {
+        Human copy = (Human)entity.copy();
+        copy.removeEntityListener(listener);
+        for(String urn : cache.keySet()) {
+            Object value = cache.get(urn);
+            StandardPropertyURN type = StandardPropertyURN.fromString(urn);
+            boolean isDefined = value != null;
+            switch (type) {
+                case X:
+                    if(isDefined) copy.setX((Integer)value);
+                    else copy.undefineX();
+                    break;
+                case Y:
+                    if(isDefined) copy.setY((Integer)value);
+                    else copy.undefineY();
+                    break;
+                case POSITION:
+                    if(isDefined) copy.setPosition((EntityID) value);
+                    else copy.undefinePosition();
+                    break;
+                case POSITION_HISTORY:
+                    if(isDefined) copy.setPositionHistory((int[])value);
+                    else copy.undefinePositionHistory();
+                    break;
+                case DIRECTION:
+                    if(isDefined) copy.setDirection((Integer)value);
+                    else copy.undefineDirection();
+                    break;
+                case STAMINA:
+                    if(isDefined) copy.setStamina((Integer)value);
+                    else copy.undefineStamina();
+                    break;
+                case HP:
+                    if(isDefined) copy.setHP((Integer)value);
+                    else copy.undefineHP();
+                    break;
+                case DAMAGE:
+                    if(isDefined) copy.setDamage((Integer)value);
+                    else copy.undefineDamage();
+                    break;
+                case BURIEDNESS:
+                    if(isDefined) copy.setBuriedness((Integer)value);
+                    else copy.undefineBuriedness();
+                    break;
+                case TRAVEL_DISTANCE:
+                    if(isDefined) copy.setTravelDistance((Integer)value);
+                    else copy.undefineTravelDistance();
+                    break;
+                default:
+            }
+        }
+        return copy;
+    }
+
+    private FireBrigade createRollbackFireBrigade(StandardEntity entity, Map<String, Object> cache, EntityListener listener) {
+        FireBrigade copy = (FireBrigade) entity.copy();
+        copy.removeEntityListener(listener);
+        for(String urn : cache.keySet()) {
+            Object value = cache.get(urn);
+            StandardPropertyURN type = StandardPropertyURN.fromString(urn);
+            boolean isDefined = value != null;
+            switch (type) {
+                case X:
+                    if(isDefined) copy.setX((Integer)value);
+                    else copy.undefineX();
+                    break;
+                case Y:
+                    if(isDefined) copy.setY((Integer)value);
+                    else copy.undefineY();
+                    break;
+                case POSITION:
+                    if(isDefined) copy.setPosition((EntityID) value);
+                    else copy.undefinePosition();
+                    break;
+                case POSITION_HISTORY:
+                    if(isDefined) copy.setPositionHistory((int[])value);
+                    else copy.undefinePositionHistory();
+                    break;
+                case DIRECTION:
+                    if(isDefined) copy.setDirection((Integer)value);
+                    else copy.undefineDirection();
+                    break;
+                case STAMINA:
+                    if(isDefined) copy.setStamina((Integer)value);
+                    else copy.undefineStamina();
+                    break;
+                case HP:
+                    if(isDefined) copy.setHP((Integer)value);
+                    else copy.undefineHP();
+                    break;
+                case DAMAGE:
+                    if(isDefined) copy.setDamage((Integer)value);
+                    else copy.undefineDamage();
+                    break;
+                case BURIEDNESS:
+                    if(isDefined) copy.setBuriedness((Integer)value);
+                    else copy.undefineBuriedness();
+                    break;
+                case TRAVEL_DISTANCE:
+                    if(isDefined) copy.setTravelDistance((Integer)value);
+                    else copy.undefineTravelDistance();
+                    break;
+                case WATER_QUANTITY:
+                    if(isDefined) copy.setWater((Integer)value);
+                    else copy.undefineWater();
+                    break;
+                default:
+            }
+        }
+        return copy;
     }
 }

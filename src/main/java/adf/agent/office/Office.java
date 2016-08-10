@@ -40,6 +40,8 @@ public abstract class Office<E extends StandardEntity> extends Agent<E> {
 				break;
 			default:
 		}
+
+		this.worldInfo.registerListener();
 	}
 
 	protected void think()

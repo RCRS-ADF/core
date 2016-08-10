@@ -131,14 +131,16 @@ public abstract class Agent<E extends StandardEntity> extends AbstractAgent<Stan
 		int time = sense.getTime();
 		ChangeSet changed = sense.getChangeSet();
 		if(this.worldInfo.needRollback()) {
-			this.worldInfo.createRollback(time, changed);
+			this.worldInfo.setRollbackBase(time);
 			this.model.merge(sense.getChangeSet());
+			Collection<Command> heard = sense.getHearing();
+			think(time, changed, heard);
+			this.worldInfo.createRollbackInfo();
 		} else {
 			this.model.merge(sense.getChangeSet());
+			Collection<Command> heard = sense.getHearing();
+			think(time, changed, heard);
 		}
-
-		Collection<Command> heard = sense.getHearing();
-		think(time, changed, heard);
 	}
 
 	@Override
