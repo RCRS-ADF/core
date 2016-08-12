@@ -115,8 +115,8 @@ public class ModuleManager
     @SuppressWarnings("unchecked")
     private ExtAction getExtAction(Class<ExtAction> actionClass) {
         try {
-            Constructor<ExtAction> constructor = actionClass.getConstructor(AgentInfo.class, WorldInfo.class, ScenarioInfo.class, ModuleManager.class);
-            ExtAction instance = constructor.newInstance(this.agentInfo, this.worldInfo, this.scenarioInfo, this);
+            Constructor<ExtAction> constructor = actionClass.getConstructor(AgentInfo.class, WorldInfo.class, ScenarioInfo.class, ModuleManager.class, DebugData.class);
+            ExtAction instance = constructor.newInstance(this.agentInfo, this.worldInfo, this.scenarioInfo, this, this.debugData);
             this.actionMap.put(actionClass.getCanonicalName(), instance);
             return instance;
         } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
