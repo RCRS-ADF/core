@@ -49,8 +49,7 @@ public class MessageRoad extends StandardMessage
         this.sendLocation = sendBlockadeLocation;
 	}
 
-	public MessageRoad(boolean isRadio, int from, int ttl, BitStreamReader bitStreamReader)
-	{
+	public MessageRoad(boolean isRadio, int from, int ttl, BitStreamReader bitStreamReader) {
 		super(isRadio, from, ttl, bitStreamReader);
 		this.rawRoadID = bitStreamReader.getBits(SIZE_ROADID);
 		this.rawBlockadeID = (bitStreamReader.getBits(1) == 1) ? bitStreamReader.getBits(SIZE_BLOCKADEID) : -1;
@@ -79,27 +78,51 @@ public class MessageRoad extends StandardMessage
 		return this.blockadeRepairCost;
 	}
 
-	public boolean isPassable()
-	{
-		return this.roadPassable;
+	public Integer getBlockadeX() {
+		return this.blockadeX;
 	}
 
-	@Override
-	public int getByteArraySize()
-	{
-		return this.toBitOutputStream().size();
+	public Integer getBlockadeY() {
+		return this.blockadeY;
 	}
 
-	@Override
-	public byte[] toByteArray() {
-		return this.toBitOutputStream().toByteArray();
+    public boolean isPassable()
+    {
+        return this.roadPassable;
+    }
+
+	public boolean isBlockadeDefined() {
+	    return this.getBlockadeID() != null;
+    }
+
+	public boolean isRepairCostDefined() {
+		return this.blockadeRepairCost != -1;
 	}
 
-	@Override
-	public BitOutputStream toBitOutputStream()
-	{
-		BitOutputStream bitOutputStream = new BitOutputStream();
-		bitOutputStream.writeBits(this.roadID.getValue(), SIZE_ROADID);
+	public boolean isXDefined() {
+		return this.blockadeX != null;
+	}
+
+	public boolean isYDefined() {
+		return this.blockadeY != null;
+	}
+
+    @Override
+    public int getByteArraySize()
+    {
+        return this.toBitOutputStream().size();
+    }
+
+    @Override
+    public byte[] toByteArray() {
+        return this.toBitOutputStream().toByteArray();
+    }
+
+    @Override
+    public BitOutputStream toBitOutputStream()
+    {
+        BitOutputStream bitOutputStream = new BitOutputStream();
+        bitOutputStream.writeBits(this.roadID.getValue(), SIZE_ROADID);
         if(this.roadBlockadeID != null) {
             bitOutputStream.writeBitsWithExistFlag(this.roadBlockadeID.getValue(), SIZE_BLOCKADEID);
         } else if(this.rawBlockadeID != -1) {
@@ -127,27 +150,9 @@ public class MessageRoad extends StandardMessage
             bitOutputStream.writeNullFlag(); // blockade x
             bitOutputStream.writeNullFlag(); // blockade y
         }
-		bitOutputStream.writeBits((this.roadPassable?1:0), SIZE_PASSABLE);
-		return bitOutputStream;
-	}
-
-	public Integer getBlockadeX() {
-		return this.blockadeX;
-	}
-
-	public Integer getBlockadeY() {
-		return this.blockadeY;
-	}
-
-	public boolean isRepairCostDefined() {
-		return this.blockadeRepairCost != -1;
-	}
-	public boolean isXDefined() {
-		return this.blockadeX != null;
-	}
-	public boolean isYDefined() {
-		return this.blockadeY != null;
-	}
+        bitOutputStream.writeBits((this.roadPassable?1:0), SIZE_PASSABLE);
+        return bitOutputStream;
+    }
 
 	@Override
 	public String getCheckKey() {
