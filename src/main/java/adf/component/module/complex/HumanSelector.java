@@ -42,4 +42,9 @@ public abstract class HumanSelector extends TargetSelector<Human> {
 
     @Override
     public abstract HumanSelector calc();
+
+    @Override
+    public final Human getTargetEntity() {
+        return (Human) this.worldInfo.getEntity(this.getTarget());
+    }
 }

@@ -7,7 +7,6 @@ import adf.agent.info.ScenarioInfo;
 import adf.agent.info.WorldInfo;
 import adf.agent.module.ModuleManager;
 import adf.agent.precompute.PrecomputeData;
-import rescuecore2.standard.entities.Blockade;
 import rescuecore2.standard.entities.Road;
 
 public abstract class RoadSelector extends TargetSelector<Road> {
@@ -42,5 +41,10 @@ public abstract class RoadSelector extends TargetSelector<Road> {
 
     @Override
     public abstract RoadSelector calc();
+
+    @Override
+    public final Road getTargetEntity() {
+        return (Road) this.worldInfo.getEntity(this.getTarget());
+    }
 }
 

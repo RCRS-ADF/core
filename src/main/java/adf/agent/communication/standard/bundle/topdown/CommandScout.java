@@ -99,4 +99,12 @@ public class CommandScout extends StandardMessage
 	public boolean idTargetIDDefined() {
 		return (this.commandTargetID != null || this.rawTargetID != -1);
 	}
+
+	@Override
+	public String getCheckKey() {
+		String toIDValue = this.broadcast ? "broadcast" : this.getToID().toString();
+		EntityID tid = this.getTargetID();
+		String tidValue = tid == null ? "null" : tid.toString();
+		return getClass().getCanonicalName() + " > to:" + toIDValue + " target:" + tidValue;
+	}
 }

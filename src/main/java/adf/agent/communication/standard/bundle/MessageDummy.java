@@ -41,4 +41,9 @@ public class MessageDummy extends StandardMessage
 		bitOutputStream.writeBits(dummyTest, SIZE_TEST);
 		return bitOutputStream;
 	}
+
+	@Override
+	public String getCheckKey() {
+		return getClass().getCanonicalName() + " > test:" + this.getValue();
+	}
 }

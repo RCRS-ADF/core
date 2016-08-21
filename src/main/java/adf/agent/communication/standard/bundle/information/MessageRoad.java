@@ -148,5 +148,10 @@ public class MessageRoad extends StandardMessage
 	public boolean isYDefined() {
 		return this.blockadeY != null;
 	}
+
+	@Override
+	public String getCheckKey() {
+		return getClass().getCanonicalName() + " > road:" + this.getRoadID().getValue();
+	}
 }
 

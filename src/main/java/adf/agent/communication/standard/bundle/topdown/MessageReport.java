@@ -43,4 +43,9 @@ public class MessageReport extends StandardMessage
 		bitOutputStream.writeBits((this.reportDone?1:0), SIZE_DONE);
 		return bitOutputStream;
 	}
+
+	@Override
+	public String getCheckKey() {
+		return getClass().getCanonicalName() + " > isDone:" + this.isDone();
+	}
 }

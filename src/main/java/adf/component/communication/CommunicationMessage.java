@@ -20,4 +20,6 @@ abstract public class CommunicationMessage
     abstract public byte[] toByteArray();
 
     abstract public BitOutputStream toBitOutputStream();
+
+    abstract public String getCheckKey();
 }

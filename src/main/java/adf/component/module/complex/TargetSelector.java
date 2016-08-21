@@ -20,6 +20,11 @@ public abstract class TargetSelector<E extends StandardEntity> extends AbstractM
 
     public abstract EntityID getTarget();
 
+    @SuppressWarnings("unchecked")
+    public E getTargetEntity() {
+        return (E)this.worldInfo.getEntity(this.getTarget());
+    }
+
     @Override
     public TargetSelector<E> precompute(PrecomputeData precomputeData) {
         super.precompute(precomputeData);

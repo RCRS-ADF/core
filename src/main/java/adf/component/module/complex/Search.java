@@ -41,4 +41,9 @@ public abstract class Search extends TargetSelector<Area> {
 
     @Override
     public abstract Search calc();
+
+    @Override
+    public final Area getTargetEntity() {
+        return (Area)this.worldInfo.getEntity(this.getTarget());
+    }
 }

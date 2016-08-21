@@ -4,10 +4,7 @@ import adf.agent.communication.standard.bundle.StandardMessageBundle;
 import adf.component.communication.CommunicationMessage;
 import adf.component.communication.MessageBundle;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public class MessageManager
 {
@@ -19,6 +16,8 @@ public class MessageManager
     private List<CommunicationMessage> receivedMessageList;
     private int heardAgentHelpCount;
 
+    private Set<String> checkDuplicationCache;
+
     public MessageManager()
     {
         standardMessageClassCount = 1;   // 00001
@@ -26,6 +25,7 @@ public class MessageManager
         messageClassMap = new HashMap<>(32);
         messageClassIDMap = new HashMap<>(32);
         sendMessageList = new ArrayList<>();
+        this.checkDuplicationCache = new HashSet<>();
         this.receivedMessageList = new ArrayList<>();
         heardAgentHelpCount = 0;
     }
@@ -79,9 +79,21 @@ public class MessageManager
         return messageClassIDMap.get(message.getClass());
     }
 
-    public void addMessage(CommunicationMessage message)
-    {
-        sendMessageList.add(message);
+    public void addMessage(CommunicationMessage message) {
+        this.addMessage(message, true);
+    }
+
+    public void addMessage(CommunicationMessage message, boolean checkDuplication) {
+        String checkKey = message.getCheckKey();
+        if(checkDuplication) {
+            if(!this.checkDuplicationCache.contains(checkKey)) {
+                this.sendMessageList.add(message);
+                this.checkDuplicationCache.add(checkKey);
+            }
+        }else {
+            this.sendMessageList.add(message);
+            this.checkDuplicationCache.add(checkKey);
+        }
     }
 
     public List<CommunicationMessage> getSendMessageList()
@@ -126,6 +138,7 @@ public class MessageManager
     public void refresh()
     {
         this.sendMessageList.clear();
+        this.checkDuplicationCache.clear();
         this.receivedMessageList.clear();
         this.heardAgentHelpCount = 0;
     }

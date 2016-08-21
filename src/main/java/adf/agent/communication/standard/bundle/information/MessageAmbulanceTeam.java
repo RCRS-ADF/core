@@ -157,5 +157,12 @@ public class MessageAmbulanceTeam extends StandardMessage
     public boolean isPositionDefined() {
         return (this.humanPosition != null || this.rawHumanPosition != -1);
     }
+
+	@Override
+	public String getCheckKey() {
+		EntityID tid = this.getTargetID();
+		String tidValue = tid == null ? "null" : tid.toString();
+		return getClass().getCanonicalName() + " > agent:" + this.getAgentID().getValue() + " target:" + tidValue;
+	}
 }
 

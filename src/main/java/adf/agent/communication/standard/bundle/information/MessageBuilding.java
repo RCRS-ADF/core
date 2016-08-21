@@ -98,5 +98,10 @@ public class MessageBuilding extends StandardMessage
 	public boolean isTemperatureDefined() {
 		return this.buildingTemperature != -1;
 	}
+
+	@Override
+	public String getCheckKey() {
+		return getClass().getCanonicalName() + " > building:" + this.getBuildingID().getValue();
+	}
 }
 

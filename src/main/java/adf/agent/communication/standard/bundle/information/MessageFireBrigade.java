@@ -172,5 +172,12 @@ public class MessageFireBrigade extends StandardMessage
 	public boolean isWaterDefined() {
 		return this.fireBrigadeWater != -1;
 	}
+
+	@Override
+    public String getCheckKey() {
+        EntityID tid = this.getTargetID();
+        String tidValue = tid == null ? "null" : tid.toString();
+	    return getClass().getCanonicalName() + " > agent:" + this.getAgentID().getValue() + " target:" + tidValue;
+    }
 }
 
