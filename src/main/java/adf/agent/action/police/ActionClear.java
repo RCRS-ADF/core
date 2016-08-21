@@ -43,6 +43,11 @@ public class ActionClear extends Action
 		this.posY = destY;
 	}
 
+    public ActionClear(int destX, int destY, Blockade blockade) {
+        this(destX, destY);
+        this.target = blockade.getID();
+    }
+
 	@Override
 	public String toString()
 	{
@@ -52,6 +57,10 @@ public class ActionClear extends Action
 	public boolean getUseOldFunction()
 	{
 		return this.useOldFunction;
+	}
+
+	public EntityID getTarget() {
+	    return this.target;
 	}
 
 	public int getPosX()
