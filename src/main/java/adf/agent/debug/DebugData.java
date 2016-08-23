@@ -1,5 +1,8 @@
 package adf.agent.debug;
 
+import rescuecore2.config.Config;
+import rescuecore2.config.ConfigException;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -34,6 +37,7 @@ public final class DebugData {
         this.stringLists = new HashMap<>();
         this.boolLists = new HashMap<>();
         this.setRawData(rawData);
+        this.setFileData(debugDataFileName);
     }
 
     public boolean isDebugMode() {
@@ -203,19 +207,17 @@ public final class DebugData {
     private void setFileData(String debugDataFileName) {
         if(debugDataFileName == null || debugDataFileName.equals("")) return;
         try {
-            for(String str : Files.readAllLines((new File(debugDataFileName)).toPath())){
-                String[] array = str.split(DATA_REGEX);
-                if(array.length < 2) continue;
-                if(array.length == 2) {
-                    this.setString(array[0], array[1]);
+            Config config = new Config(new File(debugDataFileName));
+            for(String key : config.getAllKeys()) {
+                List<String> value = config.getArrayValue(key);
+                if(value.isEmpty()) continue;
+                if(value.size() == 1) {
+                    this.setString(key, value.get(0));
                 } else {
-                    List<String> list = new ArrayList<>(array.length);
-                    Collections.addAll(list, array);
-                    list.remove(0);
-                    this.setStringList(array[0], list);
+                    this.setStringList(key, value);
                 }
             }
-        } catch (IOException e) {
+        } catch (ConfigException e) {
             e.printStackTrace();
         }
     }
