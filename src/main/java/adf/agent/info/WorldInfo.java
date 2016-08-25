@@ -29,7 +29,7 @@ public class WorldInfo implements Iterable<StandardEntity> {
         this.rollbackCache = new HashMap<>();
 	}
 
-	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// agent init ///////////////////////////////////////////////////////////////////////////////////////////////
 
 	public void indexClass(StandardEntityURN... urns) {
 		this.world.indexClass(urns);
@@ -39,20 +39,18 @@ public class WorldInfo implements Iterable<StandardEntity> {
 		this.world.index();
 	}
 
-	public ChangeSet getChanged() {
-		return this.changed;
-	}
-
     public WorldInfo requestRollback() {
         this.runRollback = true;
         return this;
     }
 
+    // get Flag ////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     public boolean needRollback() {
         return this.runRollback;
     }
 
-	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// getEntity ///////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	public StandardEntity getEntity(EntityID id) {
 		return this.world.getEntity(id);
@@ -96,7 +94,7 @@ public class WorldInfo implements Iterable<StandardEntity> {
 		return result;
 	}
 
-	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// getEntityOfType /////////////////////////////////////////////////////////////////////////////////////////////////
 
 	public Collection<StandardEntity> getEntitiesOfType(StandardEntityURN urn) {
 		return this.world.getEntitiesOfType(urn);
@@ -107,19 +105,17 @@ public class WorldInfo implements Iterable<StandardEntity> {
 	}
 
 	public Collection<StandardEntity> getEntitiesOfType(int targetTime, StandardEntityURN urn) {
-		Collection<StandardEntity> result = new HashSet<>();
-		for(StandardEntity entity : this.world.getEntitiesOfType(urn)) {
-			result.add(this.getEntity(targetTime, entity));
-		}
-		return result;
+		return this.world.getEntitiesOfType(urn)
+                .stream()
+                .map(entity -> this.getEntity(targetTime, entity))
+                .collect(Collectors.toCollection(HashSet::new));
 	}
 
 	public Collection<StandardEntity> getEntitiesOfType(int targetTime, StandardEntityURN... urns) {
-		Collection<StandardEntity> result = new HashSet<>();
-		for(StandardEntity entity : this.world.getEntitiesOfType(urns)) {
-			result.add(this.getEntity(targetTime, entity));
-		}
-		return result;
+        return this.world.getEntitiesOfType(urns)
+                .stream()
+                .map(entity -> this.getEntity(targetTime, entity))
+                .collect(Collectors.toCollection(HashSet::new));
 	}
 
 	public Collection<EntityID> getEntityIDsOfType(StandardEntityURN urn) {
@@ -138,7 +134,7 @@ public class WorldInfo implements Iterable<StandardEntity> {
 		return this.convertToID(this.getEntitiesOfType(targetTime, urns));
 	}
 
-	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// getObjectsInRange ///////////////////////////////////////////////////////////////////////////////////////////////
 
 	public Collection<StandardEntity> getObjectsInRange(EntityID entity, int range) {
 		return this.world.getObjectsInRange(entity, range);
@@ -192,21 +188,22 @@ public class WorldInfo implements Iterable<StandardEntity> {
 	public Collection<StandardEntity> getObjectsInRectangle(int targetTime, int x1, int y1, int x2, int y2, boolean ignoreHuman) {
 		Collection<StandardEntity> result = new HashSet<>();
         if (ignoreHuman) {
-            for(StandardEntity target : this.world.getObjectsInRectangle(x1, y1, x2, y2)) {
-                result.add(this.getEntity(targetTime, target));
-            }
+            result.addAll(
+                    this.world.getObjectsInRectangle(x1, y1, x2, y2).stream()
+                            .map(target -> this.getEntity(targetTime, target))
+                            .collect(Collectors.toList())
+            );
         } else {
-            for (StandardEntity target : this.world.getObjectsInRectangle(x1, y1, x2, y2)) {
-                if (target instanceof Area) {
-                    result.add(this.getEntity(targetTime, target));
-                }
-            }
+            result.addAll(
+                    this.world.getObjectsInRectangle(x1, y1, x2, y2).stream()
+                            .filter(target -> target instanceof Area)
+                            .map(target -> this.getEntity(targetTime, target))
+                            .collect(Collectors.toList())
+            );
             Map<EntityID, StandardEntity> info = this.rollbackChangeInfo.get(targetTime);
-            for(StandardEntity target : info.values()) {
-                if(target instanceof Human && result.contains(this.getPosition((Human)target))) {
-                    result.add(target);
-                }
-            }
+            info.values().stream()
+                    .filter(target -> target instanceof Human && result.contains(this.getPosition((Human) target)))
+                    .forEach(result::add);
         }
         return result;
 	}
@@ -259,19 +256,24 @@ public class WorldInfo implements Iterable<StandardEntity> {
 		return this.convertToID(this.getObjectsInRectangle(targetTime, x1, y1, x2, y2, ignoreHuman));
 	}
 
-	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// getAllEntities //////////////////////////////////////////////////////////////////////////////////////////////////
 
 	public Collection<StandardEntity> getAllEntities() {
 		return this.world.getAllEntities();
 	}
 
 	public Collection<StandardEntity> getAllEntities(int targetTime) {
-		Collection<StandardEntity> result = new HashSet<>();
-		for(StandardEntity entity : this.world.getAllEntities()) {
-			result.add(this.getEntity(targetTime, entity));
-		}
-		return result;
+		return this.world.getAllEntities()
+                .stream()
+                .map(entity -> this.getEntity(targetTime, entity))
+                .collect(Collectors.toCollection(HashSet::new));
 	}
+
+	// getChangeInfo ///////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public ChangeSet getChanged() {
+        return this.changed;
+    }
 
 	public Map<EntityID, StandardEntity> getChangeEntities(int time) {
 		return this.rollbackChangeInfo.get(time);
@@ -284,6 +286,8 @@ public class WorldInfo implements Iterable<StandardEntity> {
 	public Map<EntityID, StandardEntity> getRemoveEntities(int time) {
 		return this.rollbackChangeInfo.get(time);
 	}
+
+	// other //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	public Collection<Building> getFireBuildings() {
 		Set<Building> fireBuildings = new HashSet<>();
@@ -340,16 +344,28 @@ public class WorldInfo implements Iterable<StandardEntity> {
 	    return road.getBlockades().stream().map(entityID -> (Blockade)this.getEntity(entityID)).collect(Collectors.toSet());
     }
 
-	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// getPosition /////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public StandardEntity getPosition(Human entity) {
-        return entity.getPosition(this.world);
+    public StandardEntity getPosition(Human human) {
+        return human.getPosition(this.world);
     }
 
     public StandardEntity getPosition(EntityID entityID) {
         StandardEntity entity = this.getEntity(entityID);
-        return (entity instanceof Human) ? this.getPosition((Human)entity) : null;
+        if(entity instanceof Human) return this.getPosition((Human)entity);
+        return entity.getStandardURN() == BLOCKADE ? this.getEntity(((Blockade)entity).getPosition()) : null;
     }
+
+    public StandardEntity getPosition(int targetTime, Human entity) {
+        return this.getEntity(targetTime, entity.getPosition(this.world));
+    }
+
+    public StandardEntity getPosition(int targetTime, EntityID entityID) {
+        StandardEntity entity = this.getEntity(entityID);
+        return (entity instanceof Human) ? this.getEntity(targetTime, this.getPosition((Human)entity)) : null;
+    }
+
+    // getLocation /////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public Pair<Integer, Integer> getLocation(StandardEntity entity) {
         return entity.getLocation(this.world);
@@ -358,23 +374,6 @@ public class WorldInfo implements Iterable<StandardEntity> {
     public Pair<Integer, Integer> getLocation(EntityID entityID) {
         return this.getLocation(this.getEntity(entityID));
     }
-
-	public int getDistance(EntityID first, EntityID second) {
-		return this.world.getDistance(first, second);
-	}
-
-	public int getDistance(StandardEntity first, StandardEntity second) {
-		return this.world.getDistance(first, second);
-	}
-
-	public StandardEntity getPosition(int targetTime, Human entity) {
-		return this.getEntity(targetTime, entity.getPosition(this.world));
-	}
-
-	public StandardEntity getPosition(int targetTime, EntityID entityID) {
-		StandardEntity entity = this.getEntity(entityID);
-		return (entity instanceof Human) ? this.getEntity(targetTime, this.getPosition((Human)entity)) : null;
-	}
 
 	public Pair<Integer, Integer> getLocation(int targetTime, StandardEntity entity) {
 		StandardEntity target = this.getEntity(targetTime, entity);
@@ -386,13 +385,25 @@ public class WorldInfo implements Iterable<StandardEntity> {
 		return target.getLocation(this.world);
 	}
 
-	public int getDistance(int targetTime, EntityID first, EntityID second) {
+	// getDistance /////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public int getDistance(EntityID first, EntityID second) {
+        return this.world.getDistance(first, second);
+    }
+
+    public int getDistance(StandardEntity first, StandardEntity second) {
+        return this.world.getDistance(first, second);
+    }
+
+    public int getDistance(int targetTime, EntityID first, EntityID second) {
 		return this.world.getDistance(this.getEntity(targetTime, first), this.getEntity(targetTime, second));
 	}
 
 	public int getDistance(int targetTime, StandardEntity first, StandardEntity second) {
 		return this.world.getDistance(this.getEntity(targetTime, first), this.getEntity(targetTime, second));
 	}
+
+	// getWorldBounds //////////////////////////////////////////////////////////////////////////////////////////////////
 
 	public Rectangle2D getBounds() {
 		return this.world.getBounds();
@@ -402,81 +413,40 @@ public class WorldInfo implements Iterable<StandardEntity> {
 		return this.world.getWorldBounds();
 	}
 
-	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// addEntity //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	@Override
-	public Iterator<StandardEntity> iterator() {
-		return this.world.iterator();
-	}
-
-	/*public void addRollbackEntity(EntityID entityID) {
-	    this.addRollbackEntity(this.getEntity(entityID));
+    public void addEntity(Entity entity) {
+        entity.addEntityListener(new ChangeListener());
+        this.world.addEntity(entity);
     }
 
-    public void addRollbackEntity(StandardEntity entity) {
-		Map<EntityID, StandardEntity> changeInfo = this.rollbackChangeInfo.get(this.time);
-		StandardEntity target = changeInfo.get(entity.getID());
-		if(target == null) {
-			changeInfo.put(entity.getID(), (StandardEntity) entity.copy());
+    public void addEntity(Entity entity,
+            Class<? extends EntityListener> listener,
+            Class<? extends EntityListener>... otherListeners) {
+		try {
+			entity.addEntityListener(listener.newInstance());
+			for(Class<? extends EntityListener> other : otherListeners) {
+				entity.addEntityListener(other.newInstance());
+			}
+		} catch (InstantiationException | IllegalAccessException exception) {
+			exception.printStackTrace();
 		}
-		this.rollbackChangeInfo.put(this.time, changeInfo);
-	}*/
-
-	public void setWorld(StandardWorldModel world)
-	{
-		this.world = world;
+		this.addEntity(entity);
 	}
 
-	public void setChanged(ChangeSet changed) {
-		this.changed = changed;
-	}
-
-	public void setTime(int time) {
-		this.time = time;
-	}
-
-
-
-    public void addEntity(Entity e) {
-        e.addEntityListener(new ChangeListener());
-        this.world.addEntity(e);
+    public void addEntities(Collection<? extends Entity> entities) {
+		entities.forEach(this::addEntity);
     }
 
-    public void addEntities(Collection<? extends Entity> e) {
-        for (Entity next : e) {
-            this.addEntity(next);
-        }
+    public void addEntities(Collection<? extends Entity> entities,
+            Class<? extends EntityListener> listener,
+            Class<? extends EntityListener>... otherListeners) {
+        entities.forEach(entity -> {
+            this.addEntity(entity, listener, otherListeners);
+        });
     }
 
-    public void removeEntity(StandardEntity e) {
-        this.world.removeEntity(e.getID());
-    }
-
-    public void removeEntity(EntityID id) {
-        this.world.removeEntity(id);
-    }
-
-    public void removeAllEntities() {
-        this.world.removeAllEntities();
-    }
-
-	private Collection<EntityID> convertToID(Collection<StandardEntity> entities) {
-		return entities.stream().map(StandardEntity::getID).collect(Collectors.toList());
-	}
-
-	public void merge(ChangeSet changeSet) {
-		this.world.merge(changeSet);
-	}
-
-    public void registerListener() {
-        if(this.needRollback()) {
-            this.world.addWorldModelListener(new RollbackListener());
-
-            for (StandardEntity entity : this.getAllEntities()) {
-                entity.addEntityListener(new ChangeListener());
-            }
-        }
-    }
+    // registerListener ////////////////////////////////////////////////////////////////////////////////////////////////
 
     public void registerEntityListener(Class<? extends EntityListener> listener) {
         for (StandardEntity entity : this.getAllEntities()) {
@@ -496,39 +466,65 @@ public class WorldInfo implements Iterable<StandardEntity> {
         }
     }
 
+    // removeEntity // marge ///////////////////////////////////////////////////////////////////////////////////////////
+
+    public void removeEntity(StandardEntity e) {
+        this.world.removeEntity(e.getID());
+    }
+
+    public void removeEntity(EntityID id) {
+        this.world.removeEntity(id);
+    }
+
+    public void removeAllEntities() {
+        this.world.removeAllEntities();
+    }
+
+	public void merge(ChangeSet changeSet) {
+		this.world.merge(changeSet);
+	}
+
+	// system //////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    @Override
+    public Iterator<StandardEntity> iterator() {
+        return this.world.iterator();
+    }
+
+    public void setWorld(StandardWorldModel world)
+    {
+        this.world = world;
+    }
+
+    public void setChanged(ChangeSet changed) {
+        this.changed = changed;
+    }
+
+    public void setTime(int time) {
+        this.time = time;
+    }
+
+    private Collection<EntityID> convertToID(Collection<StandardEntity> entities) {
+        return entities.stream().map(StandardEntity::getID).collect(Collectors.toList());
+    }
+
+    // rollback ////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public void registerListener() {
+        if(this.needRollback()) {
+            this.world.addWorldModelListener(new RollbackListener());
+            for (StandardEntity entity : this.getAllEntities()) {
+                entity.addEntityListener(new ChangeListener());
+            }
+        }
+    }
+
 	public void setRollbackBase(int time) {
 		this.setTime(time);
 		this.rollbackAddInfo.put(time, new HashMap<>());
 		this.rollbackChangeInfo.put(time, new HashMap<>());
         this.rollbackCache.clear();
 	}
-
-    private class RollbackListener implements WorldModelListener<StandardEntity> {
-        @Override
-        public void entityAdded(WorldModel<? extends StandardEntity> model, StandardEntity e) {
-            Map<EntityID, StandardEntity> addInfo = rollbackAddInfo.get(time);
-            addInfo.put(e.getID(), (StandardEntity)  e.copy());
-            rollbackAddInfo.put(time, addInfo);
-        }
-
-        @Override
-        public void entityRemoved(WorldModel<? extends StandardEntity> model, StandardEntity e) {
-            Map<EntityID, StandardEntity> removeInfo = rollbackChangeInfo.get(time);
-            removeInfo.put(e.getID(), (StandardEntity)e.copy());
-            rollbackChangeInfo.put(time, removeInfo);
-        }
-    }
-
-    private class ChangeListener implements EntityListener {
-        @Override
-        public void propertyChanged(Entity entity, Property property, Object oldValue, Object newValue) {
-            EntityID entityID = entity.getID();
-            Map<String, Object> cache = rollbackCache.get(entityID);
-            if(cache == null) cache = new HashMap<>();
-            cache.put(property.getURN(), oldValue);
-            rollbackCache.put(entityID, cache);
-        }
-    }
 
 	public void createRollbackInfo(){
         Map<EntityID, StandardEntity> info = this.rollbackChangeInfo.get(this.time);
@@ -823,5 +819,32 @@ public class WorldInfo implements Iterable<StandardEntity> {
             }
         }
         return copy;
+    }
+
+    private class RollbackListener implements WorldModelListener<StandardEntity> {
+        @Override
+        public void entityAdded(WorldModel<? extends StandardEntity> model, StandardEntity e) {
+            Map<EntityID, StandardEntity> addInfo = rollbackAddInfo.get(time);
+            addInfo.put(e.getID(), (StandardEntity)  e.copy());
+            rollbackAddInfo.put(time, addInfo);
+        }
+
+        @Override
+        public void entityRemoved(WorldModel<? extends StandardEntity> model, StandardEntity e) {
+            Map<EntityID, StandardEntity> removeInfo = rollbackChangeInfo.get(time);
+            removeInfo.put(e.getID(), (StandardEntity)e.copy());
+            rollbackChangeInfo.put(time, removeInfo);
+        }
+    }
+
+    private class ChangeListener implements EntityListener {
+        @Override
+        public void propertyChanged(Entity entity, Property property, Object oldValue, Object newValue) {
+            EntityID entityID = entity.getID();
+            Map<String, Object> cache = rollbackCache.get(entityID);
+            if(cache == null) cache = new HashMap<>();
+            cache.put(property.getURN(), oldValue);
+            rollbackCache.put(entityID, cache);
+        }
     }
 }
