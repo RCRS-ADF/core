@@ -27,7 +27,7 @@ public final class DevelopData
     private Map<String, List<String>> stringLists;
     private Map<String, List<Boolean>> boolLists;
 
-    public DevelopData(boolean developFlag, String debugDataFileName, String rawData)
+    public DevelopData(boolean developFlag, String debugDataFileName, List<String> rawData)
     {
         this.developFlag = developFlag;
 
@@ -40,8 +40,8 @@ public final class DevelopData
         this.doubleLists = new HashMap<>();
         this.stringLists = new HashMap<>();
         this.boolLists = new HashMap<>();
-        this.setRawData(rawData);
         this.setFileData(debugDataFileName);
+        this.setRawData(rawData);
     }
 
     public boolean isDevelopMode()
@@ -254,6 +254,12 @@ public final class DevelopData
             }
         }
         */
+    }
+
+    private void setRawData(List<String> rawData)
+    {
+        for (String data : rawData)
+        { setRawData(data); }
     }
 
     private void setFileData(String debugDataFileName)

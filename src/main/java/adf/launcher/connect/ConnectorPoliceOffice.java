@@ -41,7 +41,7 @@ public class ConnectorPoliceOffice implements Connector
 				DevelopData developData = new DevelopData(
 						config.getBooleanValue(ConfigKey.KEY_DEVELOP_FLAG, false),
 						config.getValue(ConfigKey.KEY_DEVELOP_DATA_FILE_NAME, DevelopData.DEFAULT_FILE_NAME),
-						config.getValue(ConfigKey.KEY_DEVELOP_DATA)
+						config.getArrayValue(ConfigKey.KEY_DEVELOP_DATA)
 				);
 				launcher.connect(new OfficePolice(
 						controlPolice,
