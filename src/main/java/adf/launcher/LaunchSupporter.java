@@ -12,6 +12,7 @@ import java.util.List;
 
 public class LaunchSupporter
 {
+    private static boolean compiled = false;
     private static final String OPTION_COMPILE = "-compile";
     private static final String OPTION_AUTOCLASSPATH = "-autocp";
     private static final String OPTION_AUTOLOADERCLASS = "-autolc";
@@ -26,8 +27,8 @@ public class LaunchSupporter
         alias(args, "-local", "-h localhost");
         alias(args, "-all", "-t -1,-1,-1,-1,-1,-1");
         alias(args, "-precompute", "-pre true");
-        alias(args, "-develop", "-d true");
-
+        alias(args, "-debug", "-d true");
+        alias(args, "-develop", "-dev true");
 
         if (args.contains(OPTION_COMPILE))
         {
@@ -49,7 +50,8 @@ public class LaunchSupporter
 
         if (args.size() <= 0)
         {
-            printOptionList();
+            if (!compiled)
+            { printOptionList(); }
             System.exit(0);
         }
     }
@@ -68,15 +70,19 @@ public class LaunchSupporter
         System.out.println("-h [HOST]\t\t\t\tRCRS server host (port:7000)");
         System.out.println("-pre [0|1]\t\t\t\tPrecompute flag");
         System.out.println("-mc [FILE]\t\t\t\tModuleConfig file name");
+        System.out.println("-dev [0|1]\t\t\t\tDevelop flag");
+        System.out.println("-dd [JSON]\t\t\t\tDevelopData JSON");
+        System.out.println("-df [JSON]\t\t\t\tDevelopData JSON file");
         System.out.println("-compile\t\t\t\trun compile");
         System.out.println("-autocp\t\t\t\t\tauto load class path form " + DIRECTORY_LIBRARY);
         System.out.println("-autolc\t\t\t\t\tauto load loader class form " + DIRECTORY_BUILD);
         System.out.println("-d [0|1]\t\t\t\tDebug flag");
         System.out.println("-auto\t\t\t\t\t[alias] -autocp -autolc");
         System.out.println("-all\t\t\t\t\t[alias] -t -1,-1,-1,-1,-1,-1");
-        System.out.println("-local\t\t\t\t\t[alias] -h:localhost");
-        System.out.println("-precompute\t\t\t\t[alias] -pre:true");
-        System.out.println("-develop\t\t\t\t\t[alias] -d:true");
+        System.out.println("-local\t\t\t\t\t[alias] -h localhost");
+        System.out.println("-precompute\t\t\t\t[alias] -pre true");
+        System.out.println("-debug\t\t\t\t\t[alias] -d true");
+        System.out.println("-develop\t\t\t\t[alias] -dev true");
         System.out.println();
     }
 
@@ -184,6 +190,7 @@ public class LaunchSupporter
         }
 
         System.out.println("[FINISH] Agent compiled.");
+        compiled = true;
     }
 
     private static String getLoaderClass(String base)

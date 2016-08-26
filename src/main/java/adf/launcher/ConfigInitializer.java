@@ -70,8 +70,9 @@ public class ConfigInitializer
 		registerOption(options, new OptionPrecompute());
 		registerOption(options, new OptionModuleConfig());
 		registerOption(options, new OptionDebug());
-        registerOption(options, new OptionDebugData());
-        registerOption(options, new OptionDebugFile());
+        registerOption(options, new OptionDevelop());
+        registerOption(options, new OptionDevelopData());
+        registerOption(options, new OptionDevelopFile());
 		registerOption(options, new OptionTeam());
 		registerOption(options, new OptionAmbulanceTeam());
 		registerOption(options, new OptionFireBrigade());

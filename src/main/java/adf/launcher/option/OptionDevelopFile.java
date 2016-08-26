@@ -3,7 +3,7 @@ package adf.launcher.option;
 import adf.launcher.ConfigKey;
 import rescuecore2.config.Config;
 
-public class OptionDebugFile extends Option
+public class OptionDevelopFile extends Option
 {
     @Override
     public boolean hasValue()

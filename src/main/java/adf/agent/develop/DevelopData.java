@@ -1,6 +1,8 @@
 package adf.agent.develop;
 
+import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.File;
@@ -211,15 +213,22 @@ public final class DevelopData
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    private void setRawData(String rawData)
+    private void setRawData(String rawData, boolean isBase64)
     {
+        if (rawData.equals("")) { return; }
+        String data = (isBase64 ? new String(Base64.getDecoder().decode(rawData)) : rawData);
+
         ObjectMapper mapper = new ObjectMapper();
         Map<String, Object> dataMap = new HashMap<>();
 
         try
         {
-            dataMap = mapper.readValue(rawData, new TypeReference<Map<String, Object>>(){});
+            dataMap = mapper.readValue(data, new TypeReference<Map<String, Object>>(){});
         }
+        catch (JsonMappingException e)
+        { e.printStackTrace(); }
+        catch (JsonParseException e)
+        { System.out.println("[WARN  ] DevelopData input is invalid : " + data); }
         catch (IOException e)
         { e.printStackTrace(); }
 
@@ -236,72 +245,31 @@ public final class DevelopData
             else
             { this.setString(key, String.valueOf(object)); }
         }
-
-        /*
-        for (String str : rawData)
-        {
-            String[] array = str.split(DATA_REGEX);
-            if (array.length < 2) continue;
-            if (array.length == 2)
-            {
-                this.setString(array[0], array[1]);
-            } else
-            {
-                List<String> list = new ArrayList<>(array.length);
-                Collections.addAll(list, array);
-                list.remove(0);
-                this.setStringList(array[0], list);
-            }
-        }
-        */
     }
 
     private void setRawData(List<String> rawData)
     {
         for (String data : rawData)
-        { setRawData(data); }
+        { setRawData(data, true); }
     }
 
-    private void setFileData(String debugDataFileName)
+    private void setFileData(String developDataFileName)
     {
-        if (debugDataFileName == null || debugDataFileName.equals("")) { return; }
+        if (developDataFileName == null || developDataFileName.equals("")) { return; }
+        File file = new File(developDataFileName);
+        if (developDataFileName.equals(DEFAULT_FILE_NAME) && !(file.isFile())) { return; }
 
         String rawData = "";
-
         try
         {
             rawData = Files.lines(
-                    Paths.get(debugDataFileName),
+                    Paths.get(file.getPath()),
                     Charset.forName("UTF-8")).collect(Collectors.joining(System.getProperty("line.separator")));
         }
         catch (IOException e)
         { e.printStackTrace(); }
 
-        setRawData(rawData);
-
-
-        /*
-        try
-        {
-            Config config = new Config(new File(debugDataFileName));
-            for (String key : config.getAllKeys())
-            {
-                List<String> value = config.getArrayValue(key);
-                if (value.isEmpty()) continue;
-                if (value.size() == 1)
-                {
-                    this.setString(key, value.get(0));
-                } else
-                {
-                    this.setStringList(key, value);
-                }
-            }
-        }
-        catch (ConfigException e)
-        {
-            e.printStackTrace();
-        }
-        */
+        setRawData(rawData, false);
     }
 
     public void clear()
