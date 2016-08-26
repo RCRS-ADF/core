@@ -10,7 +10,7 @@ import java.util.Map;
 
 public class ConfigInitializer
 {
-    public static final File DEFAULT_PATH = new File(System.getProperty("user.dir"), "config");
+    public static final File DEFAULT_PATH = new File(System.getProperty("user.dir"), "config" + File.separator + "launch.cfg");
     
     public static Config getConfig(String... args)
     {

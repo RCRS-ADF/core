@@ -1,7 +1,7 @@
 package adf.component.extaction;
 
 import adf.agent.action.Action;
-import adf.agent.debug.DebugData;
+import adf.agent.develop.DevelopData;
 import adf.agent.info.AgentInfo;
 import adf.agent.info.ScenarioInfo;
 import adf.agent.info.WorldInfo;
@@ -13,11 +13,11 @@ abstract public class ExtAction {
 	protected AgentInfo agentInfo;
 	protected WorldInfo worldInfo;
 	protected ModuleManager moduleManager;
-	protected DebugData debugData;
+	protected DevelopData debugData;
 
 	protected Action result;
 
-	public ExtAction(AgentInfo ai, WorldInfo wi, ScenarioInfo si, ModuleManager moduleManager, DebugData debugData) {
+	public ExtAction(AgentInfo ai, WorldInfo wi, ScenarioInfo si, ModuleManager moduleManager, DevelopData debugData) {
 		this.worldInfo = wi;
 		this.agentInfo = ai;
 		this.scenarioInfo = si;

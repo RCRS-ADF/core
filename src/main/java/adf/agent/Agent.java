@@ -6,7 +6,7 @@ import adf.agent.communication.standard.bundle.StandardMessageBundle;
 import adf.agent.config.ModuleConfig;
 import adf.agent.info.AgentInfo;
 import adf.agent.module.ModuleManager;
-import adf.agent.debug.DebugData;
+import adf.agent.develop.DevelopData;
 import adf.agent.precompute.PrecomputeData;
 import adf.agent.info.ScenarioInfo;
 import adf.agent.info.WorldInfo;
@@ -38,14 +38,18 @@ public abstract class Agent<E extends StandardEntity> extends AbstractAgent<Stan
 	protected ModuleConfig moduleConfig;
 	protected ModuleManager moduleManager;
 	protected PrecomputeData precomputeData;
-	protected DebugData debugData;
+	protected DevelopData developData;
 	protected MessageManager messageManager;
 	private CommunicationModule communicationModule;
 	protected boolean isPrecompute;
+	protected boolean isDebugMode;
 	private int ignoreTime;
 
-	public Agent(String moduleConfigFileName, boolean isPrecompute, String dataStorageName, boolean isDebugMode, String debugDataFileName, List<String> rawDebugData) {
+	//public Agent(String moduleConfigFileName, boolean isPrecompute, String dataStorageName, boolean isDevelopMode, String debugDataFileName, List<String> rawDebugData)
+	public Agent(String moduleConfigFileName, boolean isPrecompute, String dataStorageName, boolean isDebugMode, DevelopData developData)
+	{
 		this.isPrecompute = isPrecompute;
+		this.isDebugMode = isDebugMode;
 
 		if (isPrecompute) {
 			PrecomputeData.removeData(dataStorageName);
@@ -60,7 +64,7 @@ public abstract class Agent<E extends StandardEntity> extends AbstractAgent<Stan
 		}
 
 		this.precomputeData = new PrecomputeData(dataStorageName);
-		this.debugData = new DebugData(isDebugMode, debugDataFileName, rawDebugData);
+		this.developData = developData;
 		this.messageManager = new MessageManager();
 	}
 
@@ -98,7 +102,8 @@ public abstract class Agent<E extends StandardEntity> extends AbstractAgent<Stan
                     ScenarioInfo.Mode.NON_PRECOMPUTE;
 		}
 
-		this.config.setBooleanValue(ConfigKey.KEY_DEBUG_FLAG, this.debugData.isDebugMode());
+		this.config.setBooleanValue(ConfigKey.KEY_DEBUG_FLAG, this.isDebugMode);
+		this.config.setBooleanValue(ConfigKey.KEY_DEVELOP_FLAG, this.developData.isDevelopMode());
 		this.scenarioInfo = new ScenarioInfo(this.config, this.mode);
 		this.communicationModule = null;
 

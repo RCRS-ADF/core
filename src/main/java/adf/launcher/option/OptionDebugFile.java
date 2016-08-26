@@ -20,6 +20,6 @@ public class OptionDebugFile extends Option
     @Override
     public void setValue(Config config, String data)
     {
-        config.setValue(ConfigKey.KEY_DEBUG_DATA_FILE_NAME, data);
+        config.setValue(ConfigKey.KEY_DEVELOP_DATA_FILE_NAME, data);
     }
 }

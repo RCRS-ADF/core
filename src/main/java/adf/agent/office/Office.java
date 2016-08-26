@@ -1,6 +1,7 @@
 package adf.agent.office;
 
 import adf.agent.Agent;
+import adf.agent.develop.DevelopData;
 import adf.agent.info.AgentInfo;
 import adf.agent.module.ModuleManager;
 import adf.component.control.Control;
@@ -13,9 +14,9 @@ public abstract class Office<E extends StandardEntity> extends Agent<E> {
 
 	Control rootControl;
 
-	public Office(Control control, String moduleConfigFileName, boolean isPrecompute, String datastorageName, boolean isDebugMode, String debugDataFileName, List<String> rawDebugData)
+	public Office(Control control, String moduleConfigFileName, boolean isPrecompute, String datastorageName, boolean isDebugMode, DevelopData developData)
 	{
-		super(moduleConfigFileName, isPrecompute, datastorageName, isDebugMode, debugDataFileName, rawDebugData);
+		super(moduleConfigFileName, isPrecompute, datastorageName, isDebugMode, developData);
 		this.rootControl = control;
 	}
 
@@ -26,16 +27,16 @@ public abstract class Office<E extends StandardEntity> extends Agent<E> {
 		//distance = config.getIntValue(DISTANCE_KEY);
 
 		this.agentInfo = new AgentInfo(this, model, config);
-		this.moduleManager = new ModuleManager(this.agentInfo, this.worldInfo, this.scenarioInfo, this.moduleConfig, this.debugData);
+		this.moduleManager = new ModuleManager(this.agentInfo, this.worldInfo, this.scenarioInfo, this.moduleConfig, this.developData);
 
-		rootControl.initialize(this.agentInfo, this.worldInfo, this.scenarioInfo, this.moduleManager, this.messageManager, this.debugData);
+		rootControl.initialize(this.agentInfo, this.worldInfo, this.scenarioInfo, this.moduleManager, this.messageManager, this.developData);
 
 		switch (scenarioInfo.getMode()) {
 			case NON_PRECOMPUTE:
-				rootControl.preparate(this.agentInfo, this.worldInfo, this.scenarioInfo, this.moduleManager, this.debugData);
+				rootControl.preparate(this.agentInfo, this.worldInfo, this.scenarioInfo, this.moduleManager, this.developData);
 				break;
 			case PRECOMPUTED:
-				rootControl.resume(this.agentInfo, this.worldInfo, this.scenarioInfo, this.moduleManager, precomputeData, this.debugData);
+				rootControl.resume(this.agentInfo, this.worldInfo, this.scenarioInfo, this.moduleManager, precomputeData, this.developData);
 				break;
 			default:
 		}
@@ -44,6 +45,6 @@ public abstract class Office<E extends StandardEntity> extends Agent<E> {
 	}
 
 	protected void think() {
-		this.rootControl.think(this.agentInfo, this.worldInfo, this.scenarioInfo, this.moduleManager, this.messageManager, this.debugData);
+		this.rootControl.think(this.agentInfo, this.worldInfo, this.scenarioInfo, this.moduleManager, this.messageManager, this.developData);
 	}
 }

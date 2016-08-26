@@ -87,8 +87,8 @@ public class AgentLauncher {
 			e.printStackTrace();
 		}
 
-		// remove debug data
-		//this.config.removeKey(ConfigKey.KEY_DEBUG_DATA);
+		// remove develop data
+		//this.config.removeKey(ConfigKey.KEY_DEVELOP_DATA);
 
 		System.out.println("[END   ] Done Connecting to server");
 

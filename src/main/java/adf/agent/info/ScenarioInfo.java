@@ -179,4 +179,8 @@ public class ScenarioInfo
 	public boolean isDebugMode() {
 		return this.config.getBooleanValue(ConfigKey.KEY_DEBUG_FLAG, false);
 	}
+
+	public boolean isDevelopMode() {
+		return this.config.getBooleanValue(ConfigKey.KEY_DEVELOP_FLAG, false);
+	}
 }

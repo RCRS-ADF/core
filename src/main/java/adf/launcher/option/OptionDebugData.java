@@ -3,9 +3,6 @@ package adf.launcher.option;
 import adf.launcher.ConfigKey;
 import rescuecore2.config.Config;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class OptionDebugData extends Option
 {
     // from rescuecore2.config.Config
@@ -36,7 +33,7 @@ public class OptionDebugData extends Option
             String[] nameAndValue = dataset.split(":");
             if (nameAndValue.length == 2)
             {
-                StringBuilder rawDebugData = new StringBuilder(config.getValue(ConfigKey.KEY_DEBUG_DATA, ""));
+                StringBuilder rawDebugData = new StringBuilder(config.getValue(ConfigKey.KEY_DEVELOP_DATA, ""));
                 rawDebugData.append(DATA_DELIMITER);
                 rawDebugData.append(nameAndValue[0]);
                 rawDebugData.append(INNER_DELIMITER);
@@ -47,7 +44,7 @@ public class OptionDebugData extends Option
                     if((i +1) < innerSplitedData.length)
                     { rawDebugData.append(INNER_DELIMITER); }
                 }
-                config.setValue(ConfigKey.KEY_DEBUG_DATA, rawDebugData.toString());
+                config.setValue(ConfigKey.KEY_DEVELOP_DATA, rawDebugData.toString());
             }
         }
     }

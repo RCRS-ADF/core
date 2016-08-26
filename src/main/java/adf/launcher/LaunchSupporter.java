@@ -26,7 +26,7 @@ public class LaunchSupporter
         alias(args, "-local", "-h localhost");
         alias(args, "-all", "-t -1,-1,-1,-1,-1,-1");
         alias(args, "-precompute", "-pre true");
-        alias(args, "-debug", "-d true");
+        alias(args, "-develop", "-d true");
 
 
         if (args.contains(OPTION_COMPILE))
@@ -76,7 +76,7 @@ public class LaunchSupporter
         System.out.println("-all\t\t\t\t\t[alias] -t -1,-1,-1,-1,-1,-1");
         System.out.println("-local\t\t\t\t\t[alias] -h:localhost");
         System.out.println("-precompute\t\t\t\t[alias] -pre:true");
-        System.out.println("-debug\t\t\t\t\t[alias] -d:true");
+        System.out.println("-develop\t\t\t\t\t[alias] -d:true");
         System.out.println();
     }
 

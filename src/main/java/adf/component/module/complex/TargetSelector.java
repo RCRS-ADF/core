@@ -2,7 +2,7 @@ package adf.component.module.complex;
 
 
 import adf.agent.communication.MessageManager;
-import adf.agent.debug.DebugData;
+import adf.agent.develop.DevelopData;
 import adf.agent.info.AgentInfo;
 import adf.agent.info.ScenarioInfo;
 import adf.agent.info.WorldInfo;
@@ -14,7 +14,7 @@ import rescuecore2.worldmodel.EntityID;
 
 public abstract class TargetSelector<E extends StandardEntity> extends AbstractModule {
 
-    public TargetSelector(AgentInfo ai, WorldInfo wi, ScenarioInfo si, ModuleManager moduleManager, DebugData debugData) {
+    public TargetSelector(AgentInfo ai, WorldInfo wi, ScenarioInfo si, ModuleManager moduleManager, DevelopData debugData) {
         super(ai, wi, si, moduleManager, debugData);
     }
 

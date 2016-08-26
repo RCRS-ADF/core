@@ -1,7 +1,7 @@
 package adf.launcher.connect;
 
 import adf.agent.config.ModuleConfig;
-import adf.agent.debug.DebugData;
+import adf.agent.develop.DevelopData;
 import adf.agent.platoon.PlatoonPolice;
 import adf.component.tactics.TacticsPolice;
 import adf.component.AbstractLoader;
@@ -38,15 +38,17 @@ public class ConnectorPoliceForce implements Connector
 				{
 					tacticsPolice = loader.getTacticsPolice();
 				}
-				boolean isPrecompute = config.getBooleanValue(ConfigKey.KEY_PRECOMPUTE, false);
-				boolean isDebugMode = config.getBooleanValue(ConfigKey.KEY_DEBUG_FLAG, false);
+				DevelopData developData = new DevelopData(
+						config.getBooleanValue(ConfigKey.KEY_DEVELOP_FLAG, false),
+						config.getValue(ConfigKey.KEY_DEVELOP_DATA_FILE_NAME, DevelopData.DEFAULT_FILE_NAME),
+						config.getValue(ConfigKey.KEY_DEVELOP_DATA)
+				);
 				launcher.connect(new PlatoonPolice(
 						tacticsPolice,
 						config.getValue(ConfigKey.KEY_MODULE_CONFIG_FILE_NAME, ModuleConfig.DEFAULT_CONFIG_FILE_NAME),
-						isPrecompute,
-						isDebugMode,
-                        config.getValue(ConfigKey.KEY_DEBUG_DATA_FILE_NAME, DebugData.DEFAULT_FILE_NAME),
-						config.getArrayValue(ConfigKey.KEY_DEBUG_DATA)
+						config.getBooleanValue(ConfigKey.KEY_PRECOMPUTE, false),
+						config.getBooleanValue(ConfigKey.KEY_DEBUG_FLAG, false),
+						developData
 				));
 				//System.out.println(name);
 				connected++;

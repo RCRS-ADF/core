@@ -1,7 +1,7 @@
 package adf.agent.module;
 
 import adf.agent.config.ModuleConfig;
-import adf.agent.debug.DebugData;
+import adf.agent.develop.DevelopData;
 import adf.agent.info.AgentInfo;
 import adf.agent.info.ScenarioInfo;
 import adf.agent.info.WorldInfo;
@@ -24,9 +24,9 @@ public class ModuleManager
 
     private ModuleConfig moduleConfig;
 
-    private DebugData debugData;
+    private DevelopData debugData;
 
-    public ModuleManager(AgentInfo agentInfo, WorldInfo worldInfo, ScenarioInfo scenarioInfo, ModuleConfig moduleConfig, DebugData debugData) {
+    public ModuleManager(AgentInfo agentInfo, WorldInfo worldInfo, ScenarioInfo scenarioInfo, ModuleConfig moduleConfig, DevelopData debugData) {
         this.agentInfo = agentInfo;
         this.worldInfo = worldInfo;
         this.scenarioInfo = scenarioInfo;
@@ -71,7 +71,7 @@ public class ModuleManager
     @SuppressWarnings("unchecked")
     private AbstractModule getModule(Class<AbstractModule> moduleClass) {
         try {
-            Constructor<AbstractModule> constructor = moduleClass.getConstructor(AgentInfo.class, WorldInfo.class, ScenarioInfo.class, ModuleManager.class, DebugData.class);
+            Constructor<AbstractModule> constructor = moduleClass.getConstructor(AgentInfo.class, WorldInfo.class, ScenarioInfo.class, ModuleManager.class, DevelopData.class);
             AbstractModule instance = constructor.newInstance(this.agentInfo, this.worldInfo, this.scenarioInfo, this, this.debugData);
             this.moduleMap.put(moduleClass.getCanonicalName(), instance);
             return instance;
@@ -115,7 +115,7 @@ public class ModuleManager
     @SuppressWarnings("unchecked")
     private ExtAction getExtAction(Class<ExtAction> actionClass) {
         try {
-            Constructor<ExtAction> constructor = actionClass.getConstructor(AgentInfo.class, WorldInfo.class, ScenarioInfo.class, ModuleManager.class, DebugData.class);
+            Constructor<ExtAction> constructor = actionClass.getConstructor(AgentInfo.class, WorldInfo.class, ScenarioInfo.class, ModuleManager.class, DevelopData.class);
             ExtAction instance = constructor.newInstance(this.agentInfo, this.worldInfo, this.scenarioInfo, this, this.debugData);
             this.actionMap.put(actionClass.getCanonicalName(), instance);
             return instance;
