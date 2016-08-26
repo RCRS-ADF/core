@@ -23,10 +23,10 @@ public class LaunchSupporter
     public static void delegate(List<String> args)
     {
         alias(args, "-auto", "-autocp", "-autolc");
-        alias(args, "-local", "-h:localhost");
-        alias(args, "-all", "-t:-1:-1:-1:-1:-1:-1");
-        alias(args, "-precompute", "-pre:true");
-        alias(args, "-debug", "-d:true");
+        alias(args, "-local", "-h localhost");
+        alias(args, "-all", "-t -1,-1,-1,-1,-1,-1");
+        alias(args, "-precompute", "-pre true");
+        alias(args, "-debug", "-d true");
 
 
         if (args.contains(OPTION_COMPILE))
@@ -57,23 +57,23 @@ public class LaunchSupporter
     private static void printOptionList()
     {
         System.out.println("Options:");
-        System.out.println("-t:[FB]:[FS]:[PF]:[PO]:[AT]:[AC]\tnumber of agents");
-        System.out.println("-fb:[FB]\t\t\t\tnumber of FireBrigade");
-        System.out.println("-fs:[FS]\t\t\t\tnumber of FireStation");
-        System.out.println("-pf:[PF]\t\t\t\tnumber of PoliceForce");
-        System.out.println("-po:[PO]\t\t\t\tnumber of PoliceOffice");
-        System.out.println("-at:[AT]\t\t\t\tnumber of AmbulanceTeam");
-        System.out.println("-ac:[AC]\t\t\t\tnumber of AmbulanceCentre");
-        System.out.println("-s:[HOST]\t\t\t\tRCRS server host and port");
-        System.out.println("-h:[HOST]\t\t\t\tRCRS server host (port:7000)");
-        System.out.println("-pre:[0|1]\t\t\t\tPrecompute flag");
-        System.out.println("-mc:[FILE]\t\t\t\tModuleConfig file name");
+        System.out.println("-t [FB],[FS],[PF],[PO],[AT],[AC]\tnumber of agents");
+        System.out.println("-fb [FB]\t\t\t\tnumber of FireBrigade");
+        System.out.println("-fs [FS]\t\t\t\tnumber of FireStation");
+        System.out.println("-pf [PF]\t\t\t\tnumber of PoliceForce");
+        System.out.println("-po [PO]\t\t\t\tnumber of PoliceOffice");
+        System.out.println("-at [AT]\t\t\t\tnumber of AmbulanceTeam");
+        System.out.println("-ac [AC]\t\t\t\tnumber of AmbulanceCentre");
+        System.out.println("-s [HOST]:[PORT]\t\t\t\tRCRS server host and port");
+        System.out.println("-h [HOST]\t\t\t\tRCRS server host (port:7000)");
+        System.out.println("-pre [0|1]\t\t\t\tPrecompute flag");
+        System.out.println("-mc [FILE]\t\t\t\tModuleConfig file name");
         System.out.println("-compile\t\t\t\trun compile");
         System.out.println("-autocp\t\t\t\t\tauto load class path form " + DIRECTORY_LIBRARY);
         System.out.println("-autolc\t\t\t\t\tauto load loader class form " + DIRECTORY_BUILD);
-        System.out.println("-d:[0|1]\t\t\t\tDebug flag");
+        System.out.println("-d [0|1]\t\t\t\tDebug flag");
         System.out.println("-auto\t\t\t\t\t[alias] -autocp -autolc");
-        System.out.println("-all\t\t\t\t\t[alias] -t:-1:-1:-1:-1:-1:-1");
+        System.out.println("-all\t\t\t\t\t[alias] -t -1,-1,-1,-1,-1,-1");
         System.out.println("-local\t\t\t\t\t[alias] -h:localhost");
         System.out.println("-precompute\t\t\t\t[alias] -pre:true");
         System.out.println("-debug\t\t\t\t\t[alias] -d:true");

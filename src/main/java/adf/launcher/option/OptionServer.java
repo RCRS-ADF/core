@@ -5,6 +5,11 @@ import rescuecore2.config.Config;
 
 public class OptionServer extends Option
 {
+	@Override
+	public boolean hasValue()
+	{
+		return true;
+	}
 
 	@Override
 	public String getKey()
@@ -13,12 +18,13 @@ public class OptionServer extends Option
 	}
 
 	@Override
-	public void setValue(Config config, String[] datas)
+	public void setValue(Config config, String data)
 	{
-		if (datas.length == 3)
+		String[] splitedData = data.split(":");
+		if (splitedData.length == 2)
 		{
-			config.setValue(Constants.KERNEL_HOST_NAME_KEY, datas[1]);
-			config.setValue(Constants.KERNEL_PORT_NUMBER_KEY, datas[2]);
-		}
+            config.setValue(Constants.KERNEL_HOST_NAME_KEY, splitedData[0]);
+            config.setValue(Constants.KERNEL_PORT_NUMBER_KEY, splitedData[1]);
+        }
 	}
 }

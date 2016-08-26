@@ -6,17 +6,20 @@ import rescuecore2.config.Config;
 public class OptionPrecompute extends Option
 {
 	@Override
+	public boolean hasValue()
+	{
+		return true;
+	}
+
+	@Override
 	public String getKey()
 	{
 		return "-pre";
 	}
 
 	@Override
-	public void setValue(Config config, String[] datas)
+	public void setValue(Config config, String data)
 	{
-		if (datas.length == 2)
-		{
-			config.setValue(ConfigKey.KEY_PRECOMPUTE, datas[1]);
-		}
+		config.setValue(ConfigKey.KEY_PRECOMPUTE, data);
 	}
 }

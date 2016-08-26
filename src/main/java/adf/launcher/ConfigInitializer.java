@@ -8,14 +8,16 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ConfigInitializer {
-
+public class ConfigInitializer
+{
     public static final File DEFAULT_PATH = new File(System.getProperty("user.dir"), "config");
     
-    public static Config getConfig(String... args) {
+    public static Config getConfig(String... args)
+    {
         Config commandLine = analysis(args);
         try {
-            if(DEFAULT_PATH.exists()) {
+            if(DEFAULT_PATH.exists())
+            {
                 Config config = new Config(DEFAULT_PATH);
                 config.merge(commandLine);
                 return config;
@@ -27,28 +29,41 @@ public class ConfigInitializer {
         return commandLine;
     }
     
-    public static Config analysis(String... args) {
-		if(args.length > 0) {
+    public static Config analysis(String... args)
+    {
+		if(args.length > 0)
+        {
             Config config = new Config();
             //set load target
             config.setValue(ConfigKey.KEY_LOADER_CLASS, args[0]);
             //set option
             Map<String, Option> options = initOption();
-            for (int i = 1; i < args.length; i++) {
-                String[] strArray = args[i].split(":");
-                Option option = options.get(strArray[0]);
-                if (option != null) {
-                    option.setValue(config, strArray);
+            for (int i = 1; i < args.length; i++)
+            {
+                Option option = options.get(args[i]);
+                if (option != null)
+                {
+                    String value = null;
+                    if (option.hasValue())
+                    {
+                        if (i < args.length)
+                        { value = args[++i]; }
+                        else
+                        { throw new RuntimeException("Not specified " + option.getKey() + " value!!"); }
+                    }
+                    option.setValue(config, value);
                 }
             }
             return config;
         }
-        else {
-            throw new ArrayIndexOutOfBoundsException("Not specified a Loader Class!!");
+        else
+        {
+            throw new RuntimeException("Not specified a Loader Class!!");
         }
     }
     
-    private static Map<String, Option> initOption() {
+    private static Map<String, Option> initOption()
+    {
 		Map<String, Option> options = new HashMap<>();
 		registerOption(options, new OptionServer());
 		registerOption(options, new OptionHost());
@@ -67,7 +82,8 @@ public class ConfigInitializer {
 		return options;
 	}
 
-	private static void registerOption(Map<String, Option> options, Option option) {
+	private static void registerOption(Map<String, Option> options, Option option)
+    {
 		options.put(option.getKey(), option);
 	}
 }

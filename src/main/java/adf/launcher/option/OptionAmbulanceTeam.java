@@ -5,6 +5,11 @@ import rescuecore2.config.Config;
 
 public class OptionAmbulanceTeam extends Option
 {
+	@Override
+	public boolean hasValue()
+	{
+		return true;
+	}
 
 	@Override
 	public String getKey()
@@ -13,11 +18,8 @@ public class OptionAmbulanceTeam extends Option
 	}
 
 	@Override
-	public void setValue(Config config, String[] datas)
+	public void setValue(Config config, String data)
 	{
-		if(datas.length == 2)
-		{
-			config.setValue(ConfigKey.KEY_AMBULANCE_TEAM_COUNT, datas[1]);
-		}
+		config.setValue(ConfigKey.KEY_AMBULANCE_TEAM_COUNT, data);
 	}
 }

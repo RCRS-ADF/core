@@ -6,6 +6,11 @@ import rescuecore2.config.Config;
 
 public class OptionModuleConfig extends Option
 {
+	@Override
+	public boolean hasValue()
+	{
+		return true;
+	}
 
 	@Override
 	public String getKey()
@@ -14,11 +19,8 @@ public class OptionModuleConfig extends Option
 	}
 
 	@Override
-	public void setValue(Config config, String[] datas)
+	public void setValue(Config config, String data)
 	{
-		if (datas.length == 2)
-		{
-			config.setValue(ConfigKey.KEY_MODULE_CONFIG_FILE_NAME, datas[1]);
-		}
+        config.setValue(ConfigKey.KEY_MODULE_CONFIG_FILE_NAME, data);
 	}
 }
