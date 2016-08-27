@@ -1,5 +1,6 @@
 package adf.agent.develop;
 
+import adf.launcher.ConsoleOutput;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -211,8 +212,6 @@ public final class DevelopData
         return (defaultValue != null) ? defaultValue : null;
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     private void setRawData(String rawData, boolean isBase64)
     {
         if (rawData.equals("")) { return; }
@@ -228,7 +227,9 @@ public final class DevelopData
         catch (JsonMappingException e)
         { e.printStackTrace(); }
         catch (JsonParseException e)
-        { System.out.println("[WARN  ] DevelopData input is invalid : " + data); }
+        {
+            ConsoleOutput.out(ConsoleOutput.State.WARN, "DevelopData input is invalid : " + data);
+        }
         catch (IOException e)
         { e.printStackTrace(); }
 

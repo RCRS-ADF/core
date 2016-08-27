@@ -6,6 +6,7 @@ import adf.agent.office.OfficeAmbulance;
 import adf.component.control.ControlAmbulance;
 import adf.component.AbstractLoader;
 import adf.launcher.ConfigKey;
+import adf.launcher.ConsoleOutput;
 import adf.launcher.dummy.control.DummyControlAmbulance;
 import rescuecore2.components.ComponentConnectionException;
 import rescuecore2.components.ComponentLauncher;
@@ -28,7 +29,7 @@ public class ConnectorAmbulanceCentre implements Connector {
 				ControlAmbulance controlAmbulance;
 				if (loader.getControlAmbulance() == null)
 				{
-					System.out.println("[ERROR ] Cannot Load AmbulanceCentre Control !!");
+				    ConsoleOutput.error("Cannot Load AmbulanceCentre Control !!");
 					controlAmbulance = new DummyControlAmbulance();
 				}
 				else
@@ -55,6 +56,6 @@ public class ConnectorAmbulanceCentre implements Connector {
 			//e.printStackTrace();
 			//System.out.println("[ERROR ] Cannot Load AmbulanceCentre Control !!");
 		}
-		System.out.println("[FINISH] Connect AmbulanceCentre (success:" + connected + ")");
+		ConsoleOutput.finish("Connect AmbulanceCentre (success:" + connected + ")");
 	}
 }

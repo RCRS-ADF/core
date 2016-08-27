@@ -12,6 +12,7 @@ import adf.agent.info.ScenarioInfo;
 import adf.agent.info.WorldInfo;
 import adf.component.communication.CommunicationModule;
 import adf.launcher.ConfigKey;
+import adf.launcher.ConsoleOutput;
 import rescuecore2.components.AbstractAgent;
 import rescuecore2.config.ConfigException;
 import rescuecore2.messages.Command;
@@ -109,13 +110,16 @@ public abstract class Agent<E extends StandardEntity> extends AbstractAgent<Stan
 
 		switch (scenarioInfo.getMode()) {
 			case NON_PRECOMPUTE:
-				System.out.println("Connected - " + this + " (NON_PRECOMPUTE)");
+				ConsoleOutput.out(ConsoleOutput.State.INFO,
+						"Connected - " + this + " (NON_PRECOMPUTE)");
 				break;
 			case PRECOMPUTATION_PHASE:
-				System.out.println("Connected - " + this + " (PRECOMPUTATION)");
+				ConsoleOutput.out(ConsoleOutput.State.INFO,
+						"Connected - " + this + " (PRECOMPUTATION)");
 				break;
 			case PRECOMPUTED:
-				System.out.println("Connected - " + this + " (PRECOMPUTED)");
+				ConsoleOutput.out(ConsoleOutput.State.INFO,
+						"Connected - " + this + " (PRECOMPUTED)");
 				break;
 			default:
 		}
@@ -145,8 +149,8 @@ public abstract class Agent<E extends StandardEntity> extends AbstractAgent<Stan
 
 		if ( 1 == time ) {
 			if (this.communicationModule != null) {
-				System.out.println("[ERROR ] Loader is not found.");
-				System.out.println("[NOTICE] CommunicationModule is modified - " + this);
+				ConsoleOutput.out(ConsoleOutput.State.ERROR, "[ERROR ] Loader is not found.");
+                ConsoleOutput.out(ConsoleOutput.State.NOTICE, "CommunicationModule is modified - " + this);
 			} else {
 				this.communicationModule = new StandardCommunicationModule();
 			}

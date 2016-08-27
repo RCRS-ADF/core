@@ -3,6 +3,7 @@ package adf.agent.communication;
 import adf.agent.communication.standard.bundle.StandardMessageBundle;
 import adf.component.communication.CommunicationMessage;
 import adf.component.communication.MessageBundle;
+import adf.launcher.ConsoleOutput;
 
 import java.util.*;
 
@@ -39,7 +40,8 @@ public class MessageManager
         if (messageClassMap.containsKey(index))
         {
             //throw new IllegalArgumentException("index(" + index + ") is already registrated");
-            System.out.println("index(" + index + ") is already registered/"+ messageClass.getName() +" is ignored");
+            ConsoleOutput.out(ConsoleOutput.State.WARN,
+                    "index(" + index + ") is already registered/"+ messageClass.getName() +" is ignored");
             return false;
         }
 

@@ -6,6 +6,7 @@ import adf.agent.platoon.PlatoonPolice;
 import adf.component.tactics.TacticsPolice;
 import adf.component.AbstractLoader;
 import adf.launcher.ConfigKey;
+import adf.launcher.ConsoleOutput;
 import adf.launcher.dummy.tactics.DummyTacticsPolice;
 import rescuecore2.components.ComponentConnectionException;
 import rescuecore2.components.ComponentLauncher;
@@ -31,7 +32,7 @@ public class ConnectorPoliceForce implements Connector
 				TacticsPolice tacticsPolice;
 				if (loader.getTacticsPolice() == null)
 				{
-					System.out.println("[ERROR ] Cannot Load PoliceForce Tactics !!");
+					ConsoleOutput.error("Cannot Load PoliceForce Tactics !!");
 					tacticsPolice = new DummyTacticsPolice();
 				}
 				else
@@ -59,6 +60,6 @@ public class ConnectorPoliceForce implements Connector
 			//e.printStackTrace();
 			//System.out.println("[ERROR ] Cannot Load PoliceForce Tactics !!");
 		}
-		System.out.println("[FINISH] Connect PoliceForce (success:" + connected + ")");
+		ConsoleOutput.finish("Connect PoliceForce (success:" + connected + ")");
 	}
 }

@@ -6,6 +6,7 @@ import adf.agent.platoon.PlatoonFire;
 import adf.component.tactics.TacticsFire;
 import adf.component.AbstractLoader;
 import adf.launcher.ConfigKey;
+import adf.launcher.ConsoleOutput;
 import adf.launcher.dummy.tactics.DummyTacticsFire;
 import rescuecore2.components.ComponentConnectionException;
 import rescuecore2.components.ComponentLauncher;
@@ -28,7 +29,7 @@ public class ConnectorFireBrigade implements Connector {
 				TacticsFire tacticsFire;
 				if (loader.getTacticsFire() == null)
 				{
-					System.out.println("[ERROR ] Cannot Load FireBrigade Tactics !!");
+					ConsoleOutput.error("Cannot Load FireBrigade Tactics !!");
 					tacticsFire = new DummyTacticsFire();
 				}
 				else
@@ -55,6 +56,6 @@ public class ConnectorFireBrigade implements Connector {
 			//e.printStackTrace();
 			//System.out.println("[ERROR ] Cannot Load FireBrigade Tactics !!");
 		}
-		System.out.println("[FINISH] Connect FireBrigade (success:" + connected + ")");
+		ConsoleOutput.finish("Connect FireBrigade (success:" + connected + ")");
 	}
 }

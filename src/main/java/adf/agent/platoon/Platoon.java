@@ -6,6 +6,7 @@ import adf.agent.develop.DevelopData;
 import adf.agent.info.AgentInfo;
 import adf.agent.module.ModuleManager;
 import adf.component.tactics.Tactics;
+import adf.launcher.ConsoleOutput;
 import rescuecore2.standard.entities.StandardEntity;
 
 import java.util.List;
@@ -39,7 +40,7 @@ public abstract class Platoon<E extends StandardEntity> extends Agent<E> {
 				this.rootTactics.precompute(this.agentInfo, this.worldInfo, this.scenarioInfo, this.moduleManager, this.precomputeData, this.developData);
 				this.precomputeData.setReady(true, this.worldInfo);
 				if (!this.precomputeData.write()) {
-					System.out.println("[ERROR ] Failed to write PrecomputeData.");
+					ConsoleOutput.out(ConsoleOutput.State.ERROR, "[ERROR ] Failed to write PrecomputeData.");
 				}
 				break;
 			case PRECOMPUTED:

@@ -140,7 +140,7 @@ public class LaunchSupporter
     private static void compileAgent()
     {
         String workDir = System.getProperty("user.dir");
-        System.out.println("Working Directory: " + workDir);
+        ConsoleOutput.out(ConsoleOutput.State.INFO, "Working Directory: " + workDir);
         String library = workDir + File.separator + DIRECTORY_LIBRARY;
         String src = workDir + File.separator + DIRECTORY_SRC;
         String build = workDir + File.separator + DIRECTORY_BUILD;
@@ -149,7 +149,7 @@ public class LaunchSupporter
         File srcDir = new File(src);
         if (!(libraryDir.isDirectory() && srcDir.isDirectory()))
         {
-            System.out.println("[ERROR ] Does not have the required directory.");
+            ConsoleOutput.out(ConsoleOutput.State.ERROR, "Does not have the required directory.");
             System.exit(-1);
         }
 
@@ -189,7 +189,7 @@ public class LaunchSupporter
             e.printStackTrace();
         }
 
-        System.out.println("[FINISH] Agent compiled.");
+        ConsoleOutput.out(ConsoleOutput.State.FINISH, "Agent compiled.");
         compiled = true;
     }
 

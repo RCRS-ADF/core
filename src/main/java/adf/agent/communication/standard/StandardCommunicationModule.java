@@ -6,6 +6,7 @@ import adf.component.communication.CommunicationMessage;
 import adf.component.communication.CommunicationModule;
 import adf.component.communication.util.BitOutputStream;
 import adf.component.communication.util.BitStreamReader;
+import adf.launcher.ConsoleOutput;
 import rescuecore2.messages.Command;
 import rescuecore2.messages.Message;
 import rescuecore2.standard.messages.AKSay;
@@ -93,7 +94,7 @@ public class StandardCommunicationModule extends CommunicationModule
         int messageClassIndex = bitStreamReader.getBits(SIZE_ID);
         if (messageClassIndex <= 0)
         {
-            System.out.println("ignore Message Class Index (0)");
+            ConsoleOutput.out(ConsoleOutput.State.WARN, "ignore Message Class Index (0)");
             return;
         }
 

@@ -6,6 +6,7 @@ import adf.agent.platoon.PlatoonAmbulance;
 import adf.component.AbstractLoader;
 import adf.component.tactics.TacticsAmbulance;
 import adf.launcher.ConfigKey;
+import adf.launcher.ConsoleOutput;
 import adf.launcher.dummy.tactics.DummyTacticsAmbulance;
 import rescuecore2.components.ComponentConnectionException;
 import rescuecore2.components.ComponentLauncher;
@@ -29,7 +30,7 @@ public class ConnectorAmbulanceTeam implements Connector {
 				TacticsAmbulance tacticsAmbulance;
 				if (loader.getTacticsAmbulance() == null)
 				{
-					System.out.println("[ERROR ] Cannot Load AmbulanceTeam Tactics !!");
+					ConsoleOutput.error("Cannot Load AmbulanceTeam Tactics !!");
 					tacticsAmbulance = new DummyTacticsAmbulance();
 				}
 				else
@@ -56,6 +57,6 @@ public class ConnectorAmbulanceTeam implements Connector {
 			//e.printStackTrace();
 			//System.out.println("[ERROR ] Cannot Load AmbulanceTeam Tactics !!");
 		}
-		System.out.println("[FINISH] Connect AmbulanceTeam (success:" + connected + ")");
+		ConsoleOutput.finish("Connect AmbulanceTeam (success:" + connected + ")");
 	}
 }

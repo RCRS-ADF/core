@@ -6,6 +6,7 @@ import adf.agent.office.OfficeFire;
 import adf.component.control.ControlFire;
 import adf.component.AbstractLoader;
 import adf.launcher.ConfigKey;
+import adf.launcher.ConsoleOutput;
 import adf.launcher.dummy.control.DummyControlFire;
 import rescuecore2.components.ComponentConnectionException;
 import rescuecore2.components.ComponentLauncher;
@@ -30,7 +31,7 @@ public class ConnectorFireStation implements Connector
 				ControlFire controlFire;
 				if (loader.getControlFire() == null)
 				{
-					System.out.println("[ERROR ] Cannot Load FireStation Control !!");
+					ConsoleOutput.error("Cannot Load FireStation Control !!");
 					controlFire = new DummyControlFire();
 				}
 				else
@@ -58,6 +59,6 @@ public class ConnectorFireStation implements Connector
 			//e.printStackTrace();
 			//System.out.println("[ERROR ] Cannot Load FireStation Control !!");
 		}
-		System.out.println("[FINISH] Connect FireStation (success:" + connected + ")");
+		ConsoleOutput.finish("Connect FireStation (success:" + connected + ")");
 	}
 }

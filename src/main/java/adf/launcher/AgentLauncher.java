@@ -15,85 +15,101 @@ import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AgentLauncher {
-    
+public class AgentLauncher
+{
     private Config config;
-    
+
     private AbstractLoader loader;
 
     private List<Connector> connectors;
 
-	public AgentLauncher(String... args) throws ClassNotFoundException, ClassCastException, InstantiationException, IllegalAccessException {
-	    this.init(args);
-	}
-	
-	private void init(String... args) throws ClassNotFoundException, ClassCastException, InstantiationException, IllegalAccessException {
-	    this.initSystem();
-		this.config = ConfigInitializer.getConfig(args);
+    public AgentLauncher(String... args) throws ClassNotFoundException, ClassCastException, InstantiationException, IllegalAccessException
+    {
+        this.init(args);
+    }
+
+    private void init(String... args) throws ClassNotFoundException, ClassCastException, InstantiationException, IllegalAccessException
+    {
+        this.initSystem();
+        this.config = ConfigInitializer.getConfig(args);
         this.initConnector();
-	}
-	
-	private void initSystem() {
-	    //register rescue system
-		Registry.SYSTEM_REGISTRY.registerEntityFactory(StandardEntityFactory.INSTANCE);
-		Registry.SYSTEM_REGISTRY.registerMessageFactory(StandardMessageFactory.INSTANCE);
-		Registry.SYSTEM_REGISTRY.registerPropertyFactory(StandardPropertyFactory.INSTANCE);
-	}
+    }
 
-	private void initConnector() throws ClassNotFoundException, ClassCastException, InstantiationException, IllegalAccessException {
-		//load AbstractLoader
-		URLClassLoader classLoader = (URLClassLoader)this.getClass().getClassLoader();
-		Class c = classLoader.loadClass(this.config.getValue(ConfigKey.KEY_LOADER_CLASS));
-		this.loader = (AbstractLoader)c.newInstance();
-		// set connectors
-		this.connectors = new ArrayList<>();
-		//platoon
-		this.registerConnector(new ConnectorAmbulanceTeam());
-		this.registerConnector(new ConnectorFireBrigade());
-		this.registerConnector(new ConnectorPoliceForce());
-		//office
-		this.registerConnector(new ConnectorAmbulanceCentre());
-		this.registerConnector(new ConnectorFireStation());
-		this.registerConnector(new ConnectorPoliceOffice());
-	}
+    private void initSystem()
+    {
+        //register rescue system
+        Registry.SYSTEM_REGISTRY.registerEntityFactory(StandardEntityFactory.INSTANCE);
+        Registry.SYSTEM_REGISTRY.registerMessageFactory(StandardMessageFactory.INSTANCE);
+        Registry.SYSTEM_REGISTRY.registerPropertyFactory(StandardPropertyFactory.INSTANCE);
+    }
 
-	public void registerConnector(Connector connector) {
-		this.connectors.add(connector);
-	}
+    private void initConnector() throws ClassNotFoundException, ClassCastException, InstantiationException, IllegalAccessException
+    {
+        //load AbstractLoader
+        URLClassLoader classLoader = (URLClassLoader) this.getClass().getClassLoader();
+        Class c = classLoader.loadClass(this.config.getValue(ConfigKey.KEY_LOADER_CLASS));
+        this.loader = (AbstractLoader) c.newInstance();
+        // set connectors
+        this.connectors = new ArrayList<>();
+        //platoon
+        this.registerConnector(new ConnectorAmbulanceTeam());
+        this.registerConnector(new ConnectorFireBrigade());
+        this.registerConnector(new ConnectorPoliceForce());
+        //office
+        this.registerConnector(new ConnectorAmbulanceCentre());
+        this.registerConnector(new ConnectorFireStation());
+        this.registerConnector(new ConnectorPoliceOffice());
+    }
 
-	public void start() {
-		String host = this.config.getValue(Constants.KERNEL_HOST_NAME_KEY, Constants.DEFAULT_KERNEL_HOST_NAME);
-		int port = this.config.getIntValue(Constants.KERNEL_PORT_NUMBER_KEY, Constants.DEFAULT_KERNEL_PORT_NUMBER);
-		ComponentLauncher launcher = new TCPComponentLauncher(host, port, this.config);
-		System.out.println("[START ] Connect to server (host:" + host + ", port:" + port + ")");
+    public void registerConnector(Connector connector)
+    {
+        this.connectors.add(connector);
+    }
 
-		List<Thread> threadList = new ArrayList<>();
+    public void start()
+    {
+        String host = this.config.getValue(Constants.KERNEL_HOST_NAME_KEY, Constants.DEFAULT_KERNEL_HOST_NAME);
+        int port = this.config.getIntValue(Constants.KERNEL_PORT_NUMBER_KEY, Constants.DEFAULT_KERNEL_PORT_NUMBER);
+        ComponentLauncher launcher = new TCPComponentLauncher(host, port, this.config);
+        ConsoleOutput.out(ConsoleOutput.State.START, "Connect to server (host:" + host + ", port:" + port + ")");
 
-		for (Connector connector : this.connectors) {
-			threadList.add(
-					new Thread(()->{
-						connector.connect(launcher, this.config, loader);
-					})
-			);
-		}
+        List<Thread> threadList = new ArrayList<>();
 
-		for (Thread thread : threadList)
-		{ thread.start(); }
+        for (Connector connector : this.connectors)
+        {
+            threadList.add(
+                    new Thread(() ->
+                    {
+                        connector.connect(launcher, this.config, loader);
+                    })
+            );
+        }
 
-		try {
-			for (Thread thread : threadList)
-			{ thread.join(); }
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+        for (Thread thread : threadList)
+        {
+            thread.start();
+        }
 
-		// remove develop data
-		//this.config.removeKey(ConfigKey.KEY_DEVELOP_DATA);
+        try
+        {
+            for (Thread thread : threadList)
+            {
+                thread.join();
+            }
+        }
+        catch (InterruptedException e)
+        {
+            e.printStackTrace();
+        }
 
-		System.out.println("[END   ] Done Connecting to server");
+        // remove develop data
+        //this.config.removeKey(ConfigKey.KEY_DEVELOP_DATA);
 
-		if (this.config.getBooleanValue(ConfigKey.KEY_PRECOMPUTE, false)) {
-			System.exit(0);
-		}
-	}
+        ConsoleOutput.out(ConsoleOutput.State.END, "Done Connecting to server");
+
+        if (this.config.getBooleanValue(ConfigKey.KEY_PRECOMPUTE, false))
+        {
+            System.exit(0);
+        }
+    }
 }

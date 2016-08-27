@@ -1,8 +1,10 @@
 package adf;
 
 import adf.launcher.AgentLauncher;
+import adf.launcher.ConsoleOutput;
 import adf.launcher.LaunchSupporter;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -27,7 +29,7 @@ public class Main
             connector.start();
         }
         catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
-            System.out.println("[ERROR ] Loader is not found.");
+            ConsoleOutput.out(ConsoleOutput.State.ERROR, "Loader is not found.");
             e.printStackTrace();
         }
     }
@@ -42,7 +44,7 @@ public class Main
         if (!classPath.startsWith("jar"))
         { return buildTimestamp; }
 
-        String manifestPath = classPath.substring(0, classPath.lastIndexOf("!") + 1) + "/META-INF/MANIFEST.MF";
+        String manifestPath = classPath.substring(0, classPath.lastIndexOf("!") + 1) + File.separator + "META-INF" + File.separator + "MANIFEST.MF";
         try
         {
             Manifest manifest = new Manifest(new URL(manifestPath).openStream());

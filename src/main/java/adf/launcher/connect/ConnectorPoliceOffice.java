@@ -6,6 +6,7 @@ import adf.agent.office.OfficePolice;
 import adf.component.control.ControlPolice;
 import adf.component.AbstractLoader;
 import adf.launcher.ConfigKey;
+import adf.launcher.ConsoleOutput;
 import adf.launcher.dummy.control.DummyControlPolice;
 import rescuecore2.components.ComponentConnectionException;
 import rescuecore2.components.ComponentLauncher;
@@ -31,7 +32,7 @@ public class ConnectorPoliceOffice implements Connector
 				ControlPolice controlPolice;
 				if (loader.getControlPolice() == null)
 				{
-					System.out.println("[ERROR ] Cannot Load PoliceOffice Control !!");
+					ConsoleOutput.error("Cannot Load PoliceOffice Control !!");
 					controlPolice = new DummyControlPolice();
 				}
 				else
@@ -59,6 +60,6 @@ public class ConnectorPoliceOffice implements Connector
 			//e.printStackTrace();
 			//System.out.println("[ERROR ] Cannot Load PoliceOffice Control !!");
 		}
-		System.out.println("[FINISH] Connect PoliceOffice (success:" + connected + ")");
+		ConsoleOutput.finish("Connect PoliceOffice (success:" + connected + ")");
 	}
 }
