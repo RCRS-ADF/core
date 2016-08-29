@@ -13,6 +13,9 @@ import rescuecore2.standard.entities.StandardEntity;
 import rescuecore2.worldmodel.EntityID;
 
 public abstract class TargetSelector<E extends StandardEntity> extends AbstractModule {
+    public static final int TASK_LEVEL_NORMAL = 0;
+    public static final int TASK_LEVEL_REQUEST = 1;
+    public static final int TASK_LEVEL_ORDER = 2;
 
     public TargetSelector(AgentInfo ai, WorldInfo wi, ScenarioInfo si, ModuleManager moduleManager, DevelopData debugData) {
         super(ai, wi, si, moduleManager, debugData);
@@ -51,5 +54,7 @@ public abstract class TargetSelector<E extends StandardEntity> extends AbstractM
 
     @Override
     public abstract TargetSelector<E> calc();
+
+    public abstract int getTaskLevel();
 
 }

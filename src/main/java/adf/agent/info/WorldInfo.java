@@ -420,7 +420,8 @@ public class WorldInfo implements Iterable<StandardEntity> {
         this.world.addEntity(entity);
     }
 
-    public void addEntity(Entity entity,
+	@SafeVarargs
+    public final void addEntity(Entity entity,
             Class<? extends EntityListener> listener,
             Class<? extends EntityListener>... otherListeners) {
 		try {
@@ -438,7 +439,8 @@ public class WorldInfo implements Iterable<StandardEntity> {
 		entities.forEach(this::addEntity);
     }
 
-    public void addEntities(Collection<? extends Entity> entities,
+	@SafeVarargs
+    public final void addEntities(Collection<? extends Entity> entities,
             Class<? extends EntityListener> listener,
             Class<? extends EntityListener>... otherListeners) {
         entities.forEach(entity -> {
