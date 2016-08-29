@@ -9,8 +9,6 @@ import adf.component.tactics.Tactics;
 import adf.launcher.ConsoleOutput;
 import rescuecore2.standard.entities.StandardEntity;
 
-import java.util.List;
-
 public abstract class Platoon<E extends StandardEntity> extends Agent<E> {
 	private Tactics rootTactics;
 
@@ -34,7 +32,7 @@ public abstract class Platoon<E extends StandardEntity> extends Agent<E> {
 		switch (this.scenarioInfo.getMode()) {
 			case NON_PRECOMPUTE:
 				this.rootTactics.preparate(this.agentInfo, this.worldInfo, this.scenarioInfo, this.moduleManager, this.developData);
-                this.worldInfo.registerListener();
+                this.worldInfo.registerRollbackListener();
 				break;
 			case PRECOMPUTATION_PHASE:
 				this.rootTactics.precompute(this.agentInfo, this.worldInfo, this.scenarioInfo, this.moduleManager, this.precomputeData, this.developData);
@@ -45,7 +43,7 @@ public abstract class Platoon<E extends StandardEntity> extends Agent<E> {
 				break;
 			case PRECOMPUTED:
 				this.rootTactics.resume(this.agentInfo, this.worldInfo, this.scenarioInfo, this.moduleManager, this.precomputeData, this.developData);
-                this.worldInfo.registerListener();
+                this.worldInfo.registerRollbackListener();
 				break;
 			default:
 		}

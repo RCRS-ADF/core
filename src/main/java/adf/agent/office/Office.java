@@ -5,10 +5,7 @@ import adf.agent.develop.DevelopData;
 import adf.agent.info.AgentInfo;
 import adf.agent.module.ModuleManager;
 import adf.component.control.Control;
-import rescuecore2.config.ConfigException;
 import rescuecore2.standard.entities.StandardEntity;
-
-import java.util.List;
 
 public abstract class Office<E extends StandardEntity> extends Agent<E> {
 
@@ -41,7 +38,7 @@ public abstract class Office<E extends StandardEntity> extends Agent<E> {
 			default:
 		}
 
-		this.worldInfo.registerListener();
+		this.worldInfo.registerRollbackListener();
 	}
 
 	protected void think() {

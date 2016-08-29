@@ -15,18 +15,14 @@ public class WorldInfo implements Iterable<StandardEntity> {
 	private ChangeSet changed;
     private int time;
 
-	private Map<Integer, Map<EntityID, StandardEntity>> rollbackAddInfo;
-	private Map<Integer, Map<EntityID, StandardEntity>> rollbackChangeInfo;
-	private Map<EntityID, Map<String, Object>> rollbackCache;
+    private Map<EntityID, Map<Integer, Map<String, Object>>> rollback;
 	private boolean runRollback;
 
     public WorldInfo(StandardWorldModel world) {
 		this.setWorld(world);
         this.time = -1;
-		this.rollbackChangeInfo = new HashMap<>();
-		this.rollbackAddInfo = new HashMap<>();
         this.runRollback = Boolean.FALSE;
-        this.rollbackCache = new HashMap<>();
+        this.rollback = new HashMap<>();
 	}
 
 	// agent init ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -40,7 +36,7 @@ public class WorldInfo implements Iterable<StandardEntity> {
 	}
 
     public WorldInfo requestRollback() {
-        this.runRollback = true;
+        this.runRollback = Boolean.TRUE;
         return this;
     }
 
@@ -56,42 +52,61 @@ public class WorldInfo implements Iterable<StandardEntity> {
 		return this.world.getEntity(id);
 	}
 
+    public StandardEntity getEntity(int targetTime, EntityID entityID) {
+        return this.getEntity(targetTime, this.getEntity(entityID));
+
+    }
+
 	public StandardEntity getEntity(int targetTime, StandardEntity entity) {
-		return this.getEntity(targetTime, entity.getID());
-	}
+        if(targetTime <= 0) {
+            targetTime = this.time + targetTime;
+        }
+        Map<String, Object> rollbackProperties = new HashMap<>();
+        Map<Integer, Map<String, Object>> entityHistory = this.rollback.get(entity.getID());
+        if(entityHistory == null) { return (StandardEntity)entity.copy(); }
 
-	public StandardEntity getEntity(int targetTime, EntityID entityID) {
-		StandardEntity result = this.getEntity(entityID);
-		if(targetTime <= 0) {
-			targetTime = this.time + targetTime;
-		}
+        for(int i = this.time - 1; i >= targetTime; i--) {
+            Map<String, Object> changeProperties = entityHistory.get(i);
+            if(changeProperties == null) {
+                continue;
+            }
+            rollbackProperties.putAll(changeProperties);
+        }
 
-		for(int i = this.time - 1; i >= targetTime; i--) {
-			Map<EntityID, StandardEntity> info = this.rollbackAddInfo.get(i);
-			if(info != null) {
-				StandardEntity entity = info.get(entityID);
-				if (entity != null) {
-					if(i > targetTime) return null;
-					result = entity;
-				}
-			}
-			info = this.rollbackChangeInfo.get(i);
-			if(info != null) {
-				StandardEntity entity = info.get(entityID);
-				if(entity != null) {
-					result = entity;
-					continue;
-				}
-			}
-			info = this.rollbackChangeInfo.get(i);
-			if(info != null) {
-				StandardEntity entity = info.get(entityID);
-				if(entity != null) {
-					result = entity;
-				}
-			}
-		}
-		return result;
+        Set<Property> propertySet = entity.getProperties();
+        if(rollbackProperties.size() >= propertySet.size()) {
+            boolean notExist = true;
+            for (Property property : propertySet) {
+                String key = property.getURN();
+                if (rollbackProperties.containsKey(key)) {
+                    if (rollbackProperties.get(key) != null) {
+                        notExist = false;
+                        break;
+                    }
+                }
+            }
+            if(notExist) { return null; }
+        }
+
+        if(entity.getStandardURN() == StandardEntityURN.FIRE_BRIGADE) {
+            return this.createRollbackFireBrigade(entity, rollbackProperties);
+        }
+        if(entity instanceof Human) {
+            return this.createRollbackHuman(entity, rollbackProperties);
+        }
+        if(entity instanceof Building) {
+            return this.createRollbackBuilding(entity, rollbackProperties);
+        }
+        if(entity instanceof Road) {
+            return this.createRollbackRoad(entity, rollbackProperties);
+        }
+        if(entity.getStandardURN() == StandardEntityURN.BLOCKADE) {
+            return this.createRollbackBlockade(entity, rollbackProperties);
+        }
+        if(entity.getStandardURN() == StandardEntityURN.WORLD) {
+            return this.createRollbackWorld(entity, rollbackProperties);
+        }
+        return null;
 	}
 
 	// getEntityOfType /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -194,16 +209,28 @@ public class WorldInfo implements Iterable<StandardEntity> {
                             .collect(Collectors.toList())
             );
         } else {
-            result.addAll(
-                    this.world.getObjectsInRectangle(x1, y1, x2, y2).stream()
-                            .filter(target -> target instanceof Area)
-                            .map(target -> this.getEntity(targetTime, target))
-                            .collect(Collectors.toList())
+            Collection<EntityID> areaIDs = new HashSet<>();
+            for(StandardEntity entity : this.world.getObjectsInRectangle(x1, y1, x2, y2)) {
+                if(entity instanceof Area) {
+                    result.add(this.getEntity(targetTime, entity));
+                    areaIDs.add(entity.getID());
+                } else if(entity.getStandardURN() == StandardEntityURN.BLOCKADE) {
+                    result.add(this.getEntity(targetTime, entity));
+                }
+            }
+            Collection<StandardEntity> humans = this.getEntitiesOfType(
+                    StandardEntityURN.CIVILIAN,
+                    StandardEntityURN.AMBULANCE_TEAM,
+                    StandardEntityURN.FIRE_BRIGADE,
+                    StandardEntityURN.POLICE_FORCE
             );
-            Map<EntityID, StandardEntity> info = this.rollbackChangeInfo.get(targetTime);
-            info.values().stream()
-                    .filter(target -> target instanceof Human && result.contains(this.getPosition((Human) target)))
-                    .forEach(result::add);
+            for(StandardEntity entity : humans) {
+                Human rollback = (Human)this.getEntity(targetTime, entity);
+                EntityID position = rollback.getPosition();
+                if (position != null && areaIDs.contains(position)) {
+                    result.add(rollback);
+                }
+            }
         }
         return result;
 	}
@@ -274,18 +301,6 @@ public class WorldInfo implements Iterable<StandardEntity> {
     public ChangeSet getChanged() {
         return this.changed;
     }
-
-	public Map<EntityID, StandardEntity> getChangeEntities(int time) {
-		return this.rollbackChangeInfo.get(time);
-	}
-
-	public Map<EntityID, StandardEntity> getAddEntities(int time) {
-		return this.rollbackAddInfo.get(time);
-	}
-
-	public Map<EntityID, StandardEntity> getRemoveEntities(int time) {
-		return this.rollbackChangeInfo.get(time);
-	}
 
 	// other //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -420,14 +435,16 @@ public class WorldInfo implements Iterable<StandardEntity> {
         this.world.addEntity(entity);
     }
 
-	@SafeVarargs
     public final void addEntity(Entity entity,
             Class<? extends EntityListener> listener,
-            Class<? extends EntityListener>... otherListeners) {
+            Class<?>... otherListeners) {
 		try {
 			entity.addEntityListener(listener.newInstance());
-			for(Class<? extends EntityListener> other : otherListeners) {
-				entity.addEntityListener(other.newInstance());
+			for(Class<?> other : otherListeners) {
+                Object otherListener = other.newInstance();
+                if(otherListener instanceof EntityListener) {
+                    entity.addEntityListener((EntityListener)otherListener);
+                }
 			}
 		} catch (InstantiationException | IllegalAccessException exception) {
 			exception.printStackTrace();
@@ -439,16 +456,15 @@ public class WorldInfo implements Iterable<StandardEntity> {
 		entities.forEach(this::addEntity);
     }
 
-	@SafeVarargs
     public final void addEntities(Collection<? extends Entity> entities,
             Class<? extends EntityListener> listener,
-            Class<? extends EntityListener>... otherListeners) {
+            Class<?>... otherListeners) {
         entities.forEach(entity -> {
             this.addEntity(entity, listener, otherListeners);
         });
     }
 
-    // registerListener ////////////////////////////////////////////////////////////////////////////////////////////////
+    // registerRollbackListener ////////////////////////////////////////////////////////////////////////////////////////////////
 
     public void registerEntityListener(Class<? extends EntityListener> listener) {
         for (StandardEntity entity : this.getAllEntities()) {
@@ -512,7 +528,7 @@ public class WorldInfo implements Iterable<StandardEntity> {
 
     // rollback ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public void registerListener() {
+    public void registerRollbackListener() {
         if(this.needRollback()) {
             this.world.addWorldModelListener(new RollbackListener());
             for (StandardEntity entity : this.getAllEntities()) {
@@ -521,43 +537,8 @@ public class WorldInfo implements Iterable<StandardEntity> {
         }
     }
 
-	public void setRollbackBase(int time) {
-		this.setTime(time);
-		this.rollbackAddInfo.put(time, new HashMap<>());
-		this.rollbackChangeInfo.put(time, new HashMap<>());
-        this.rollbackCache.clear();
-	}
-
-	public void createRollbackInfo(){
-        Map<EntityID, StandardEntity> info = this.rollbackChangeInfo.get(this.time);
-	    EntityListener listener = new ChangeListener();
-	    for(EntityID id : this.rollbackCache.keySet()) {
-	        if(info.get(id) != null) continue;
-
-	        StandardEntity entity = this.getEntity(id);
-	        Map<String, Object> cache = this.rollbackCache.get(id);
-            StandardEntityURN urn = entity.getStandardURN();
-            if(BUILDING == urn) info.put(id, this.createRollbackBuilding(entity, cache, listener));
-            else if(ROAD == urn) info.put(id, this.createRollbackRoad(entity, cache, listener));
-            else if(BLOCKADE == urn) info.put(id, this.createRollbackBlockade(entity, cache, listener));
-            else if(CIVILIAN == urn) info.put(id, this.createRollbackHuman(entity, cache, listener));
-            else if(AMBULANCE_TEAM == urn) info.put(id, this.createRollbackHuman(entity, cache, listener));
-            else if(POLICE_FORCE == urn) info.put(id, this.createRollbackHuman(entity, cache, listener));
-            else if(FIRE_BRIGADE == urn) info.put(id, this.createRollbackFireBrigade(entity, cache, listener));
-            else if(HYDRANT == urn) info.put(id, this.createRollbackRoad(entity, cache, listener));
-            else if(REFUGE == urn) info.put(id, this.createRollbackBuilding(entity, cache, listener));
-            else if(GAS_STATION == urn) info.put(id, this.createRollbackBuilding(entity, cache, listener));
-            else if(AMBULANCE_CENTRE == urn) info.put(id, this.createRollbackBuilding(entity, cache, listener));
-            else if(FIRE_STATION == urn) info.put(id, this.createRollbackBuilding(entity, cache, listener));
-            else if(POLICE_OFFICE == urn) info.put(id, this.createRollbackBuilding(entity, cache, listener));
-            else if(WORLD == urn) info.put(id, this.createRollbackWorld(entity, cache, listener));
-        }
-        this.rollbackChangeInfo.put(this.time, info);
-    }
-
-    private Blockade createRollbackBlockade(StandardEntity entity, Map<String, Object> cache, EntityListener listener) {
+    private Blockade createRollbackBlockade(StandardEntity entity, Map<String, Object> cache) {
         Blockade copy = (Blockade)entity.copy();
-        copy.removeEntityListener(listener);
         for(String urn : cache.keySet()) {
             Object value = cache.get(urn);
             StandardPropertyURN type = StandardPropertyURN.fromString(urn);
@@ -590,9 +571,8 @@ public class WorldInfo implements Iterable<StandardEntity> {
     }
 
     @SuppressWarnings("unchecked")
-    private Building createRollbackBuilding(StandardEntity entity, Map<String, Object> cache, EntityListener listener) {
+    private Building createRollbackBuilding(StandardEntity entity, Map<String, Object> cache) {
         Building copy = (Building)entity.copy();
-        copy.removeEntityListener(listener);
         for(String urn : cache.keySet()) {
             Object value = cache.get(urn);
             StandardPropertyURN type = StandardPropertyURN.fromString(urn);
@@ -649,9 +629,8 @@ public class WorldInfo implements Iterable<StandardEntity> {
     }
 
     @SuppressWarnings("unchecked")
-    private Road createRollbackRoad(StandardEntity entity, Map<String, Object> cache, EntityListener listener) {
+    private Road createRollbackRoad(StandardEntity entity, Map<String, Object> cache) {
         Road copy = (Road)entity.copy();
-        copy.removeEntityListener(listener);
         for(String urn : cache.keySet()) {
             Object value = cache.get(urn);
             StandardPropertyURN type = StandardPropertyURN.fromString(urn);
@@ -677,9 +656,8 @@ public class WorldInfo implements Iterable<StandardEntity> {
         return copy;
     }
 
-    private World createRollbackWorld(StandardEntity entity, Map<String, Object> cache, EntityListener listener) {
+    private World createRollbackWorld(StandardEntity entity, Map<String, Object> cache) {
         World copy = (World) entity.copy();
-        copy.removeEntityListener(listener);
         for(String urn : cache.keySet()) {
             Object value = cache.get(urn);
             StandardPropertyURN type = StandardPropertyURN.fromString(urn);
@@ -711,9 +689,8 @@ public class WorldInfo implements Iterable<StandardEntity> {
         return copy;
     }
 
-    private Human createRollbackHuman(StandardEntity entity, Map<String, Object> cache, EntityListener listener) {
+    private Human createRollbackHuman(StandardEntity entity, Map<String, Object> cache) {
         Human copy = (Human)entity.copy();
-        copy.removeEntityListener(listener);
         for(String urn : cache.keySet()) {
             Object value = cache.get(urn);
             StandardPropertyURN type = StandardPropertyURN.fromString(urn);
@@ -765,9 +742,8 @@ public class WorldInfo implements Iterable<StandardEntity> {
         return copy;
     }
 
-    private FireBrigade createRollbackFireBrigade(StandardEntity entity, Map<String, Object> cache, EntityListener listener) {
+    private FireBrigade createRollbackFireBrigade(StandardEntity entity, Map<String, Object> cache) {
         FireBrigade copy = (FireBrigade) entity.copy();
-        copy.removeEntityListener(listener);
         for(String urn : cache.keySet()) {
             Object value = cache.get(urn);
             StandardPropertyURN type = StandardPropertyURN.fromString(urn);
@@ -826,16 +802,39 @@ public class WorldInfo implements Iterable<StandardEntity> {
     private class RollbackListener implements WorldModelListener<StandardEntity> {
         @Override
         public void entityAdded(WorldModel<? extends StandardEntity> model, StandardEntity e) {
-            Map<EntityID, StandardEntity> addInfo = rollbackAddInfo.get(time);
-            addInfo.put(e.getID(), (StandardEntity)  e.copy());
-            rollbackAddInfo.put(time, addInfo);
+            EntityID entityID = e.getID();
+            Map<Integer, Map<String, Object>> entityHistory = rollback.get(entityID);
+            if (entityHistory == null) { entityHistory = new HashMap<>(); }
+            Map<String, Object> changeProperties = entityHistory.get(time);
+            if(changeProperties == null) { changeProperties = new HashMap<>(); }
+            Map<String, Object> addedPoint = new HashMap<>();
+
+            for(Property property : e.getProperties()) {
+                changeProperties.put(property.getURN(), property.getValue());
+                addedPoint.put(property.getURN(), null);
+            }
+
+            entityHistory.put(time, changeProperties);
+            entityHistory.put(time - 1, addedPoint);
+            rollback.put(entityID, entityHistory);
+
         }
 
         @Override
         public void entityRemoved(WorldModel<? extends StandardEntity> model, StandardEntity e) {
-            Map<EntityID, StandardEntity> removeInfo = rollbackChangeInfo.get(time);
-            removeInfo.put(e.getID(), (StandardEntity)e.copy());
-            rollbackChangeInfo.put(time, removeInfo);
+            EntityID entityID = e.getID();
+
+            Map<Integer, Map<String, Object>> entityHistory = rollback.get(entityID);
+            if (entityHistory == null) { entityHistory = new HashMap<>(); }
+            Map<String, Object> changeProperties = entityHistory.get(time);
+            if(changeProperties == null) { changeProperties = new HashMap<>(); }
+
+            for(Property property : e.getProperties()) {
+                changeProperties.put(property.getURN(), property.getValue());
+            }
+
+            entityHistory.put(time, changeProperties);
+            rollback.put(entityID, entityHistory);
         }
     }
 
@@ -843,10 +842,16 @@ public class WorldInfo implements Iterable<StandardEntity> {
         @Override
         public void propertyChanged(Entity entity, Property property, Object oldValue, Object newValue) {
             EntityID entityID = entity.getID();
-            Map<String, Object> cache = rollbackCache.get(entityID);
-            if(cache == null) cache = new HashMap<>();
-            cache.put(property.getURN(), oldValue);
-            rollbackCache.put(entityID, cache);
+
+            Map<Integer, Map<String, Object>> entityHistory = rollback.get(entityID);
+            if (entityHistory == null) { entityHistory = new HashMap<>(); }
+            Map<String, Object> changeProperties = entityHistory.get(time);
+            if(changeProperties == null) { changeProperties = new HashMap<>(); }
+
+            changeProperties.put(property.getURN(), oldValue);
+
+            entityHistory.put(time, changeProperties);
+            rollback.put(entityID, entityHistory);
         }
     }
 }
