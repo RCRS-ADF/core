@@ -41,10 +41,5 @@ public abstract class RoadSelector extends TargetSelector<Road> {
 
     @Override
     public abstract RoadSelector calc();
-
-    @Override
-    public final Road getTargetEntity() {
-        return (Road) this.worldInfo.getEntity(this.getTarget());
-    }
 }
 

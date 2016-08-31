@@ -41,9 +41,4 @@ public abstract class BuildingSelector extends TargetSelector<Building> {
 
     @Override
     public abstract BuildingSelector calc();
-
-    @Override
-    public final Building getTargetEntity() {
-        return (Building) this.worldInfo.getEntity(this.getTarget());
-    }
 }
