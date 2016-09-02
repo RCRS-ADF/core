@@ -108,7 +108,7 @@ public class LaunchSupporter
         System.out.println("-autocp\t\t\t\t\tauto load class path form " + DIRECTORY_LIBRARY);
         System.out.println("-autolc\t\t\t\t\tauto load loader class form " + DIRECTORY_BUILD);
         System.out.println("-d [0|1]\t\t\t\tDebug flag");
-        System.out.println("-check\t\t\t\t\tagent class check");
+        System.out.println("-check\t\t\t\t\tsimple agent class check");
         System.out.println("-auto\t\t\t\t\t[alias] -autocp -autolc");
         System.out.println("-all\t\t\t\t\t[alias] -t -1,-1,-1,-1,-1,-1");
         System.out.println("-local\t\t\t\t\t[alias] -h localhost");
