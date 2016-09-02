@@ -221,12 +221,17 @@ public class LaunchSupporter
             String line;
             while ((line = br.readLine()) != null)
             { sb.append(line + System.getProperty("line.separator")); }
-            System.out.println(sb.toString());
+            System.out.print(sb.toString());
             br.close();
 
-            if (process.exitValue() != 0)
-            { System.exit(process.exitValue()); }
+            if (process.waitFor() != 0)
+            {
+                ConsoleOutput.error("Compile failed");
+                System.exit(process.exitValue());
+            }
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
