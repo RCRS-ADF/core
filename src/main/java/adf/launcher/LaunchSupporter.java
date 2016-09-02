@@ -26,6 +26,8 @@ public class LaunchSupporter
     private static final String DIRECTORY_BUILD = "build";
     private static final String CLASSNAME_LOADERPARENT = "adf.component.AbstractLoader";
 
+    private static int countAgentCheckWarning = 0;
+
     public static void delegate(List<String> args)
     {
         boolean worked = false;
@@ -240,9 +242,11 @@ public class LaunchSupporter
 
     private static void checkAgentClass()
     {
+        countAgentCheckWarning = 0;
         ConsoleOutput.start("Agent class check");
         checkAgentClass(DIRECTORY_BUILD, DIRECTORY_BUILD);
-        ConsoleOutput.finish("Agent class check");
+        ConsoleOutput.finish("Agent class check (" + countAgentCheckWarning +
+                " warning" + (countAgentCheckWarning > 1 ? 's' : "") + ")");
     }
 
     private static void checkAgentClass(String base, String path)
@@ -295,6 +299,7 @@ public class LaunchSupporter
                             if (methodList.size() > 0)
                             {
                                 ConsoleOutput.warn("Exist violating public method : " + loaderClass);
+                                countAgentCheckWarning += methodList.size();
                                 for (String methodSign : methodList)
                                 {
                                     String methodData[] = methodSign.split(":", 3);
@@ -317,13 +322,16 @@ public class LaunchSupporter
 
                             for (Field field : ClassLoader.getSystemClassLoader().loadClass(loaderClass).getDeclaredFields())
                             {
-                                if (Modifier.isStatic(field.getModifiers()))
+                                if (Modifier.isStatic(field.getModifiers()) && !(Modifier.isFinal(field.getModifiers())))
                                 {
-                                    if (!(Modifier.isFinal(field.getModifiers())))
-                                    { ConsoleOutput.warn("Exist static field : " + loaderClass + "." + field.getName()); }
+                                    ConsoleOutput.warn("Exist variable static field : " + loaderClass + "." + field.getName());
+                                    countAgentCheckWarning++;
                                 }
                                 else if (Modifier.isPublic(field.getModifiers()))
-                                { ConsoleOutput.warn("Exist public field : " + loaderClass + "." + field.getName()); }
+                                {
+                                    ConsoleOutput.warn("Exist public field : " + loaderClass + "." + field.getName());
+                                    countAgentCheckWarning++;
+                                }
                             }
                         } catch (ClassNotFoundException e) {
                             e.printStackTrace();
