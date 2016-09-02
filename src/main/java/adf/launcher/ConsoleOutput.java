@@ -18,16 +18,29 @@ public class ConsoleOutput
 
     public static void out(State state, String out)
     {
-        out(state.name(), out);
-    }
-
-    public static void out(String title, String out)
-    {
+        boolean colorMode = System.getProperty("cm", "0").equals("1");
+        if (colorMode)
+        {
+            switch (state)
+            {
+                case INFO:
+                    System.out.print("\u001B[36m"); break;
+                case WARN:
+                    System.out.print("\u001B[33m"); break;
+                case ERROR:
+                    System.out.print("\u001B[31m"); break;
+                case NOTICE:
+                    System.out.print("\u001B[35m"); break;
+                case START:
+                case FINISH:
+                    System.out.print("\u001B[32m"); break;
+            }
+        }
         System.out.print('[');
-        System.out.print(title);
-        for (int i = title.length(); i < titleLength; i++)
+        System.out.print(state.name());
+        for (int i = state.name().length(); i < titleLength; i++)
         { System.out.print(' '); }
-        System.out.print("] ");
+        System.out.print("]" + (colorMode ? "\u001B[0m " : " "));
         System.out.println(out);
     }
 
