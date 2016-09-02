@@ -9,11 +9,13 @@ import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Pattern;
 
 public class LaunchSupporter
 {
     private static boolean compiled = false;
     private static final String OPTION_COMPILE = "-compile";
+    private static final String OPTION_JAVAHOME = "-javahome";
     private static final String OPTION_AUTOCLASSPATH = "-autocp";
     private static final String OPTION_AUTOLOADERCLASS = "-autolc";
     private static final String DIRECTORY_LIBRARY = "library";
@@ -23,6 +25,8 @@ public class LaunchSupporter
 
     public static void delegate(List<String> args)
     {
+        String compilerJavaHome = null;
+
         alias(args, "-auto", "-autocp", "-autolc");
         alias(args, "-local", "-h localhost");
         alias(args, "-all", "-t -1,-1,-1,-1,-1,-1");
@@ -30,10 +34,21 @@ public class LaunchSupporter
         alias(args, "-debug", "-d true");
         alias(args, "-develop", "-dev true");
 
+        if (args.contains(OPTION_JAVAHOME))
+        {
+            int index = args.indexOf(OPTION_JAVAHOME) +1;
+            if (index < args.size())
+            {
+                compilerJavaHome = args.get(index);
+                args.remove(index);
+            }
+            args.remove(OPTION_JAVAHOME);
+        }
+
         if (args.contains(OPTION_COMPILE))
         {
             args.remove(OPTION_COMPILE);
-            compileAgent();
+            compileAgent(compilerJavaHome);
         }
 
         if (args.contains(OPTION_AUTOCLASSPATH))
@@ -74,6 +89,7 @@ public class LaunchSupporter
         System.out.println("-dd [JSON]\t\t\t\tDevelopData JSON");
         System.out.println("-df [JSON]\t\t\t\tDevelopData JSON file");
         System.out.println("-compile\t\t\t\trun compile");
+        System.out.println("-javahome [JAVA_HOME]\t\t\tcompiler java-home");
         System.out.println("-autocp\t\t\t\t\tauto load class path form " + DIRECTORY_LIBRARY);
         System.out.println("-autolc\t\t\t\t\tauto load loader class form " + DIRECTORY_BUILD);
         System.out.println("-d [0|1]\t\t\t\tDebug flag");
@@ -137,10 +153,17 @@ public class LaunchSupporter
         }
     }
 
-    private static void compileAgent()
+    private static void compileAgent(String javaHome)
     {
         String workDir = System.getProperty("user.dir");
         ConsoleOutput.out(ConsoleOutput.State.INFO, "Working Directory: " + workDir);
+        String javac = "javac";
+        if (javaHome != null)
+        {
+            javaHome = Pattern.compile(File.separator + "$").matcher(javaHome).replaceFirst("");
+            javac = javaHome + File.separator + "bin" + File.separator + javac;
+        }
+        ConsoleOutput.out(ConsoleOutput.State.INFO, "Compiler javac: " + javac);
         String library = workDir + File.separator + DIRECTORY_LIBRARY;
         String src = workDir + File.separator + DIRECTORY_SRC;
         String build = workDir + File.separator + DIRECTORY_BUILD;
@@ -158,7 +181,7 @@ public class LaunchSupporter
         buildDir.mkdir();
 
         List<String> cmdArray = new ArrayList<>();
-        cmdArray.add("javac");
+        cmdArray.add(javac);
         cmdArray.add("-cp");
         cmdArray.add(getClassPath(library));
         cmdArray.add("-d");
