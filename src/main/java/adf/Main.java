@@ -17,7 +17,8 @@ public class Main
         ConsoleOutput.version();
         List<String> launcherArguments = new ArrayList<>();
         launcherArguments.addAll(Arrays.asList(args));
-        LaunchSupporter.delegate(launcherArguments);
+        (new LaunchSupporter()).delegate(launcherArguments);
+        System.gc();
 
         try {
             AgentLauncher connector = new AgentLauncher((String[]) launcherArguments.toArray(new String[0]));

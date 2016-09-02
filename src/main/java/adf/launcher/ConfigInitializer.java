@@ -8,11 +8,11 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ConfigInitializer
+class ConfigInitializer
 {
-    public static final File DEFAULT_PATH = new File(System.getProperty("user.dir"), "config" + File.separator + "launch.cfg");
+    private static final File DEFAULT_PATH = new File(System.getProperty("user.dir"), "config" + File.separator + "launch.cfg");
     
-    public static Config getConfig(String... args)
+    static Config getConfig(String... args)
     {
         Config commandLine = analysis(args);
         try {
@@ -29,7 +29,7 @@ public class ConfigInitializer
         return commandLine;
     }
     
-    public static Config analysis(String... args)
+    private static Config analysis(String... args)
     {
 		if(args.length > 0)
         {

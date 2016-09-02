@@ -14,6 +14,7 @@ import rescuecore2.standard.messages.StandardMessageFactory;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class AgentLauncher
 {
@@ -61,7 +62,7 @@ public class AgentLauncher
         this.registerConnector(new ConnectorPoliceOffice());
     }
 
-    public void registerConnector(Connector connector)
+    private void registerConnector(Connector connector)
     {
         this.connectors.add(connector);
     }
@@ -73,42 +74,27 @@ public class AgentLauncher
         ComponentLauncher launcher = new TCPComponentLauncher(host, port, this.config);
         ConsoleOutput.out(ConsoleOutput.State.START, "Connect to server (host:" + host + ", port:" + port + ")");
 
-        List<Thread> threadList = new ArrayList<>();
+        List<Thread> threadList = this.connectors.stream().map( connector ->
+                new Thread(() -> connector.connect(launcher, this.config, loader))).
+                collect(Collectors.toList());
 
-        for (Connector connector : this.connectors)
-        {
-            threadList.add(
-                    new Thread(() ->
-                    {
-                        connector.connect(launcher, this.config, loader);
-                    })
-            );
-        }
-
-        for (Thread thread : threadList)
-        {
-            thread.start();
-        }
+        threadList.forEach(Thread::start);
 
         try
         {
             for (Thread thread : threadList)
-            {
-                thread.join();
-            }
+            { thread.join(); }
         }
         catch (InterruptedException e)
         {
             e.printStackTrace();
         }
 
-        // remove develop data
-        //this.config.removeKey(ConfigKey.KEY_DEVELOP_DATA);
-
-        ConsoleOutput.finish("Done Connecting to server");
+        ConsoleOutput.finish("Done connecting to server");
 
         if (this.config.getBooleanValue(ConfigKey.KEY_PRECOMPUTE, false))
         {
+            // Because Precompute phase is only use postConnect.
             System.exit(0);
         }
     }

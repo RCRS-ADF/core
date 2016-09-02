@@ -1,7 +1,6 @@
 package adf.launcher;
 
 import java.io.*;
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -16,19 +15,24 @@ import java.util.regex.Pattern;
 
 public class LaunchSupporter
 {
-    private static final String OPTION_COMPILE = "-compile";
-    private static final String OPTION_JAVAHOME = "-javahome";
-    private static final String OPTION_CHECK = "-check";
-    private static final String OPTION_AUTOCLASSPATH = "-autocp";
-    private static final String OPTION_AUTOLOADERCLASS = "-autolc";
-    private static final String DIRECTORY_LIBRARY = "library";
-    private static final String DIRECTORY_SRC = "src";
-    private static final String DIRECTORY_BUILD = "build";
-    private static final String CLASSNAME_LOADERPARENT = "adf.component.AbstractLoader";
+    private final String OPTION_COMPILE = "-compile";
+    private final String OPTION_JAVAHOME = "-javahome";
+    private final String OPTION_CHECK = "-check";
+    private final String OPTION_AUTOCLASSPATH = "-autocp";
+    private final String OPTION_AUTOLOADERCLASS = "-autolc";
+    private final String DIRECTORY_LIBRARY = "library";
+    private final String DIRECTORY_SRC = "src";
+    private final String DIRECTORY_BUILD = "build";
+    private final String CLASSNAME_LOADERPARENT = "adf.component.AbstractLoader";
 
-    private static int countAgentCheckWarning = 0;
+    private int countAgentCheckWarning;
 
-    public static void delegate(List<String> args)
+    public LaunchSupporter()
+    {
+        countAgentCheckWarning = 0;
+    }
+
+    public void delegate(List<String> args)
     {
         boolean worked = false;
         String compilerJavaHome = null;
@@ -88,7 +92,7 @@ public class LaunchSupporter
         }
     }
 
-    private static void printOptionList()
+    private void printOptionList()
     {
         System.out.println("Options:");
         System.out.println("-t [FB],[FS],[PF],[PO],[AT],[AC]\tnumber of agents");
@@ -121,7 +125,7 @@ public class LaunchSupporter
         System.out.println();
     }
 
-    private static void alias(List<String> args, String option, String... original)
+    private void alias(List<String> args, String option, String... original)
     {
         if (args.contains(option))
         {
@@ -136,12 +140,12 @@ public class LaunchSupporter
         }
     }
 
-    private static void autoLoadDefaultLoaderClass(List<String> args)
+    private void autoLoadDefaultLoaderClass(List<String> args)
     {
         args.add(0, getLoaderClass(DIRECTORY_BUILD));
     }
 
-    private static void autoLoadDefaultClassPath()
+    private void autoLoadDefaultClassPath()
     {
         addClassPath(DIRECTORY_BUILD);
 
@@ -153,7 +157,7 @@ public class LaunchSupporter
         }
     }
 
-    private static void addClassPath(String path)
+    private void addClassPath(String path)
     {
         URLClassLoader systemLoader = (URLClassLoader) ClassLoader.getSystemClassLoader();
         Class<?> systemClass = URLClassLoader.class;
@@ -162,18 +166,12 @@ public class LaunchSupporter
             Method method = systemClass.getDeclaredMethod("addURL", URL.class);
             method.setAccessible(true);
             method.invoke(systemLoader, new File(path).toURI().toURL());
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        } catch (MalformedURLException e) {
+        } catch (NoSuchMethodException | IllegalAccessException | MalformedURLException | InvocationTargetException e) {
             e.printStackTrace();
         }
     }
 
-    private static void compileAgent(String javaHome)
+    private void compileAgent(String javaHome)
     {
         ConsoleOutput.start("Agent compile");
         String workDir = System.getProperty("user.dir");
@@ -199,7 +197,11 @@ public class LaunchSupporter
 
         File buildDir = new File(build);
         deleteFile(buildDir);
-        buildDir.mkdir();
+        if (!(buildDir.mkdir()))
+        {
+            ConsoleOutput.error("Make build directory failed");
+            System.exit(-1);
+        }
 
         List<String> cmdArray = new ArrayList<>();
         cmdArray.add(javac);
@@ -222,7 +224,7 @@ public class LaunchSupporter
 
             String line;
             while ((line = br.readLine()) != null)
-            { sb.append(line + System.getProperty("line.separator")); }
+            { sb.append(line).append(System.getProperty("line.separator")); }
             System.out.print(sb.toString());
             br.close();
 
@@ -231,16 +233,14 @@ public class LaunchSupporter
                 ConsoleOutput.error("Compile failed");
                 System.exit(process.exitValue());
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
 
         ConsoleOutput.out(ConsoleOutput.State.FINISH, "Agent compile");
     }
 
-    private static void checkAgentClass()
+    private void checkAgentClass()
     {
         countAgentCheckWarning = 0;
         ConsoleOutput.start("Agent class check");
@@ -249,7 +249,7 @@ public class LaunchSupporter
                 " warning" + (countAgentCheckWarning > 1 ? 's' : "") + ")");
     }
 
-    private static void checkAgentClass(String base, String path)
+    private void checkAgentClass(String base, String path)
     {
         File dir = new File(path);
         File[] files = dir.listFiles();
@@ -349,18 +349,16 @@ public class LaunchSupporter
                 { checkAgentClass(base, file.getPath()); }
             }
         }
-
-        return;
     }
 
-    private static String getLoaderClass(String base)
+    private String getLoaderClass(String base)
     {
         return getLoaderClass(base, base);
     }
 
-    private static String getLoaderClass(String base, String path)
+    private String getLoaderClass(String base, String path)
     {
-        String loaderClass = "";
+        String loaderClass;
         File dir = new File(path);
         File[] files = dir.listFiles();
         if (files != null)
@@ -403,7 +401,7 @@ public class LaunchSupporter
         return loaderClass;
     }
 
-    private static String getClassPath(String path)
+    private String getClassPath(String path)
     {
         String classPath = "";
         File dir = new File(path);
@@ -426,7 +424,7 @@ public class LaunchSupporter
         return classPath;
     }
 
-    private static List<String> getJavaFilesText(String path)
+    private List<String> getJavaFilesText(String path)
     {
         List<String> javaFilesText = new ArrayList<>();
         File dir = new File(path);
@@ -448,13 +446,16 @@ public class LaunchSupporter
         return javaFilesText;
     }
 
-    private static void deleteFile(File file)
+    private void deleteFile(File file)
     {
         if (!file.exists())
         { return; }
 
         if (file.isFile())
-        { file.delete(); }
+        {
+            if (!(file.delete()))
+            { ConsoleOutput.error("Delete file failed"); }
+        }
         else if (file.isDirectory())
         {
             File[] files = file.listFiles();
@@ -463,7 +464,8 @@ public class LaunchSupporter
                 for (File file1 : files)
                 { deleteFile(file1); }
             }
-            file.delete();
+            if (!(file.delete()))
+            { ConsoleOutput.error("Delete file failed"); }
         }
     }
 }
