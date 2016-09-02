@@ -38,11 +38,11 @@ public class LaunchSupporter
         String compilerJavaHome = null;
 
         alias(args, "-auto", "-autocp", "-autolc");
-        alias(args, "-local", "-h localhost");
-        alias(args, "-all", "-t -1,-1,-1,-1,-1,-1");
-        alias(args, "-precompute", "-pre true");
-        alias(args, "-debug", "-d true");
-        alias(args, "-develop", "-dev true");
+        alias(args, "-local", "-h", "localhost");
+        alias(args, "-all", "-t", "-1,-1,-1,-1,-1,-1");
+        alias(args, "-precompute", "-pre", "true");
+        alias(args, "-debug", "-d", "true");
+        alias(args, "-develop", "-dev", "true");
         alias(args, "-checkagent", "-autocp", "-check");
 
         if (args.contains(OPTION_JAVAHOME))

@@ -74,9 +74,9 @@ public class AgentLauncher
         ComponentLauncher launcher = new TCPComponentLauncher(host, port, this.config);
         ConsoleOutput.out(ConsoleOutput.State.START, "Connect to server (host:" + host + ", port:" + port + ")");
 
-        List<Thread> threadList = this.connectors.stream().map( connector ->
-                new Thread(() -> connector.connect(launcher, this.config, loader))).
-                collect(Collectors.toList());
+        List<Thread> threadList = this.connectors.stream().map( connector
+                -> new Thread(() -> connector.connect(launcher, this.config, loader)))
+                .collect(Collectors.toList());
 
         threadList.forEach(Thread::start);
 
@@ -86,11 +86,12 @@ public class AgentLauncher
             { thread.join(); }
         }
         catch (InterruptedException e)
-        {
-            e.printStackTrace();
-        }
+        { e.printStackTrace(); }
 
-        ConsoleOutput.finish("Done connecting to server");
+        int connectedCount = this.connectors.stream().mapToInt(Connector::getCountConnected).sum();
+
+        ConsoleOutput.finish("Done connecting to server (" + connectedCount
+                + " agent" + (connectedCount > 1 ? 's' : "") + ")");
 
         if (this.config.getBooleanValue(ConfigKey.KEY_PRECOMPUTE, false))
         {

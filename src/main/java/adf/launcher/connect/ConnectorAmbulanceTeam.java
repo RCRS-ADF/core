@@ -13,12 +13,11 @@ import rescuecore2.components.ComponentLauncher;
 import rescuecore2.config.Config;
 import rescuecore2.connection.ConnectionException;
 
-public class ConnectorAmbulanceTeam implements Connector {
+public class ConnectorAmbulanceTeam extends Connector {
 	@Override
 	public void connect(ComponentLauncher launcher, Config config, AbstractLoader loader)
 	{
 		int count = config.getIntValue(ConfigKey.KEY_AMBULANCE_TEAM_COUNT, 0);
-		int connected = 0;
         //check
 		if (count == 0) {
 			return;

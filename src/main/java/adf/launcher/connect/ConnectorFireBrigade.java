@@ -13,12 +13,11 @@ import rescuecore2.components.ComponentLauncher;
 import rescuecore2.config.Config;
 import rescuecore2.connection.ConnectionException;
 
-public class ConnectorFireBrigade implements Connector {
+public class ConnectorFireBrigade extends Connector {
 	@Override
 	public void connect(ComponentLauncher launcher, Config config, AbstractLoader loader)
 	{
 		int count = config.getIntValue(ConfigKey.KEY_FIRE_BRIGADE_COUNT, 0);
-		int connected = 0;
 
 		if (count == 0) {
 			return;
