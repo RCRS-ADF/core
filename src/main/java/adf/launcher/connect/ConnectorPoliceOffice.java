@@ -30,7 +30,7 @@ public class ConnectorPoliceOffice extends Connector
 				ControlPolice controlPolice;
 				if (loader.getControlPolice() == null)
 				{
-					ConsoleOutput.error("Cannot Load PoliceOffice Control !!");
+					ConsoleOutput.error("Cannot Load PoliceOffice Control");
 					controlPolice = new DummyControlPolice();
 				}
 				else

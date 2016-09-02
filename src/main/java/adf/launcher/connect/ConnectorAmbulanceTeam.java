@@ -29,7 +29,7 @@ public class ConnectorAmbulanceTeam extends Connector {
 				TacticsAmbulance tacticsAmbulance;
 				if (loader.getTacticsAmbulance() == null)
 				{
-					ConsoleOutput.error("Cannot Load AmbulanceTeam Tactics !!");
+					ConsoleOutput.error("Cannot Load AmbulanceTeam Tactics");
 					tacticsAmbulance = new DummyTacticsAmbulance();
 				}
 				else

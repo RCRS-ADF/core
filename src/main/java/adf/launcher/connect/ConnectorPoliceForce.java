@@ -30,7 +30,7 @@ public class ConnectorPoliceForce extends Connector
 				TacticsPolice tacticsPolice;
 				if (loader.getTacticsPolice() == null)
 				{
-					ConsoleOutput.error("Cannot Load PoliceForce Tactics !!");
+					ConsoleOutput.error("Cannot Load PoliceForce Tactics");
 					tacticsPolice = new DummyTacticsPolice();
 				}
 				else

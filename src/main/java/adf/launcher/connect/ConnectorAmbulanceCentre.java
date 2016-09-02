@@ -28,7 +28,7 @@ public class ConnectorAmbulanceCentre extends Connector {
 				ControlAmbulance controlAmbulance;
 				if (loader.getControlAmbulance() == null)
 				{
-				    ConsoleOutput.error("Cannot Load AmbulanceCentre Control !!");
+				    ConsoleOutput.error("Cannot Load AmbulanceCentre Control");
 					controlAmbulance = new DummyControlAmbulance();
 				}
 				else

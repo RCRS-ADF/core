@@ -28,7 +28,7 @@ public class ConnectorFireBrigade extends Connector {
 				TacticsFire tacticsFire;
 				if (loader.getTacticsFire() == null)
 				{
-					ConsoleOutput.error("Cannot Load FireBrigade Tactics !!");
+					ConsoleOutput.error("Cannot Load FireBrigade Tactics");
 					tacticsFire = new DummyTacticsFire();
 				}
 				else

@@ -29,7 +29,7 @@ public class ConnectorFireStation extends Connector
 				ControlFire controlFire;
 				if (loader.getControlFire() == null)
 				{
-					ConsoleOutput.error("Cannot Load FireStation Control !!");
+					ConsoleOutput.error("Cannot Load FireStation Control");
 					controlFire = new DummyControlFire();
 				}
 				else
