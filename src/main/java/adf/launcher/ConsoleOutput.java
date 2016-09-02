@@ -18,7 +18,7 @@ public class ConsoleOutput
 
     public static void out(State state, String out)
     {
-        boolean colorMode = System.getProperty("cm", "0").equals("1");
+        boolean colorMode = System.getProperty("color", "0").equals("1");
         if (colorMode)
         {
             switch (state)
