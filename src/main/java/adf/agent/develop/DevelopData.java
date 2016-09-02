@@ -139,7 +139,7 @@ public final class DevelopData
             }
             if (value != null) { return value; }
         }
-        return (defaultValue != null) ? defaultValue : null;
+        return defaultValue;
     }
 
     public List<Double> getDoubleList(String name, List<Double> defaultValue)
