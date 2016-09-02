@@ -14,7 +14,7 @@ public class ConsoleOutput
 {
     private static final int titleLength = 6;
 
-    public static enum State {INFO, WARN, ERROR, NOTICE, START, FINISH, END};
+    public static enum State {INFO, WARN, ERROR, NOTICE, START, FINISH};
 
     public static void out(State state, String out)
     {
@@ -48,9 +48,6 @@ public class ConsoleOutput
 
     public static void finish(String out)
     { out(State.FINISH, out); }
-
-    public static void end(String out)
-    { out(State.END, out); }
 
     public static void version()
     { System.out.println("[ RCRS ADF Version " + VERSION_CODE + " (build " + getTimestamp() + ") ]\n"); }

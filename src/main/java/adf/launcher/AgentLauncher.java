@@ -105,7 +105,7 @@ public class AgentLauncher
         // remove develop data
         //this.config.removeKey(ConfigKey.KEY_DEVELOP_DATA);
 
-        ConsoleOutput.out(ConsoleOutput.State.END, "Done Connecting to server");
+        ConsoleOutput.finish("Done Connecting to server");
 
         if (this.config.getBooleanValue(ConfigKey.KEY_PRECOMPUTE, false))
         {

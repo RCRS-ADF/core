@@ -1,8 +1,11 @@
 package adf.launcher;
 
 import java.io.*;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -13,9 +16,9 @@ import java.util.regex.Pattern;
 
 public class LaunchSupporter
 {
-    private static boolean compiled = false;
     private static final String OPTION_COMPILE = "-compile";
     private static final String OPTION_JAVAHOME = "-javahome";
+    private static final String OPTION_CHECK = "-check";
     private static final String OPTION_AUTOCLASSPATH = "-autocp";
     private static final String OPTION_AUTOLOADERCLASS = "-autolc";
     private static final String DIRECTORY_LIBRARY = "library";
@@ -25,6 +28,7 @@ public class LaunchSupporter
 
     public static void delegate(List<String> args)
     {
+        boolean worked = false;
         String compilerJavaHome = null;
 
         alias(args, "-auto", "-autocp", "-autolc");
@@ -33,10 +37,11 @@ public class LaunchSupporter
         alias(args, "-precompute", "-pre true");
         alias(args, "-debug", "-d true");
         alias(args, "-develop", "-dev true");
+        alias(args, "-checkagent", "-autocp", "-check");
 
         if (args.contains(OPTION_JAVAHOME))
         {
-            int index = args.indexOf(OPTION_JAVAHOME) +1;
+            int index = args.indexOf(OPTION_JAVAHOME) + 1;
             if (index < args.size())
             {
                 compilerJavaHome = args.get(index);
@@ -49,12 +54,22 @@ public class LaunchSupporter
         {
             args.remove(OPTION_COMPILE);
             compileAgent(compilerJavaHome);
+            args.add(OPTION_AUTOCLASSPATH);
+            args.add(OPTION_CHECK);
+            worked = true;
         }
 
         if (args.contains(OPTION_AUTOCLASSPATH))
         {
             args.remove(OPTION_AUTOCLASSPATH);
             autoLoadDefaultClassPath();
+        }
+
+        if (args.contains(OPTION_CHECK))
+        {
+            args.remove(OPTION_CHECK);
+            checkAgentClass();
+            worked = true;
         }
 
         if (args.contains(OPTION_AUTOLOADERCLASS))
@@ -65,7 +80,7 @@ public class LaunchSupporter
 
         if (args.size() <= 0)
         {
-            if (!compiled)
+            if (!worked)
             { printOptionList(); }
             System.exit(0);
         }
@@ -93,16 +108,18 @@ public class LaunchSupporter
         System.out.println("-autocp\t\t\t\t\tauto load class path form " + DIRECTORY_LIBRARY);
         System.out.println("-autolc\t\t\t\t\tauto load loader class form " + DIRECTORY_BUILD);
         System.out.println("-d [0|1]\t\t\t\tDebug flag");
+        System.out.println("-check\t\t\t\t\tagent class check");
         System.out.println("-auto\t\t\t\t\t[alias] -autocp -autolc");
         System.out.println("-all\t\t\t\t\t[alias] -t -1,-1,-1,-1,-1,-1");
         System.out.println("-local\t\t\t\t\t[alias] -h localhost");
         System.out.println("-precompute\t\t\t\t[alias] -pre true");
         System.out.println("-debug\t\t\t\t\t[alias] -d true");
         System.out.println("-develop\t\t\t\t[alias] -dev true");
+        System.out.println("-checkagent\t\t\t\t[alias] -autocp -check");
         System.out.println();
     }
 
-    private static void alias(List<String>args, String option, String... original)
+    private static void alias(List<String> args, String option, String... original)
     {
         if (args.contains(option))
         {
@@ -138,7 +155,8 @@ public class LaunchSupporter
     {
         URLClassLoader systemLoader = (URLClassLoader) ClassLoader.getSystemClassLoader();
         Class<?> systemClass = URLClassLoader.class;
-        try {
+        try
+        {
             Method method = systemClass.getDeclaredMethod("addURL", URL.class);
             method.setAccessible(true);
             method.invoke(systemLoader, new File(path).toURI().toURL());
@@ -155,15 +173,16 @@ public class LaunchSupporter
 
     private static void compileAgent(String javaHome)
     {
+        ConsoleOutput.start("Agent compile");
         String workDir = System.getProperty("user.dir");
-        ConsoleOutput.out(ConsoleOutput.State.INFO, "Working Directory: " + workDir);
+        ConsoleOutput.info("Working Directory: " + workDir);
         String javac = "javac";
         if (javaHome != null)
         {
             javaHome = Pattern.compile(File.separator + "$").matcher(javaHome).replaceFirst("");
             javac = javaHome + File.separator + "bin" + File.separator + javac;
         }
-        ConsoleOutput.out(ConsoleOutput.State.INFO, "Compiler javac: " + javac);
+        ConsoleOutput.info("Compiler javac: " + javac);
         String library = workDir + File.separator + DIRECTORY_LIBRARY;
         String src = workDir + File.separator + DIRECTORY_SRC;
         String build = workDir + File.separator + DIRECTORY_BUILD;
@@ -172,7 +191,7 @@ public class LaunchSupporter
         File srcDir = new File(src);
         if (!(libraryDir.isDirectory() && srcDir.isDirectory()))
         {
-            ConsoleOutput.out(ConsoleOutput.State.ERROR, "Does not have the required directory.");
+            ConsoleOutput.error("Does not have the required directory");
             System.exit(-1);
         }
 
@@ -185,14 +204,15 @@ public class LaunchSupporter
         cmdArray.add("-cp");
         cmdArray.add(getClassPath(library));
         cmdArray.add("-d");
-        cmdArray.add(".." + File.separator + "build" + File.separator);
+        cmdArray.add(".." + File.separator + DIRECTORY_BUILD + File.separator);
         cmdArray.addAll(getJavaFilesText(src));
 
         ProcessBuilder processBuilder = new ProcessBuilder(cmdArray);
         processBuilder.directory(srcDir);
         processBuilder.redirectErrorStream(true);
 
-        try {
+        try
+        {
             Process process = processBuilder.start();
             InputStream is = process.getInputStream();
             BufferedReader br = new BufferedReader(new InputStreamReader(is));
@@ -200,20 +220,124 @@ public class LaunchSupporter
 
             String line;
             while ((line = br.readLine()) != null)
-            {
-                sb.append(line + System.getProperty("line.separator"));
-            }
+            { sb.append(line + System.getProperty("line.separator")); }
             System.out.println(sb.toString());
             br.close();
 
-            if (process.exitValue()!= 0)
+            if (process.exitValue() != 0)
             { System.exit(process.exitValue()); }
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        ConsoleOutput.out(ConsoleOutput.State.FINISH, "Agent compiled.");
-        compiled = true;
+        ConsoleOutput.out(ConsoleOutput.State.FINISH, "Agent compile");
+    }
+
+    private static void checkAgentClass()
+    {
+        ConsoleOutput.start("Agent class check");
+        checkAgentClass(DIRECTORY_BUILD, DIRECTORY_BUILD);
+        ConsoleOutput.finish("Agent class check");
+    }
+
+    private static void checkAgentClass(String base, String path)
+    {
+        File dir = new File(path);
+        File[] files = dir.listFiles();
+        if (files != null)
+        {
+            Arrays.sort(files, (a, b) -> (int) (b.lastModified() - a.lastModified()));
+            for (File file : files)
+            {
+                if (file.isFile())
+                {
+                    String filePath = file.getPath();
+                    if (filePath.endsWith(".class") && !filePath.contains("$"))
+                    {
+                        String loaderClass = filePath.substring(base.length() + 1, filePath.length() - 6).replace(File.separator, ".");
+                        try
+                        {
+                            Class clazz = ClassLoader.getSystemClassLoader().loadClass(loaderClass);
+
+                            ArrayList<String> methodList = new ArrayList<>();
+                            for (Method method : clazz.getDeclaredMethods())
+                            {
+                                if (Modifier.isPublic(method.getModifiers()))
+                                {
+                                    String sign = method.getReturnType().getName() + ":" + method.getName() + ":";
+                                    for (Class paramClass : method.getParameterTypes())
+                                    { sign += paramClass.getName() + ","; }
+                                    methodList.add(sign);
+                                }
+                            }
+
+                            clazz = clazz.getSuperclass();
+                            while (!(clazz.equals(java.lang.Object.class)))
+                            {
+                                for (Method method : clazz.getDeclaredMethods())
+                                {
+                                    if (!(Modifier.isPrivate(method.getModifiers())))
+                                    {
+                                        String sign = method.getReturnType().getName() + ":" + method.getName() + ":";
+                                        for (Class paramClass : method.getParameterTypes())
+                                        { sign += paramClass.getName() + ","; }
+                                        methodList.remove(sign);
+                                    }
+                                }
+                                clazz = clazz.getSuperclass();
+                            }
+
+                            if (methodList.size() > 0)
+                            {
+                                ConsoleOutput.warn("Exist violating public method : " + loaderClass);
+                                for (String methodSign : methodList)
+                                {
+                                    String methodData[] = methodSign.split(":", 3);
+                                    String returnType[] = methodData[0].split("\\.");
+                                    String paramType[] = methodData[2].split(",");
+                                    System.out.print("\t" + returnType[returnType.length -1] + " " + methodData[1] + "(");
+                                    boolean isFirst = true;
+                                    for (String name : paramType)
+                                    {
+                                        if (isFirst)
+                                        { isFirst = false; }
+                                        else
+                                        { System.out.print(", "); }
+                                        String splitedName[] = name.split("\\.");
+                                        System.out.print(splitedName[splitedName.length -1]);
+                                    }
+                                    System.out.println(")");
+                                }
+                            }
+
+                            for (Field field : ClassLoader.getSystemClassLoader().loadClass(loaderClass).getDeclaredFields())
+                            {
+                                if (Modifier.isStatic(field.getModifiers()))
+                                {
+                                    if (!(Modifier.isFinal(field.getModifiers())))
+                                    { ConsoleOutput.warn("Exist static field : " + loaderClass + "." + field.getName()); }
+                                }
+                                else if (Modifier.isPublic(field.getModifiers()))
+                                { ConsoleOutput.warn("Exist public field : " + loaderClass + "." + field.getName()); }
+                            }
+                        } catch (ClassNotFoundException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+        }
+
+        if (files != null)
+        {
+            for (File file : files)
+            {
+                if (file.isDirectory())
+                { checkAgentClass(base, file.getPath()); }
+            }
+        }
+
+        return;
     }
 
     private static String getLoaderClass(String base)
@@ -226,17 +350,21 @@ public class LaunchSupporter
         String loaderClass = "";
         File dir = new File(path);
         File[] files = dir.listFiles();
-        if (files != null) {
-            Arrays.sort(files, (a, b)->(int)(b.lastModified() - a.lastModified()));
-            for (File file : files) {
-                if (file.isFile()) {
+        if (files != null)
+        {
+            Arrays.sort(files, (a, b) -> (int) (b.lastModified() - a.lastModified()));
+            for (File file : files)
+            {
+                if (file.isFile())
+                {
                     String filePath = file.getPath();
-                    if (filePath.endsWith(".class") && !filePath.contains("$")) {
+                    if (filePath.endsWith(".class") && !filePath.contains("$"))
+                    {
                         loaderClass = filePath.substring(base.length() + 1, filePath.length() - 6).replace(File.separator, ".");
-                        try {
-                            if (ClassLoader.getSystemClassLoader().loadClass(loaderClass).getSuperclass().getName().equals(CLASSNAME_LOADERPARENT)) {
-                                return loaderClass;
-                            }
+                        try
+                        {
+                            if (ClassLoader.getSystemClassLoader().loadClass(loaderClass).getSuperclass().getName().equals(CLASSNAME_LOADERPARENT))
+                            { return loaderClass; }
                         } catch (ClassNotFoundException e) {
                             e.printStackTrace();
                         }
@@ -246,13 +374,15 @@ public class LaunchSupporter
         }
         loaderClass = "";
 
-        if (files != null) {
-            for (File file : files) {
-                if (file.isDirectory()) {
+        if (files != null)
+        {
+            for (File file : files)
+            {
+                if (file.isDirectory())
+                {
                     loaderClass = getLoaderClass(base, file.getPath());
-                    if (!loaderClass.equals("")) {
-                        return loaderClass;
-                    }
+                    if (!loaderClass.equals(""))
+                    { return loaderClass; }
                 }
             }
         }
@@ -260,40 +390,45 @@ public class LaunchSupporter
         return loaderClass;
     }
 
-    private static String getClassPath(String path) {
+    private static String getClassPath(String path)
+    {
         String classPath = "";
         File dir = new File(path);
         File[] files = dir.listFiles();
-        if (files != null) {
-            for (File file : files) {
-                if (file.isFile()) {
+        if (files != null)
+        {
+            for (File file : files)
+            {
+                if (file.isFile())
+                {
                     String filePath = file.getPath();
-                    if (filePath.endsWith(".jar") && !filePath.endsWith("-sources.jar")) {
-                        classPath += filePath + System.getProperty("path.separator");
-                    }
-                } else if (file.isDirectory()) {
-                    classPath += getClassPath(file.getPath());
+                    if (filePath.endsWith(".jar") && !filePath.endsWith("-sources.jar"))
+                    { classPath += filePath + System.getProperty("path.separator"); }
                 }
+                else if (file.isDirectory())
+                { classPath += getClassPath(file.getPath()); }
             }
         }
 
         return classPath;
     }
 
-    private static List<String> getJavaFilesText(String path) {
+    private static List<String> getJavaFilesText(String path)
+    {
         List<String> javaFilesText = new ArrayList<>();
         File dir = new File(path);
         File[] files = dir.listFiles();
-        if (files != null) {
-            for (File file : files) {
-                if (file.isFile()) {
+        if (files != null)
+        {
+            for (File file : files)
+            {
+                if (file.isFile())
+                {
                     String filePath = file.getPath();
-                    if (filePath.endsWith(".java")) {
-                        javaFilesText.add(filePath);
-                    }
-                } else if (file.isDirectory()) {
-                    javaFilesText.addAll(getJavaFilesText(file.getPath()));
-                }
+                    if (filePath.endsWith(".java"))
+                    { javaFilesText.add(filePath); }
+                } else if (file.isDirectory())
+                { javaFilesText.addAll(getJavaFilesText(file.getPath())); }
             }
         }
 
@@ -302,17 +437,18 @@ public class LaunchSupporter
 
     private static void deleteFile(File file)
     {
-        if(!file.exists())
+        if (!file.exists())
         { return; }
 
-        if(file.isFile()) {
-            file.delete();
-        } else if(file.isDirectory()) {
+        if (file.isFile())
+        { file.delete(); }
+        else if (file.isDirectory())
+        {
             File[] files = file.listFiles();
-            if (files != null) {
-                for (File file1 : files) {
-                    deleteFile(file1);
-                }
+            if (files != null)
+            {
+                for (File file1 : files)
+                { deleteFile(file1); }
             }
             file.delete();
         }
