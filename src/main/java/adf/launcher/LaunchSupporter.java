@@ -64,12 +64,6 @@ public class LaunchSupporter
             args.add(OPTION_CHECK);
             worked = true;
         }
-        if (args.contains(OPTION_CHECK))
-        {
-            args.remove(OPTION_CHECK);
-            checkAgentClass();
-            worked = true;
-        }
 
         if (args.contains(OPTION_AUTOCLASSPATH))
         {
@@ -136,9 +130,7 @@ public class LaunchSupporter
         {
             args.remove(option);
             for (String org : original)
-            {
-                args.add(org);
-            }
+            { args.add(org); }
         }
     }
 
