@@ -1,6 +1,6 @@
 package adf.launcher;
 
-import adf.launcher.annotation.NoConstructionWarning;
+import adf.launcher.annotation.NoStructureWarning;
 
 import java.io.*;
 import java.lang.reflect.Field;
@@ -301,7 +301,7 @@ public class LaunchSupporter
                     if (filePath.endsWith(".class") && !filePath.contains("$"))
                     {
                         boolean isAdfChild = false;
-                        boolean noConstructionWarning = false;
+                        boolean noStructureWarning = false;
                         String loaderClass = filePath.substring(base.length() + 1, filePath.length() - 6).replace(File.separator, ".");
 
                         try
@@ -320,7 +320,7 @@ public class LaunchSupporter
                                 }
                             }
 
-                            noConstructionWarning = clazz.isAnnotationPresent(NoConstructionWarning.class);
+                            noStructureWarning = clazz.isAnnotationPresent(NoStructureWarning.class);
 
                             clazz = clazz.getSuperclass();
                             while (!(clazz.equals(java.lang.Object.class)))
@@ -381,7 +381,7 @@ public class LaunchSupporter
                                 }
                             }
 
-                            if (!(noConstructionWarning))
+                            if (!(noStructureWarning))
                             {
                                 List<String> cmdArray = new ArrayList<>();
                                 cmdArray.add(jdeps);
@@ -425,7 +425,7 @@ public class LaunchSupporter
                                     if (sb.length() > 0)
                                     {
                                         countAgentCheckWarning++;
-                                        ConsoleOutput.warn("Invalid construction (invoke the parent package class) :");
+                                        ConsoleOutput.warn("Violation structure (invoke the parent package class) :");
                                         System.out.println("\t" + loaderClass + " ->");
                                         System.out.print(sb);
                                     }
