@@ -53,10 +53,9 @@ public class ConnectorPoliceForce extends Connector
 				connected++;
 			}
 		}
-		catch (ComponentConnectionException | InterruptedException | ConnectionException e)
+		catch (InterruptedException | ConnectionException | ComponentConnectionException e)
 		{
 			//e.printStackTrace();
-			//System.out.println("[ERROR ] Cannot Load PoliceForce Tactics !!");
 		}
 		ConsoleOutput.finish("Connect PoliceForce (success:" + connected + ")");
 	}

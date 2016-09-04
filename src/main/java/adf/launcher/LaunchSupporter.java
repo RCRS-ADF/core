@@ -43,7 +43,7 @@ public class LaunchSupporter
         alias(args, "-precompute", "-pre", "true");
         alias(args, "-debug", "-d", "true");
         alias(args, "-develop", "-dev", "true");
-        alias(args, "-checkagent", "-autocp", "-check");
+        alias(args, OPTION_CHECK, OPTION_AUTOCLASSPATH, OPTION_CHECK);
 
         if (args.contains(OPTION_JAVAHOME))
         {
@@ -62,6 +62,12 @@ public class LaunchSupporter
             compileAgent(compilerJavaHome);
             args.add(OPTION_AUTOCLASSPATH);
             args.add(OPTION_CHECK);
+            worked = true;
+        }
+        if (args.contains(OPTION_CHECK))
+        {
+            args.remove(OPTION_CHECK);
+            checkAgentClass();
             worked = true;
         }
 
@@ -109,19 +115,18 @@ public class LaunchSupporter
         System.out.println("-dev [0|1]\t\t\t\tDevelop flag");
         System.out.println("-dd [JSON]\t\t\t\tDevelopData JSON");
         System.out.println("-df [JSON]\t\t\t\tDevelopData JSON file");
-        System.out.println("-compile\t\t\t\trun compile");
+        System.out.println("-compile\t\t\t\trun compile (with -check)");
         System.out.println("-javahome [JAVA_HOME]\t\t\tcompiler java-home");
         System.out.println("-autocp\t\t\t\t\tauto load class path form " + DIRECTORY_LIBRARY);
         System.out.println("-autolc\t\t\t\t\tauto load loader class form " + DIRECTORY_BUILD);
         System.out.println("-d [0|1]\t\t\t\tDebug flag");
-        System.out.println("-check\t\t\t\t\tsimple agent class check");
+        System.out.println("-check\t\t\t\t\tsimple agent class check (with -autocp)");
         System.out.println("-auto\t\t\t\t\t[alias] -autocp -autolc");
         System.out.println("-all\t\t\t\t\t[alias] -t -1,-1,-1,-1,-1,-1");
         System.out.println("-local\t\t\t\t\t[alias] -h localhost");
         System.out.println("-precompute\t\t\t\t[alias] -pre true");
         System.out.println("-debug\t\t\t\t\t[alias] -d true");
         System.out.println("-develop\t\t\t\t[alias] -dev true");
-        System.out.println("-checkagent\t\t\t\t[alias] -autocp -check");
         System.out.println();
     }
 
@@ -129,14 +134,11 @@ public class LaunchSupporter
     {
         if (args.contains(option))
         {
-            List<String> temp = new ArrayList<>();
+            args.remove(option);
             for (String org : original)
             {
-                if (!args.contains(org))
-                { temp.add(org); }
+                args.add(org);
             }
-            args.addAll(temp);
-            args.remove(option);
         }
     }
 

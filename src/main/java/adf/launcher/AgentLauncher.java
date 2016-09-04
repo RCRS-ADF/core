@@ -3,6 +3,7 @@ package adf.launcher;
 import adf.component.AbstractLoader;
 import adf.launcher.connect.*;
 import rescuecore2.Constants;
+import rescuecore2.components.ComponentConnectionException;
 import rescuecore2.components.ComponentLauncher;
 import rescuecore2.components.TCPComponentLauncher;
 import rescuecore2.config.Config;
@@ -75,7 +76,7 @@ public class AgentLauncher
         ConsoleOutput.out(ConsoleOutput.State.START, "Connect to server (host:" + host + ", port:" + port + ")");
 
         List<Thread> threadList = this.connectors.stream().map( connector
-                -> new Thread(() -> connector.connect(launcher, this.config, loader)))
+                -> new Thread(() -> { connector.connect(launcher, this.config, loader); }))
                 .collect(Collectors.toList());
 
         threadList.forEach(Thread::start);

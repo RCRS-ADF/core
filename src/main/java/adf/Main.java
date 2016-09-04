@@ -3,6 +3,7 @@ package adf;
 import adf.launcher.AgentLauncher;
 import adf.launcher.ConsoleOutput;
 import adf.launcher.LaunchSupporter;
+import rescuecore2.components.ComponentConnectionException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
