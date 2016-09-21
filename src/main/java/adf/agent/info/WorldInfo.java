@@ -356,7 +356,10 @@ public class WorldInfo implements Iterable<StandardEntity> {
     }
 
 	public Collection<Blockade> getBlockades(Road road) {
-	    return road.getBlockades().stream().map(entityID -> (Blockade)this.getEntity(entityID)).collect(Collectors.toSet());
+        if(road.isBlockadesDefined()) {
+            return road.getBlockades().stream().map(entityID -> (Blockade) this.getEntity(entityID)).collect(Collectors.toSet());
+        }
+        return null;
     }
 
 	// getPosition /////////////////////////////////////////////////////////////////////////////////////////////////////
