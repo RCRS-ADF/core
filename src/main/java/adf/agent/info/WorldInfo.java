@@ -352,14 +352,14 @@ public class WorldInfo implements Iterable<StandardEntity> {
         if(entity instanceof Road) {
             return this.getBlockades((Road)entity);
         }
-        return null;
+        return new HashSet<>();
     }
 
 	public Collection<Blockade> getBlockades(Road road) {
         if(road.isBlockadesDefined()) {
             return road.getBlockades().stream().map(entityID -> (Blockade) this.getEntity(entityID)).collect(Collectors.toSet());
         }
-        return null;
+        return new HashSet<>();
     }
 
 	// getPosition /////////////////////////////////////////////////////////////////////////////////////////////////////
