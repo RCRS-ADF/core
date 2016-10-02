@@ -30,7 +30,7 @@ public final class DevelopData
     private Map<String, List<String>> stringLists;
     private Map<String, List<Boolean>> boolLists;
 
-    public DevelopData(boolean developFlag, String debugDataFileName, List<String> rawData)
+    public DevelopData(boolean developFlag, String developDataFileName, List<String> rawData)
     {
         this.developFlag = developFlag;
 
@@ -46,7 +46,7 @@ public final class DevelopData
 
         if (developFlag)
         {
-            this.setDataFile(debugDataFileName);
+            this.setDataFile(developDataFileName);
             this.setRawData(rawData);
         }
     }
@@ -225,10 +225,10 @@ public final class DevelopData
                 List<String> list = new ArrayList<>(((List)object).size());
                 for (Object o : (List)object)
                 { list.add(String.valueOf(o)); }
-                this.setStringList(key, list);
+                this.stringLists.put(key, list);
             }
             else
-            { this.setString(key, String.valueOf(object)); }
+            { this.stringValues.put(key, String.valueOf(object)); }
         }
     }
 
@@ -270,6 +270,7 @@ public final class DevelopData
         this.boolLists.clear();
     }
 
+    /*
     public Integer setInteger(String name, int value)
     {
         return this.intValues.put(name, value);
@@ -309,4 +310,5 @@ public final class DevelopData
     {
         return this.stringLists.put(name, value);
     }
+    */
 }

@@ -15,8 +15,8 @@ import java.util.Collection;
 
 public abstract class Clustering extends AbstractModule{
 
-    public Clustering(AgentInfo ai, WorldInfo wi, ScenarioInfo si, ModuleManager moduleManager, DevelopData debugData) {
-        super(ai, wi, si, moduleManager, debugData);
+    public Clustering(AgentInfo ai, WorldInfo wi, ScenarioInfo si, ModuleManager moduleManager, DevelopData developData) {
+        super(ai, wi, si, moduleManager, developData);
     }
 
     public abstract int getClusterNumber();

@@ -13,16 +13,16 @@ abstract public class ExtAction {
 	protected AgentInfo agentInfo;
 	protected WorldInfo worldInfo;
 	protected ModuleManager moduleManager;
-	protected DevelopData debugData;
+	protected DevelopData developData;
 
 	protected Action result;
 
-	public ExtAction(AgentInfo ai, WorldInfo wi, ScenarioInfo si, ModuleManager moduleManager, DevelopData debugData) {
+	public ExtAction(AgentInfo ai, WorldInfo wi, ScenarioInfo si, ModuleManager moduleManager, DevelopData developData) {
 		this.worldInfo = wi;
 		this.agentInfo = ai;
 		this.scenarioInfo = si;
 		this.moduleManager = moduleManager;
-        this.debugData = debugData;
+        this.developData = developData;
 		this.result = null;
 	}
 

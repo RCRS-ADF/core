@@ -24,14 +24,14 @@ public class ModuleManager
 
     private ModuleConfig moduleConfig;
 
-    private DevelopData debugData;
+    private DevelopData developData;
 
-    public ModuleManager(AgentInfo agentInfo, WorldInfo worldInfo, ScenarioInfo scenarioInfo, ModuleConfig moduleConfig, DevelopData debugData) {
+    public ModuleManager(AgentInfo agentInfo, WorldInfo worldInfo, ScenarioInfo scenarioInfo, ModuleConfig moduleConfig, DevelopData developData) {
         this.agentInfo = agentInfo;
         this.worldInfo = worldInfo;
         this.scenarioInfo = scenarioInfo;
         this.moduleConfig = moduleConfig;
-        this.debugData = debugData;
+        this.developData = developData;
         this.moduleMap = new HashMap<>();
         this.actionMap = new HashMap<>();
     }
@@ -72,7 +72,7 @@ public class ModuleManager
     private AbstractModule getModule(Class<AbstractModule> moduleClass) {
         try {
             Constructor<AbstractModule> constructor = moduleClass.getConstructor(AgentInfo.class, WorldInfo.class, ScenarioInfo.class, ModuleManager.class, DevelopData.class);
-            AbstractModule instance = constructor.newInstance(this.agentInfo, this.worldInfo, this.scenarioInfo, this, this.debugData);
+            AbstractModule instance = constructor.newInstance(this.agentInfo, this.worldInfo, this.scenarioInfo, this, this.developData);
             this.moduleMap.put(moduleClass.getCanonicalName(), instance);
             return instance;
         } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
@@ -116,7 +116,7 @@ public class ModuleManager
     private ExtAction getExtAction(Class<ExtAction> actionClass) {
         try {
             Constructor<ExtAction> constructor = actionClass.getConstructor(AgentInfo.class, WorldInfo.class, ScenarioInfo.class, ModuleManager.class, DevelopData.class);
-            ExtAction instance = constructor.newInstance(this.agentInfo, this.worldInfo, this.scenarioInfo, this, this.debugData);
+            ExtAction instance = constructor.newInstance(this.agentInfo, this.worldInfo, this.scenarioInfo, this, this.developData);
             this.actionMap.put(actionClass.getCanonicalName(), instance);
             return instance;
         } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {

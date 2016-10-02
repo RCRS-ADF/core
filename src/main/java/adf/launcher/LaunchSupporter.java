@@ -103,13 +103,13 @@ public class LaunchSupporter
         System.out.println("-po [PO]\t\t\t\tnumber of PoliceOffice");
         System.out.println("-at [AT]\t\t\t\tnumber of AmbulanceTeam");
         System.out.println("-ac [AC]\t\t\t\tnumber of AmbulanceCentre");
-        System.out.println("-s [HOST]:[PORT]\t\t\t\tRCRS server host and port");
+        System.out.println("-s [HOST]:[PORT]\t\t\tRCRS server host and port");
         System.out.println("-h [HOST]\t\t\t\tRCRS server host (port:7000)");
         System.out.println("-pre [0|1]\t\t\t\tPrecompute flag");
         System.out.println("-mc [FILE]\t\t\t\tModuleConfig file name");
         System.out.println("-dev [0|1]\t\t\t\tDevelop flag");
         System.out.println("-dd [JSON]\t\t\t\tDevelopData JSON");
-        System.out.println("-df [JSON]\t\t\t\tDevelopData JSON file");
+        System.out.println("-df [JSON File]\t\t\tDevelopData JSON file");
         System.out.println("-compile\t\t\t\trun compile (with -check)");
         System.out.println("-javahome [JAVA_HOME]\t\t\tcompiler java-home");
         System.out.println("-autocp\t\t\t\t\tauto load class path form " + DIRECTORY_LIBRARY);
