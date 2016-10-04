@@ -1,0 +1,9 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="node1" href="$classadf_1_1launcher_1_1connect_1_1Connector.html" title="adf.launcher.connect.Connector" alt="" coords="5,177,232,203"/>
+<area shape="rect" id="node2" href="$classadf_1_1launcher_1_1connect_1_1ConnectorAmbulanceCentre.html" title="adf.launcher.connect.Connector\lAmbulanceCentre" alt="" coords="280,5,507,47"/>
+<area shape="rect" id="node3" href="$classadf_1_1launcher_1_1connect_1_1ConnectorAmbulanceTeam.html" title="adf.launcher.connect.Connector\lAmbulanceTeam" alt="" coords="280,71,507,112"/>
+<area shape="rect" id="node4" href="$classadf_1_1launcher_1_1connect_1_1ConnectorFireBrigade.html" title="adf.launcher.connect.Connector\lFireBrigade" alt="" coords="280,136,507,177"/>
+<area shape="rect" id="node5" href="$classadf_1_1launcher_1_1connect_1_1ConnectorFireStation.html" title="adf.launcher.connect.Connector\lFireStation" alt="" coords="280,201,507,243"/>
+<area shape="rect" id="node6" href="$classadf_1_1launcher_1_1connect_1_1ConnectorPoliceForce.html" title="adf.launcher.connect.Connector\lPoliceForce" alt="" coords="280,267,507,308"/>
+<area shape="rect" id="node7" href="$classadf_1_1launcher_1_1connect_1_1ConnectorPoliceOffice.html" title="adf.launcher.connect.Connector\lPoliceOffice" alt="" coords="280,332,507,373"/>
+</map>
