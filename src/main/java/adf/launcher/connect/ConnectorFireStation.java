@@ -13,14 +13,12 @@ import rescuecore2.components.ComponentLauncher;
 import rescuecore2.config.Config;
 import rescuecore2.connection.ConnectionException;
 
-public class ConnectorFireStation implements Connector
+public class ConnectorFireStation extends Connector
 {
-
 	@Override
 	public void connect(ComponentLauncher launcher, Config config, AbstractLoader loader)
 	{
 		int count = config.getIntValue(ConfigKey.KEY_FIRE_STATION_COUNT, 0);
-		int connected = 0;
 
 		if (count == 0) {
 			return;
@@ -31,7 +29,7 @@ public class ConnectorFireStation implements Connector
 				ControlFire controlFire;
 				if (loader.getControlFire() == null)
 				{
-					ConsoleOutput.error("Cannot Load FireStation Control !!");
+					ConsoleOutput.error("Cannot Load FireStation Control");
 					controlFire = new DummyControlFire();
 				}
 				else

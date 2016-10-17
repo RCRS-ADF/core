@@ -16,6 +16,7 @@ hs_err_pid*
 # build
 build/*
 !build/libs
+!build/docs
 
 # intelliJ
 *.iml

@@ -11,8 +11,8 @@ import rescuecore2.standard.entities.Road;
 
 public abstract class RoadSelector extends TargetSelector<Road> {
 
-    public RoadSelector(AgentInfo ai, WorldInfo wi, ScenarioInfo si, ModuleManager moduleManager, DevelopData debugData) {
-        super(ai, wi, si, moduleManager, debugData);
+    public RoadSelector(AgentInfo ai, WorldInfo wi, ScenarioInfo si, ModuleManager moduleManager, DevelopData developData) {
+        super(ai, wi, si, moduleManager, developData);
     }
 
     @Override

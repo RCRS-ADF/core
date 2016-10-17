@@ -30,7 +30,7 @@ public final class DevelopData
     private Map<String, List<String>> stringLists;
     private Map<String, List<Boolean>> boolLists;
 
-    public DevelopData(boolean developFlag, String debugDataFileName, List<String> rawData)
+    public DevelopData(boolean developFlag, String developDataFileName, List<String> rawData)
     {
         this.developFlag = developFlag;
 
@@ -43,8 +43,12 @@ public final class DevelopData
         this.doubleLists = new HashMap<>();
         this.stringLists = new HashMap<>();
         this.boolLists = new HashMap<>();
-        this.setFileData(debugDataFileName);
-        this.setRawData(rawData);
+
+        if (developFlag)
+        {
+            this.setDataFile(developDataFileName);
+            this.setRawData(rawData);
+        }
     }
 
     public boolean isDevelopMode()
@@ -52,7 +56,7 @@ public final class DevelopData
         return this.developFlag;
     }
 
-    public Integer getInteger(String name, int... defaultValue)
+    public Integer getInteger(String name, int defaultValue)
     {
         if (this.developFlag)
         {
@@ -67,10 +71,10 @@ public final class DevelopData
             }
             if (value != null) { return value; }
         }
-        return (defaultValue != null && defaultValue.length > 0) ? defaultValue[0] : null;
+        return defaultValue;
     }
 
-    public Double getDouble(String name, double... defaultValue)
+    public Double getDouble(String name, double defaultValue)
     {
         if (this.developFlag)
         {
@@ -85,10 +89,10 @@ public final class DevelopData
             }
             if (value != null) { return value; }
         }
-        return (defaultValue != null && defaultValue.length > 0) ? defaultValue[0] : null;
+        return defaultValue;
     }
 
-    public Boolean getBoolean(String name, boolean... defaultValue)
+    public Boolean getBoolean(String name, boolean defaultValue)
     {
         if (this.developFlag)
         {
@@ -103,22 +107,17 @@ public final class DevelopData
             }
             if (value != null) { return value; }
         }
-        return (defaultValue != null && defaultValue.length > 0) ? defaultValue[0] : null;
+        return defaultValue;
     }
 
-    public String getString(String name, String... defaultValue)
+    public String getString(String name, String defaultValue)
     {
         if (this.developFlag)
         {
             String value = this.stringValues.get(name);
             if (value != null) { return value; }
         }
-        return (defaultValue != null && defaultValue.length > 0) ? defaultValue[0] : null;
-    }
-
-    public List<Integer> getIntegerList(String name)
-    {
-        return this.getIntegerList(name, null);
+        return defaultValue;
     }
 
     public List<Integer> getIntegerList(String name, List<Integer> defaultValue)
@@ -140,12 +139,7 @@ public final class DevelopData
             }
             if (value != null) { return value; }
         }
-        return (defaultValue != null) ? defaultValue : null;
-    }
-
-    public List<Double> getDoubleList(String name)
-    {
-        return this.getDoubleList(name, null);
+        return defaultValue;
     }
 
     public List<Double> getDoubleList(String name, List<Double> defaultValue)
@@ -167,27 +161,7 @@ public final class DevelopData
             }
             if (value != null) { return value; }
         }
-        return (defaultValue != null) ? defaultValue : null;
-    }
-
-    public List<String> getStringList(String name)
-    {
-        return this.getStringList(name, null);
-    }
-
-    public List<String> getStringList(String name, List<String> defaultValue)
-    {
-        if (this.developFlag)
-        {
-            List<String> value = this.stringLists.get(name);
-            if (value != null) { return value; }
-        }
-        return (defaultValue != null) ? defaultValue : null;
-    }
-
-    public List<Boolean> getBooleanList(String name)
-    {
-        return this.getBooleanList(name, null);
+        return defaultValue;
     }
 
     public List<Boolean> getBooleanList(String name, List<Boolean> defaultValue)
@@ -209,7 +183,17 @@ public final class DevelopData
             }
             if (value != null) { return value; }
         }
-        return (defaultValue != null) ? defaultValue : null;
+        return defaultValue;
+    }
+
+    public List<String> getStringList(String name, List<String> defaultValue)
+    {
+        if (this.developFlag)
+        {
+            List<String> value = this.stringLists.get(name);
+            if (value != null) { return value; }
+        }
+        return defaultValue;
     }
 
     private void setRawData(String rawData, boolean isBase64)
@@ -241,10 +225,10 @@ public final class DevelopData
                 List<String> list = new ArrayList<>(((List)object).size());
                 for (Object o : (List)object)
                 { list.add(String.valueOf(o)); }
-                this.setStringList(key, list);
+                this.stringLists.put(key, list);
             }
             else
-            { this.setString(key, String.valueOf(object)); }
+            { this.stringValues.put(key, String.valueOf(object)); }
         }
     }
 
@@ -254,7 +238,7 @@ public final class DevelopData
         { setRawData(data, true); }
     }
 
-    private void setFileData(String developDataFileName)
+    private void setDataFile(String developDataFileName)
     {
         if (developDataFileName == null || developDataFileName.equals("")) { return; }
         File file = new File(developDataFileName);
@@ -286,6 +270,7 @@ public final class DevelopData
         this.boolLists.clear();
     }
 
+    /*
     public Integer setInteger(String name, int value)
     {
         return this.intValues.put(name, value);
@@ -325,4 +310,5 @@ public final class DevelopData
     {
         return this.stringLists.put(name, value);
     }
+    */
 }

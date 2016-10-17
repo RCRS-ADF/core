@@ -1,0 +1,11 @@
+<map id="adf.agent.platoon.Platoon&lt; E extends StandardEntity &gt;" name="adf.agent.platoon.Platoon&lt; E extends StandardEntity &gt;">
+<area shape="rect" id="node2" href="$classadf_1_1agent_1_1Agent.html" title="adf::agent::Agent\&lt; E \&gt;" alt="" coords="837,237,1009,264"/>
+<area shape="rect" id="node4" href="$classadf_1_1agent_1_1info_1_1AgentInfo.html" title="adf.agent.info.AgentInfo" alt="" coords="441,85,619,112"/>
+<area shape="rect" id="node5" href="$classadf_1_1agent_1_1module_1_1ModuleManager.html" title="adf.agent.module.ModuleManager" alt="" coords="409,136,651,163"/>
+<area shape="rect" id="node6" href="$classadf_1_1agent_1_1info_1_1WorldInfo.html" title="adf.agent.info.WorldInfo" alt="" coords="441,187,619,213"/>
+<area shape="rect" id="node8" href="$classadf_1_1agent_1_1precompute_1_1PrecomputeData.html" title="adf.agent.precompute.PrecomputeData" alt="" coords="391,237,669,264"/>
+<area shape="rect" id="node10" href="$classadf_1_1agent_1_1communication_1_1MessageManager.html" title="adf.agent.communication.\lMessageManager" alt="" coords="434,289,626,330"/>
+<area shape="rect" id="node11" href="$classadf_1_1agent_1_1develop_1_1DevelopData.html" title="adf.agent.develop.DevelopData" alt="" coords="416,355,644,381"/>
+<area shape="rect" id="node12" href="$classadf_1_1agent_1_1info_1_1ScenarioInfo.html" title="adf.agent.info.ScenarioInfo" alt="" coords="431,405,629,432"/>
+<area shape="rect" id="node13" href="$classadf_1_1agent_1_1config_1_1ModuleConfig.html" title="adf.agent.config.ModuleConfig" alt="" coords="421,456,639,483"/>
+</map>

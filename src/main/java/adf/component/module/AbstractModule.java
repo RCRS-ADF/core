@@ -13,18 +13,18 @@ public abstract class AbstractModule {
     protected AgentInfo agentInfo;
     protected WorldInfo worldInfo;
     protected ModuleManager moduleManager;
-    protected DevelopData debugData;
+    protected DevelopData developData;
 
     protected int countPrecompute;
     protected int countResume;
     protected int countPreparate;
 
-    public AbstractModule(AgentInfo ai, WorldInfo wi, ScenarioInfo si, ModuleManager moduleManager, DevelopData debugData) {
+    public AbstractModule(AgentInfo ai, WorldInfo wi, ScenarioInfo si, ModuleManager moduleManager, DevelopData developData) {
         this.worldInfo = wi;
         this.agentInfo = ai;
         this.scenarioInfo = si;
         this.moduleManager = moduleManager;
-        this.debugData = debugData;
+        this.developData = developData;
         this.countPrecompute = 0;
         this.countResume = 0;
         this.countPreparate = 0;

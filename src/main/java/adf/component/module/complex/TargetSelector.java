@@ -13,8 +13,8 @@ import rescuecore2.worldmodel.EntityID;
 
 public abstract class TargetSelector<E extends StandardEntity> extends AbstractModule {
 
-    public TargetSelector(AgentInfo ai, WorldInfo wi, ScenarioInfo si, ModuleManager moduleManager, DevelopData debugData) {
-        super(ai, wi, si, moduleManager, debugData);
+    public TargetSelector(AgentInfo ai, WorldInfo wi, ScenarioInfo si, ModuleManager moduleManager, DevelopData developData) {
+        super(ai, wi, si, moduleManager, developData);
     }
 
     public abstract EntityID getTarget();

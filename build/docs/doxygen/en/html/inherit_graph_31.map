@@ -1,0 +1,9 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="node1" href="$classadf_1_1component_1_1tactics_1_1Tactics.html" title="adf.component.tactics.Tactics" alt="" coords="5,78,220,105"/>
+<area shape="rect" id="node2" href="$classadf_1_1component_1_1tactics_1_1TacticsAmbulance.html" title="adf.component.tactics.Tactics\lAmbulance" alt="" coords="279,9,494,51"/>
+<area shape="rect" id="node4" href="$classadf_1_1component_1_1tactics_1_1TacticsFire.html" title="adf.component.tactics.TacticsFire" alt="" coords="268,78,505,105"/>
+<area shape="rect" id="node6" href="$classadf_1_1component_1_1tactics_1_1TacticsPolice.html" title="adf.component.tactics.Tactics\lPolice" alt="" coords="279,132,494,173"/>
+<area shape="rect" id="node3" href="$classadf_1_1launcher_1_1dummy_1_1tactics_1_1DummyTacticsAmbulance.html" title="adf.launcher.dummy.tactics.\lDummyTacticsAmbulance" alt="" coords="553,5,757,47"/>
+<area shape="rect" id="node5" href="$classadf_1_1launcher_1_1dummy_1_1tactics_1_1DummyTacticsFire.html" title="adf.launcher.dummy.tactics.\lDummyTacticsFire" alt="" coords="553,71,757,112"/>
+<area shape="rect" id="node7" href="$classadf_1_1launcher_1_1dummy_1_1tactics_1_1DummyTacticsPolice.html" title="adf.launcher.dummy.tactics.\lDummyTacticsPolice" alt="" coords="553,136,757,177"/>
+</map>

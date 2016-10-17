@@ -13,12 +13,11 @@ import rescuecore2.components.ComponentLauncher;
 import rescuecore2.config.Config;
 import rescuecore2.connection.ConnectionException;
 
-public class ConnectorAmbulanceCentre implements Connector {
+public class ConnectorAmbulanceCentre extends Connector {
 	@Override
 	public void connect(ComponentLauncher launcher, Config config, AbstractLoader loader)
 	{
 		int count = config.getIntValue(ConfigKey.KEY_AMBULANCE_CENTRE_COUNT, 0);
-		int connected = 0;
 
 		if (count == 0) {
 			return;
@@ -29,7 +28,7 @@ public class ConnectorAmbulanceCentre implements Connector {
 				ControlAmbulance controlAmbulance;
 				if (loader.getControlAmbulance() == null)
 				{
-				    ConsoleOutput.error("Cannot Load AmbulanceCentre Control !!");
+				    ConsoleOutput.error("Cannot Load AmbulanceCentre Control");
 					controlAmbulance = new DummyControlAmbulance();
 				}
 				else

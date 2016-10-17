@@ -1,0 +1,9 @@
+<map id="クラス階層図" name="クラス階層図">
+<area shape="rect" id="node1" href="$classadf_1_1component_1_1control_1_1Control.html" title="adf.component.control.Control" alt="" coords="5,78,224,105"/>
+<area shape="rect" id="node2" href="$classadf_1_1component_1_1control_1_1ControlAmbulance.html" title="adf.component.control.Control\lAmbulance" alt="" coords="284,9,503,51"/>
+<area shape="rect" id="node4" href="$classadf_1_1component_1_1control_1_1ControlFire.html" title="adf.component.control.ControlFire" alt="" coords="272,78,515,105"/>
+<area shape="rect" id="node6" href="$classadf_1_1component_1_1control_1_1ControlPolice.html" title="adf.component.control.Control\lPolice" alt="" coords="284,132,503,173"/>
+<area shape="rect" id="node3" href="$classadf_1_1launcher_1_1dummy_1_1control_1_1DummyControlAmbulance.html" title="adf.launcher.dummy.control.\lDummyControlAmbulance" alt="" coords="563,5,769,47"/>
+<area shape="rect" id="node5" href="$classadf_1_1launcher_1_1dummy_1_1control_1_1DummyControlFire.html" title="adf.launcher.dummy.control.\lDummyControlFire" alt="" coords="563,71,769,112"/>
+<area shape="rect" id="node7" href="$classadf_1_1launcher_1_1dummy_1_1control_1_1DummyControlPolice.html" title="adf.launcher.dummy.control.\lDummyControlPolice" alt="" coords="563,136,769,177"/>
+</map>

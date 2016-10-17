@@ -13,14 +13,12 @@ import rescuecore2.components.ComponentLauncher;
 import rescuecore2.config.Config;
 import rescuecore2.connection.ConnectionException;
 
-public class ConnectorPoliceForce implements Connector
+public class ConnectorPoliceForce extends Connector
 {
-
 	@Override
 	public void connect(ComponentLauncher launcher, Config config, AbstractLoader loader)
 	{
 		int count = config.getIntValue(ConfigKey.KEY_POLICE_FORCE_COUNT, 0);
-		int connected = 0;
 
 		if (count == 0) {
 			return;
@@ -32,7 +30,7 @@ public class ConnectorPoliceForce implements Connector
 				TacticsPolice tacticsPolice;
 				if (loader.getTacticsPolice() == null)
 				{
-					ConsoleOutput.error("Cannot Load PoliceForce Tactics !!");
+					ConsoleOutput.error("Cannot Load PoliceForce Tactics");
 					tacticsPolice = new DummyTacticsPolice();
 				}
 				else
@@ -55,10 +53,9 @@ public class ConnectorPoliceForce implements Connector
 				connected++;
 			}
 		}
-		catch (ComponentConnectionException | InterruptedException | ConnectionException e)
+		catch (InterruptedException | ConnectionException | ComponentConnectionException e)
 		{
 			//e.printStackTrace();
-			//System.out.println("[ERROR ] Cannot Load PoliceForce Tactics !!");
 		}
 		ConsoleOutput.finish("Connect PoliceForce (success:" + connected + ")");
 	}

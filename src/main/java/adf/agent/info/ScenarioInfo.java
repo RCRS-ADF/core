@@ -3,11 +3,19 @@ package adf.agent.info;
 import adf.launcher.ConfigKey;
 import rescuecore2.config.Config;
 
+/**
+ * \~english
+ * \~japanese シナリオに関する情報を取得する
+ */
 public class ScenarioInfo
 {
+	/**
+     * \~english
+	 * \~japanese getMode()で返る値
+	 */
 	public enum Mode
 	{
-		NON_PRECOMPUTE,
+		NON_PRECOMPUTE /** \~english  \~japanese 非事前計算時 */,
 		PRECOMPUTED,
 		PRECOMPUTATION_PHASE
 	}
@@ -15,36 +23,69 @@ public class ScenarioInfo
 	private Config config;
 	private Mode mode;
 
+	/**
+	 * (internal invoking only).
+	 * @param config base config
+	 * @param mode agent run mode
+	 */
 	public ScenarioInfo(Config config, Mode mode)
 	{
 		this.config = config;
 		this.mode = mode;
 	}
 
+	/**
+	 * (internal invoking only).
+	 * @param config base config
+	 */
 	public ScenarioInfo(Config config)
 	{
 		this(config, Mode.NON_PRECOMPUTE);
 	}
 
+	/**
+	 * (internal invoking only).
+	 * @param config base config
+	 */
 	public void setConfig(Config config)
 	{
 		this.config = config;
 	}
 
+	/**
+	 * \~english
+	 * \~japanese エージェントの起動モードを返す
+	 * @return agent run mode
+	 */
 	public Mode getMode()
 	{
 		return mode;
 	}
 
+	/**
+	 * \~english
+	 * \~japanese rescuecoreのConfigを返す
+	 * @return raw config
+	 */
 	public Config getRawConfig()
 	{
 		return this.config;
 	}
 
+	/**
+	 * \~english
+	 * \~japanese 消火の最大パワーを返す
+	 * @return fire.extinguish.max-sum
+	 */
 	public int getFireExtinguishMaxSum() {
 		return this.config.getIntValue("fire.extinguish.max-sum");
 	}
 
+	/**
+	 * \~english
+	 * \~japanese Platoon系エージェントの最大通信チャンネル数を返す
+	 * @return comms.channels.max.platoon
+	 */
 	public int getCommsChannelsMaxPlatoon()
 	{
 		return config.getIntValue("comms.channels.max.platoon");

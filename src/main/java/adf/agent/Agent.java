@@ -46,7 +46,7 @@ public abstract class Agent<E extends StandardEntity> extends AbstractAgent<Stan
 	protected boolean isDebugMode;
 	private int ignoreTime;
 
-	//public Agent(String moduleConfigFileName, boolean isPrecompute, String dataStorageName, boolean isDevelopMode, String debugDataFileName, List<String> rawDebugData)
+	//public Agent(String moduleConfigFileName, boolean isPrecompute, String dataStorageName, boolean isDevelopMode, String developDataFileName, List<String> rawdevelopData)
 	public Agent(String moduleConfigFileName, boolean isPrecompute, String dataStorageName, boolean isDebugMode, DevelopData developData)
 	{
 		this.isPrecompute = isPrecompute;
