@@ -109,7 +109,7 @@ public class LaunchSupporter
         System.out.println("-mc [FILE]\t\t\t\tModuleConfig file name");
         System.out.println("-dev [0|1]\t\t\t\tDevelop flag");
         System.out.println("-dd [JSON]\t\t\t\tDevelopData JSON");
-        System.out.println("-df [JSON File]\t\t\tDevelopData JSON file");
+        System.out.println("-df [JSON File]\t\t\t\tDevelopData JSON file");
         System.out.println("-compile\t\t\t\trun compile (with -check)");
         System.out.println("-javahome [JAVA_HOME]\t\t\tcompiler java-home");
         System.out.println("-autocp\t\t\t\t\tauto load class path form " + DIRECTORY_LIBRARY);

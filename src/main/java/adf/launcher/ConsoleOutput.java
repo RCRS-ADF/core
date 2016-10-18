@@ -75,7 +75,7 @@ public class ConsoleOutput
         if (!classPath.startsWith("jar"))
         { return buildTimestamp; }
 
-        String manifestPath = classPath.substring(0, classPath.lastIndexOf("!") + 1) + File.separator + "META-INF" + File.separator + "MANIFEST.MF";
+        String manifestPath = classPath.substring(0, classPath.lastIndexOf("!") + 1) + "/META-INF/MANIFEST.MF";
         try
         {
             Manifest manifest = new Manifest(new URL(manifestPath).openStream());
