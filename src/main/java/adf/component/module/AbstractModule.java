@@ -15,9 +15,11 @@ public abstract class AbstractModule {
     protected ModuleManager moduleManager;
     protected DevelopData developData;
 
-    protected int countPrecompute;
-    protected int countResume;
-    protected int countPreparate;
+    private int countPrecompute;
+    private int countResume;
+    private int countPreparate;
+    private int countUpdateInfo;
+    //private int count
 
     public AbstractModule(AgentInfo ai, WorldInfo wi, ScenarioInfo si, ModuleManager moduleManager, DevelopData developData) {
         this.worldInfo = wi;
@@ -28,6 +30,7 @@ public abstract class AbstractModule {
         this.countPrecompute = 0;
         this.countResume = 0;
         this.countPreparate = 0;
+        this.countUpdateInfo = 0;
     }
 
     public AbstractModule precompute(PrecomputeData precomputeData) {
@@ -61,5 +64,25 @@ public abstract class AbstractModule {
 
     public int getCountPreparate() {
         return this.countPreparate;
+    }
+
+    public int getCountUpdateInfo() {
+        return this.countUpdateInfo;
+    }
+
+    public void resetCountPrecompute() {
+        this.countPrecompute = 0;
+    }
+
+    public void resetCountResume() {
+        this.countResume = 0;
+    }
+
+    public void resetCountPreparate() {
+        this.countPreparate = 0;
+    }
+
+    public void resetCountUpdateInfo() {
+        this.countUpdateInfo = 0;
     }
 }
