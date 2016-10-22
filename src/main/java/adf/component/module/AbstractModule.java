@@ -19,7 +19,7 @@ public abstract class AbstractModule {
     private int countResume;
     private int countPreparate;
     private int countUpdateInfo;
-    //private int count
+    private int countUpdateInfoCurrentTime;
 
     public AbstractModule(AgentInfo ai, WorldInfo wi, ScenarioInfo si, ModuleManager moduleManager, DevelopData developData) {
         this.worldInfo = wi;
@@ -31,6 +31,7 @@ public abstract class AbstractModule {
         this.countResume = 0;
         this.countPreparate = 0;
         this.countUpdateInfo = 0;
+        this.countUpdateInfoCurrentTime = 0;
     }
 
     public AbstractModule precompute(PrecomputeData precomputeData) {
@@ -49,6 +50,12 @@ public abstract class AbstractModule {
     }
 
     public AbstractModule updateInfo(MessageManager messageManager){
+        if (this.countUpdateInfoCurrentTime != this.agentInfo.getTime())
+        {
+            this.countUpdateInfo = 0;
+            this.countUpdateInfoCurrentTime = this.agentInfo.getTime();
+        }
+        this.countUpdateInfo++;
         return this;
     }
 
@@ -67,6 +74,11 @@ public abstract class AbstractModule {
     }
 
     public int getCountUpdateInfo() {
+        if (this.countUpdateInfoCurrentTime != this.agentInfo.getTime())
+        {
+            this.countUpdateInfo = 0;
+            this.countUpdateInfoCurrentTime = this.agentInfo.getTime();
+        }
         return this.countUpdateInfo;
     }
 
