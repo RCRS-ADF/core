@@ -7,6 +7,7 @@ import adf.agent.info.ScenarioInfo;
 import adf.agent.info.WorldInfo;
 import adf.component.extaction.ExtAction;
 import adf.component.module.AbstractModule;
+import rescuecore2.config.NoSuchConfigOptionException;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -37,35 +38,40 @@ public class ModuleManager
     }
 
     @SuppressWarnings("unchecked")
-    public final <T extends AbstractModule> T getModule(String moduleName, String defaultName) {
-        AbstractModule instance = this.moduleMap.get(moduleName);
-        if(instance != null) {
-            return (T)instance;
-        }
+    public final <T extends AbstractModule> T getModule(String moduleName, String defaultClassName) {
+        String className = moduleName;
+        try
+        { className = this.moduleConfig.getValue(moduleName); }
+        catch (NoSuchConfigOptionException ignored) { }
+
         try {
-            String defaultModuleStr = (defaultName != null ? this.moduleConfig.getValue(moduleName, defaultName) : this.moduleConfig.getValue(moduleName));
-            if (defaultModuleStr != null) {
-                Class<?> moduleClass = Class.forName(defaultModuleStr);
-                if (AbstractModule.class.isAssignableFrom(moduleClass)) {
-                    instance = this.getModule((Class<AbstractModule>) moduleClass);
-                    this.moduleMap.put(moduleName, instance);
-                    return (T)instance;
-                }
-            } else {
-                Class<?> moduleClass = Class.forName(moduleName);
-                if (AbstractModule.class.isAssignableFrom(moduleClass)) {
-                    return (T) this.getModule((Class<AbstractModule>) moduleClass);
-                }
+            Class<?> moduleClass;
+            try {
+                moduleClass = Class.forName(className);
+            }catch (ClassNotFoundException | NullPointerException e) {
+                className = defaultClassName;
+                moduleClass = Class.forName(className);
             }
-        }catch (ClassNotFoundException e) {
+
+            AbstractModule instance = this.moduleMap.get(className);
+            if(instance != null) {
+                return (T)instance;
+            }
+
+            if (AbstractModule.class.isAssignableFrom(moduleClass)) {
+                instance = this.getModule((Class<AbstractModule>) moduleClass);
+                this.moduleMap.put(className, instance);
+                return (T)instance;
+            }
+        }catch (ClassNotFoundException | NullPointerException e) {
             throw new RuntimeException(e);
         }
-        throw new IllegalArgumentException("Module name is not found : " + moduleName);
+        throw new IllegalArgumentException("Module name is not found : " + className);
     }
 
     @SuppressWarnings("unchecked")
     public final <T extends AbstractModule> T getModule(String moduleName) {
-        return this.getModule(this.moduleConfig.getValue(moduleName), null);
+        return this.getModule(moduleName, null);
     }
 
     @SuppressWarnings("unchecked")
@@ -81,30 +87,35 @@ public class ModuleManager
     }
 
     @SuppressWarnings("unchecked")
-    public final ExtAction getExtAction(String actionName, String defaultName) {
-        ExtAction instance = this.actionMap.get(actionName);
-        if(instance != null) {
-            return instance;
-        }
+    public final ExtAction getExtAction(String actionName, String defaultClassName) {
+        String className = actionName;
+        try
+        { className = this.moduleConfig.getValue(actionName); }
+        catch (NoSuchConfigOptionException ignored) { }
+
         try {
-            String defaultStr = (defaultName != null ? this.moduleConfig.getValue(actionName, defaultName) : this.moduleConfig.getValue(actionName));
-            if (defaultStr != null) {
-                Class<?> actionClass = Class.forName(defaultStr);
-                if (ExtAction.class.isAssignableFrom(actionClass)) {
-                    instance = this.getExtAction((Class<ExtAction>) actionClass);
-                    this.actionMap.put(actionName, instance);
-                    return instance;
-                }
-            } else {
-                Class<?> actionClass = Class.forName(actionName);
-                if (ExtAction.class.isAssignableFrom(actionClass)) {
-                    return this.getExtAction((Class<ExtAction>) actionClass);
-                }
+            Class<?> actionClass;
+            try {
+                actionClass = Class.forName(className);
+            }catch (ClassNotFoundException | NullPointerException e) {
+                className = defaultClassName;
+                actionClass = Class.forName(className);
             }
-        }catch (ClassNotFoundException e) {
+
+            ExtAction instance = this.actionMap.get(className);
+            if(instance != null) {
+                return instance;
+            }
+
+            if (ExtAction.class.isAssignableFrom(actionClass)) {
+                instance = this.getExtAction((Class<ExtAction>) actionClass);
+                this.actionMap.put(className, instance);
+                return instance;
+            }
+        }catch (ClassNotFoundException | NullPointerException e) {
             throw new RuntimeException(e);
         }
-        throw new IllegalArgumentException("ExtAction name is not found : " + actionName);
+        throw new IllegalArgumentException("ExtAction name is not found : " + className);
     }
 
     @SuppressWarnings("unchecked")

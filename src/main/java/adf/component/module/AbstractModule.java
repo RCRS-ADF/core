@@ -8,7 +8,8 @@ import adf.agent.info.WorldInfo;
 import adf.agent.module.ModuleManager;
 import adf.agent.precompute.PrecomputeData;
 
-public abstract class AbstractModule {
+public abstract class AbstractModule
+{
     protected ScenarioInfo scenarioInfo;
     protected AgentInfo agentInfo;
     protected WorldInfo worldInfo;
