@@ -8,6 +8,8 @@ import adf.agent.info.WorldInfo;
 import adf.agent.module.ModuleManager;
 import rescuecore2.worldmodel.EntityID;
 
+import java.util.Collection;
+
 abstract public class ExtAction {
 	protected ScenarioInfo scenarioInfo;
 	protected AgentInfo agentInfo;
@@ -27,6 +29,10 @@ abstract public class ExtAction {
 	}
 
     public abstract ExtAction setTarget(EntityID... targets);
+
+	public ExtAction setTarget(Collection<EntityID> targets) {
+        return setTarget(targets.toArray(new EntityID[targets.size()]));
+    }
 
 	public abstract ExtAction calc();
 
