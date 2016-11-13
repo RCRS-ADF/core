@@ -9,7 +9,7 @@ import adf.agent.module.ModuleManager;
 import adf.agent.precompute.PrecomputeData;
 import rescuecore2.standard.entities.Area;
 
-public abstract class Search extends TargetSelector<Area> {
+public abstract class Search extends TargetDetector<Area> {
 
     public Search(AgentInfo ai, WorldInfo wi, ScenarioInfo si, ModuleManager moduleManager, DevelopData developData) {
         super(ai, wi, si, moduleManager, developData);

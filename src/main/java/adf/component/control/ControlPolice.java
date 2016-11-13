@@ -1,6 +1,12 @@
 package adf.component.control;
 
-public abstract class ControlPolice extends Control
+import adf.component.tactics.center.TacticsPoliceCenter;
+
+/**
+ * @deprecated change class name {@link TacticsPoliceCenter}
+ */
+@Deprecated
+public abstract class ControlPolice extends TacticsPoliceCenter
 {
 	public ControlPolice(ControlPolice parent)
 	{

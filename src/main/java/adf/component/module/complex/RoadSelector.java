@@ -9,7 +9,11 @@ import adf.agent.module.ModuleManager;
 import adf.agent.precompute.PrecomputeData;
 import rescuecore2.standard.entities.Road;
 
-public abstract class RoadSelector extends TargetSelector<Road> {
+/**
+ * @deprecated change class name {@link RoadDetector}
+ */
+@Deprecated
+public abstract class RoadSelector extends RoadDetector {
 
     public RoadSelector(AgentInfo ai, WorldInfo wi, ScenarioInfo si, ModuleManager moduleManager, DevelopData developData) {
         super(ai, wi, si, moduleManager, developData);

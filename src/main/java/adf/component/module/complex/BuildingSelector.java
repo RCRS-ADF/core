@@ -9,7 +9,11 @@ import adf.agent.module.ModuleManager;
 import adf.agent.precompute.PrecomputeData;
 import rescuecore2.standard.entities.Building;
 
-public abstract class BuildingSelector extends TargetSelector<Building> {
+/**
+ * @deprecated change class name {@link BuildingDetector}
+ */
+@Deprecated
+public abstract class BuildingSelector extends BuildingDetector {
 
     public BuildingSelector(AgentInfo ai, WorldInfo wi, ScenarioInfo si, ModuleManager moduleManager, DevelopData developData) {
         super(ai, wi, si, moduleManager, developData);

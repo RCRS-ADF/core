@@ -11,6 +11,7 @@ public class CommandPolice extends StandardMessage
 	public static final int ACTION_REST = 0;
 	public static final int ACTION_MOVE = 1;
 	public static final int ACTION_CLEAR = 2;
+    public static final int ACTION_AUTONOMY = 3;
 
 	private static final int SIZE_TO = 32;
 	private static final int SIZE_TARGET = 32;

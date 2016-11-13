@@ -1,18 +1,17 @@
 package adf.agent.office;
 
 import adf.agent.develop.DevelopData;
-import adf.component.control.ControlAmbulance;
+import adf.component.tactics.center.TacticsAmbulanceCenter;
 import rescuecore2.standard.entities.Building;
 import rescuecore2.standard.entities.StandardEntityURN;
 
 import java.util.EnumSet;
-import java.util.List;
 
 public class OfficeAmbulance extends Office<Building>
 {
-	public OfficeAmbulance(ControlAmbulance control, String moduleConfigFileName, boolean isPrecompute, boolean isDebugMode, DevelopData developData)
+	public OfficeAmbulance(TacticsAmbulanceCenter tacticsAmbulanceCenter, String moduleConfigFileName, boolean isPrecompute, boolean isDebugMode, DevelopData developData)
 	{
-		super(control, moduleConfigFileName, isPrecompute, DATASTORAGE_FILE_NAME_AMBULANCE, isDebugMode, developData);
+		super(tacticsAmbulanceCenter, moduleConfigFileName, isPrecompute, DATASTORAGE_FILE_NAME_AMBULANCE, isDebugMode, developData);
 	}
 
 	@Override

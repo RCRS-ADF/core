@@ -1,18 +1,17 @@
 package adf.agent.office;
 
 import adf.agent.develop.DevelopData;
-import adf.component.control.ControlPolice;
+import adf.component.tactics.center.TacticsPoliceCenter;
 import rescuecore2.standard.entities.Building;
 import rescuecore2.standard.entities.StandardEntityURN;
 
 import java.util.EnumSet;
-import java.util.List;
 
 public class OfficePolice extends Office<Building>
 {
-	public OfficePolice(ControlPolice control, String moduleConfigFileName, boolean isPrecompute, boolean isDebugMode, DevelopData developData)
+	public OfficePolice(TacticsPoliceCenter tacticsPoliceCenter, String moduleConfigFileName, boolean isPrecompute, boolean isDebugMode, DevelopData developData)
 	{
-		super(control, moduleConfigFileName, isPrecompute, DATASTORAGE_FILE_NAME_POLICE, isDebugMode, developData);
+		super(tacticsPoliceCenter, moduleConfigFileName, isPrecompute, DATASTORAGE_FILE_NAME_POLICE, isDebugMode, developData);
 	}
 
 	@Override

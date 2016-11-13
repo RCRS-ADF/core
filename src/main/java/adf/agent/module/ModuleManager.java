@@ -87,7 +87,7 @@ public class ModuleManager
     }
 
     @SuppressWarnings("unchecked")
-    public final ExtAction getExtAction(String actionName, String defaultClassName) {
+    public final <A extends ExtAction> A getExtAction(String actionName, String defaultClassName) {
         String className = actionName;
         try
         { className = this.moduleConfig.getValue(actionName); }
@@ -104,13 +104,13 @@ public class ModuleManager
 
             ExtAction instance = this.actionMap.get(className);
             if(instance != null) {
-                return instance;
+                return (A)instance;
             }
 
             if (ExtAction.class.isAssignableFrom(actionClass)) {
                 instance = this.getExtAction((Class<ExtAction>) actionClass);
                 this.actionMap.put(className, instance);
-                return instance;
+                return (A)instance;
             }
         }catch (ClassNotFoundException | NullPointerException e) {
             throw new RuntimeException(e);
@@ -119,7 +119,7 @@ public class ModuleManager
     }
 
     @SuppressWarnings("unchecked")
-    public final ExtAction getExtAction(String actionName) {
+    public final <A extends ExtAction> A getExtAction(String actionName) {
         return getExtAction(actionName, null);
     }
 

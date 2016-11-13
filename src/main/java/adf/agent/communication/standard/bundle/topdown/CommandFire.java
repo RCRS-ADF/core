@@ -12,6 +12,7 @@ public class CommandFire extends StandardMessage
 	public static final int ACTION_MOVE = 1;
 	public static final int ACTION_EXTINGUISH = 2;
 	public static final int ACTION_REFILL = 3;
+    public static final int ACTION_AUTONOMY = 4;
 
 	private static final int SIZE_TO = 32;
 	private static final int SIZE_TARGET = 32;

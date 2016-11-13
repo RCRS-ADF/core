@@ -13,6 +13,7 @@ public class CommandAmbulance extends StandardMessage
 	public static final int ACTION_RESCUE = 2;
 	public static final int ACTION_LOAD = 3;
 	public static final int ACTION_UNLOAD = 4;
+	public static final int ACTION_AUTONOMY = 5;
 
 	private static final int SIZE_TO = 32;
 	private static final int SIZE_TARGET = 32;

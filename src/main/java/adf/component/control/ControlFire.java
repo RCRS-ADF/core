@@ -1,6 +1,12 @@
 package adf.component.control;
 
-public abstract class ControlFire extends Control
+import adf.component.tactics.center.TacticsFireCenter;
+
+/**
+ * @deprecated change class name {@link TacticsFireCenter}
+ */
+@Deprecated
+public abstract class ControlFire extends TacticsFireCenter
 {
 	public ControlFire(ControlFire parent)
 	{

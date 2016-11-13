@@ -1,0 +1,50 @@
+package adf.component.module.complex.center;
+
+
+import adf.agent.communication.MessageManager;
+import adf.agent.develop.DevelopData;
+import adf.agent.info.AgentInfo;
+import adf.agent.info.ScenarioInfo;
+import adf.agent.info.WorldInfo;
+import adf.agent.module.ModuleManager;
+import adf.agent.precompute.PrecomputeData;
+import rescuecore2.worldmodel.EntityID;
+
+import java.util.Map;
+
+public abstract class AmbulanceTargetAllocation extends TargetAllocation {
+
+    public AmbulanceTargetAllocation(AgentInfo ai, WorldInfo wi, ScenarioInfo si, ModuleManager moduleManager, DevelopData developData) {
+        super(ai, wi, si, moduleManager, developData);
+    }
+
+    @Override
+    public abstract Map<EntityID, EntityID> getResult();
+
+    @Override
+    public abstract AmbulanceTargetAllocation calc();
+
+    @Override
+    public AmbulanceTargetAllocation precompute(PrecomputeData precomputeData) {
+        super.precompute(precomputeData);
+        return this;
+    }
+
+    @Override
+    public AmbulanceTargetAllocation resume(PrecomputeData precomputeData) {
+        super.resume(precomputeData);
+        return this;
+    }
+
+    @Override
+    public AmbulanceTargetAllocation preparate() {
+        super.preparate();
+        return this;
+    }
+
+    @Override
+    public AmbulanceTargetAllocation updateInfo(MessageManager messageManager) {
+        super.updateInfo(messageManager);
+        return this;
+    }
+}

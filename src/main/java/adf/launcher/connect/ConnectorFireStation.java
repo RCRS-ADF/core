@@ -3,11 +3,11 @@ package adf.launcher.connect;
 import adf.agent.config.ModuleConfig;
 import adf.agent.develop.DevelopData;
 import adf.agent.office.OfficeFire;
-import adf.component.control.ControlFire;
 import adf.component.AbstractLoader;
+import adf.component.tactics.center.TacticsFireCenter;
 import adf.launcher.ConfigKey;
 import adf.launcher.ConsoleOutput;
-import adf.launcher.dummy.control.DummyControlFire;
+import adf.launcher.dummy.control.DummyTacticsFireCenter;
 import rescuecore2.components.ComponentConnectionException;
 import rescuecore2.components.ComponentLauncher;
 import rescuecore2.config.Config;
@@ -26,15 +26,18 @@ public class ConnectorFireStation extends Connector
 		
 		try {
 			for (int i = 0; i != count; ++i) {
-				ControlFire controlFire;
-				if (loader.getControlFire() == null)
+				TacticsFireCenter tacticsFireCenter;
+				if (loader.getTacticsFireCenter() == null && loader.getControlFire() == null)
 				{
-					ConsoleOutput.error("Cannot Load FireStation Control");
-					controlFire = new DummyControlFire();
+					ConsoleOutput.error("Cannot Load FireStation Tactics");
+					tacticsFireCenter = new DummyTacticsFireCenter();
 				}
 				else
 				{
-					controlFire = loader.getControlFire();
+					tacticsFireCenter = loader.getTacticsFireCenter();
+					if(tacticsFireCenter == null) {
+						tacticsFireCenter = loader.getControlFire();
+					}
 				}
 				DevelopData developData = new DevelopData(
 						config.getBooleanValue(ConfigKey.KEY_DEVELOP_FLAG, false),
@@ -42,7 +45,7 @@ public class ConnectorFireStation extends Connector
 						config.getArrayValue(ConfigKey.KEY_DEVELOP_DATA, "")
 				);
 				launcher.connect(new OfficeFire(
-						controlFire,
+						tacticsFireCenter,
 						config.getValue(ConfigKey.KEY_MODULE_CONFIG_FILE_NAME, ModuleConfig.DEFAULT_CONFIG_FILE_NAME),
 						config.getBooleanValue(ConfigKey.KEY_PRECOMPUTE, false),
 						config.getBooleanValue(ConfigKey.KEY_DEBUG_FLAG, false),

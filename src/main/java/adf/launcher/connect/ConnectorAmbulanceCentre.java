@@ -3,11 +3,11 @@ package adf.launcher.connect;
 import adf.agent.config.ModuleConfig;
 import adf.agent.develop.DevelopData;
 import adf.agent.office.OfficeAmbulance;
-import adf.component.control.ControlAmbulance;
 import adf.component.AbstractLoader;
+import adf.component.tactics.center.TacticsAmbulanceCenter;
 import adf.launcher.ConfigKey;
 import adf.launcher.ConsoleOutput;
-import adf.launcher.dummy.control.DummyControlAmbulance;
+import adf.launcher.dummy.control.DummyTacticsAmbulanceCenter;
 import rescuecore2.components.ComponentConnectionException;
 import rescuecore2.components.ComponentLauncher;
 import rescuecore2.config.Config;
@@ -25,15 +25,18 @@ public class ConnectorAmbulanceCentre extends Connector {
 
 		try {
 			for (int i = 0; i != count; ++i) {
-				ControlAmbulance controlAmbulance;
-				if (loader.getControlAmbulance() == null)
+				TacticsAmbulanceCenter tacticsAmbulanceCenter;
+				if (loader.getTacticsAmbulanceCenter() == null && loader.getControlAmbulance() == null)
 				{
-				    ConsoleOutput.error("Cannot Load AmbulanceCentre Control");
-					controlAmbulance = new DummyControlAmbulance();
+				    ConsoleOutput.error("Cannot Load AmbulanceCentre Tactics");
+					tacticsAmbulanceCenter = new DummyTacticsAmbulanceCenter();
 				}
 				else
 				{
-					controlAmbulance = loader.getControlAmbulance();
+					tacticsAmbulanceCenter = loader.getTacticsAmbulanceCenter();
+					if(tacticsAmbulanceCenter == null) {
+						tacticsAmbulanceCenter = loader.getControlAmbulance();
+					}
 				}
 				DevelopData developData = new DevelopData(
 						config.getBooleanValue(ConfigKey.KEY_DEVELOP_FLAG, false),
@@ -41,7 +44,7 @@ public class ConnectorAmbulanceCentre extends Connector {
 						config.getArrayValue(ConfigKey.KEY_DEVELOP_DATA, "")
 						);
 				launcher.connect(new OfficeAmbulance(
-						controlAmbulance,
+						tacticsAmbulanceCenter,
 						config.getValue(ConfigKey.KEY_MODULE_CONFIG_FILE_NAME, ModuleConfig.DEFAULT_CONFIG_FILE_NAME),
 						config.getBooleanValue(ConfigKey.KEY_PRECOMPUTE, false),
 						config.getBooleanValue(ConfigKey.KEY_DEBUG_FLAG, false),

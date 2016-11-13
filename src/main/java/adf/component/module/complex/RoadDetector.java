@@ -8,42 +8,38 @@ import adf.agent.info.ScenarioInfo;
 import adf.agent.info.WorldInfo;
 import adf.agent.module.ModuleManager;
 import adf.agent.precompute.PrecomputeData;
-import rescuecore2.standard.entities.Human;
+import rescuecore2.standard.entities.Road;
 
-/**
- * @deprecated change class name {@link HumanDetector}
- */
-@Deprecated
-public abstract class HumanSelector extends HumanDetector {
+public abstract class RoadDetector extends TargetDetector<Road> {
 
-    public HumanSelector(AgentInfo ai, WorldInfo wi, ScenarioInfo si, ModuleManager moduleManager, DevelopData developData) {
+    public RoadDetector(AgentInfo ai, WorldInfo wi, ScenarioInfo si, ModuleManager moduleManager, DevelopData developData) {
         super(ai, wi, si, moduleManager, developData);
     }
 
     @Override
-    public HumanSelector precompute(PrecomputeData precomputeData) {
+    public RoadDetector precompute(PrecomputeData precomputeData) {
         super.precompute(precomputeData);
         return this;
     }
 
     @Override
-    public HumanSelector resume(PrecomputeData precomputeData) {
+    public RoadDetector resume(PrecomputeData precomputeData) {
         super.resume(precomputeData);
         return this;
     }
 
     @Override
-    public HumanSelector preparate() {
+    public RoadDetector preparate() {
         super.preparate();
         return this;
     }
 
     @Override
-    public HumanSelector updateInfo(MessageManager messageManager) {
+    public RoadDetector updateInfo(MessageManager messageManager) {
         super.updateInfo(messageManager);
         return this;
     }
 
     @Override
-    public abstract HumanSelector calc();
+    public abstract RoadDetector calc();
 }

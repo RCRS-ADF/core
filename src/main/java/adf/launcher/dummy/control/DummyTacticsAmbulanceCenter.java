@@ -1,15 +1,15 @@
 package adf.launcher.dummy.control;
 
 import adf.agent.communication.MessageManager;
+import adf.agent.develop.DevelopData;
 import adf.agent.info.AgentInfo;
 import adf.agent.info.ScenarioInfo;
 import adf.agent.info.WorldInfo;
 import adf.agent.module.ModuleManager;
-import adf.agent.develop.DevelopData;
 import adf.agent.precompute.PrecomputeData;
-import adf.component.control.ControlAmbulance;
+import adf.component.tactics.center.TacticsAmbulanceCenter;
 
-public class DummyControlAmbulance extends ControlAmbulance
+public class DummyTacticsAmbulanceCenter extends TacticsAmbulanceCenter
 {
     @Override
     public void initialize(AgentInfo agentInfo, WorldInfo worldInfo, ScenarioInfo scenarioInfo, ModuleManager moduleManager, MessageManager messageManager, DevelopData developData)

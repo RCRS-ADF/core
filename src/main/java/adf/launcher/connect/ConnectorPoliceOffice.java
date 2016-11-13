@@ -3,11 +3,11 @@ package adf.launcher.connect;
 import adf.agent.config.ModuleConfig;
 import adf.agent.develop.DevelopData;
 import adf.agent.office.OfficePolice;
-import adf.component.control.ControlPolice;
 import adf.component.AbstractLoader;
+import adf.component.tactics.center.TacticsPoliceCenter;
 import adf.launcher.ConfigKey;
 import adf.launcher.ConsoleOutput;
-import adf.launcher.dummy.control.DummyControlPolice;
+import adf.launcher.dummy.control.DummyTacticsPoliceCenter;
 import rescuecore2.components.ComponentConnectionException;
 import rescuecore2.components.ComponentLauncher;
 import rescuecore2.config.Config;
@@ -27,15 +27,18 @@ public class ConnectorPoliceOffice extends Connector
 
 		try {
 			for (int i = 0; i != count; ++i) {
-				ControlPolice controlPolice;
-				if (loader.getControlPolice() == null)
+				TacticsPoliceCenter tacticsPoliceCenter;
+				if (loader.getTacticsPoliceCenter() == null && loader.getControlPolice() == null)
 				{
-					ConsoleOutput.error("Cannot Load PoliceOffice Control");
-					controlPolice = new DummyControlPolice();
+					ConsoleOutput.error("Cannot Load PoliceOffice Tactics");
+					tacticsPoliceCenter = new DummyTacticsPoliceCenter();
 				}
 				else
 				{
-					controlPolice = loader.getControlPolice();
+					tacticsPoliceCenter = loader.getTacticsPoliceCenter();
+					if(tacticsPoliceCenter == null) {
+						tacticsPoliceCenter = loader.getControlPolice();
+					}
 				}
 				DevelopData developData = new DevelopData(
 						config.getBooleanValue(ConfigKey.KEY_DEVELOP_FLAG, false),
@@ -43,7 +46,7 @@ public class ConnectorPoliceOffice extends Connector
 						config.getArrayValue(ConfigKey.KEY_DEVELOP_DATA, "")
 				);
 				launcher.connect(new OfficePolice(
-						controlPolice,
+						tacticsPoliceCenter,
 						config.getValue(ConfigKey.KEY_MODULE_CONFIG_FILE_NAME, ModuleConfig.DEFAULT_CONFIG_FILE_NAME),
 						config.getBooleanValue(ConfigKey.KEY_PRECOMPUTE, false),
 						config.getBooleanValue(ConfigKey.KEY_DEBUG_FLAG, false),
