@@ -1,0 +1,5 @@
+<map id="adf.component.tactics.center.TacticsAmbulanceCenter" name="adf.component.tactics.center.TacticsAmbulanceCenter">
+<area shape="rect" id="node3" href="$classadf_1_1component_1_1control_1_1ControlAmbulance.html" title="adf.component.control.Control\lAmbulance" alt="" coords="539,5,757,47"/>
+<area shape="rect" id="node4" href="$classadf_1_1launcher_1_1dummy_1_1control_1_1DummyTacticsAmbulanceCenter.html" title="adf.launcher.dummy.control.\lDummyTacticsAmbulanceCenter" alt="" coords="531,71,765,112"/>
+<area shape="rect" id="node2" href="$classadf_1_1component_1_1tactics_1_1center_1_1TacticsCenter.html" title="adf.component.tactics.center.\lTacticsCenter" alt="" coords="5,39,220,80"/>
+</map>

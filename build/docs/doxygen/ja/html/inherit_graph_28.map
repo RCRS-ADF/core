@@ -1,4 +1,5 @@
 <map id="クラス階層図" name="クラス階層図">
-<area shape="rect" id="node1" href="$classadf_1_1component_1_1module_1_1complex_1_1TargetSelector.html" title="adf.component.module.complex.\lTargetSelector\&lt; Building \&gt;" alt="" coords="5,5,241,47"/>
-<area shape="rect" id="node2" href="$classadf_1_1component_1_1module_1_1complex_1_1BuildingSelector.html" title="adf.component.module.complex.\lBuildingSelector" alt="" coords="289,5,525,47"/>
+<area shape="rect" id="node1" href="$classadf_1_1component_1_1module_1_1complex_1_1TargetDetector.html" title="adf.component.module.complex.\lTargetDetector\&lt; Building \&gt;" alt="" coords="5,5,241,47"/>
+<area shape="rect" id="node2" href="$classadf_1_1component_1_1module_1_1complex_1_1BuildingDetector.html" title="adf.component.module.complex.\lBuildingDetector" alt="" coords="289,5,525,47"/>
+<area shape="rect" id="node3" href="$classadf_1_1component_1_1module_1_1complex_1_1BuildingSelector.html" title="adf.component.module.complex.\lBuildingSelector" alt="" coords="573,5,809,47"/>
 </map>

@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['launchsupporter',['LaunchSupporter',['../classadf_1_1launcher_1_1LaunchSupporter.html',1,'adf::launcher']]]
+  ['humandetector',['HumanDetector',['../classadf_1_1component_1_1module_1_1complex_1_1HumanDetector.html',1,'adf::component::module::complex']]],
+  ['humanselector',['HumanSelector',['../classadf_1_1component_1_1module_1_1complex_1_1HumanSelector.html',1,'adf::component::module::complex']]]
 ];

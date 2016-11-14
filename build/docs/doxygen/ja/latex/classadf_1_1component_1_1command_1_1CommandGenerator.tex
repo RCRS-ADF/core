@@ -1,0 +1,86 @@
+\hypertarget{classadf_1_1component_1_1command_1_1CommandGenerator}{}\section{adf.\+component.\+command.\+Command\+Generator クラス}
+\label{classadf_1_1component_1_1command_1_1CommandGenerator}\index{adf.\+component.\+command.\+Command\+Generator@{adf.\+component.\+command.\+Command\+Generator}}
+
+
+adf.\+component.\+command.\+Command\+Generator 連携図
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classadf_1_1component_1_1command_1_1CommandGenerator__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{公開メンバ関数}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classadf_1_1component_1_1command_1_1CommandGenerator_a579e876e1447a86dd950db6d810c6d07}{}\label{classadf_1_1component_1_1command_1_1CommandGenerator_a579e876e1447a86dd950db6d810c6d07} 
+{\bfseries Command\+Generator} (\hyperlink{classadf_1_1agent_1_1info_1_1AgentInfo}{Agent\+Info} ai, \hyperlink{classadf_1_1agent_1_1info_1_1WorldInfo}{World\+Info} wi, \hyperlink{classadf_1_1agent_1_1info_1_1ScenarioInfo}{Scenario\+Info} si, \hyperlink{classadf_1_1agent_1_1module_1_1ModuleManager}{Module\+Manager} module\+Manager, \hyperlink{classadf_1_1agent_1_1develop_1_1DevelopData}{Develop\+Data} develop\+Data)
+\item 
+\hypertarget{classadf_1_1component_1_1command_1_1CommandGenerator_a61589fda1263d0062286cd4b04c013d3}{}\label{classadf_1_1component_1_1command_1_1CommandGenerator_a61589fda1263d0062286cd4b04c013d3} 
+abstract \hyperlink{classadf_1_1component_1_1command_1_1CommandGenerator}{Command\+Generator} {\bfseries set\+Data} (Map$<$ Entity\+ID, Entity\+ID $>$ allocation\+Data)
+\item 
+\hypertarget{classadf_1_1component_1_1command_1_1CommandGenerator_ad454eb64f15bce3eb1e5661815f36476}{}\label{classadf_1_1component_1_1command_1_1CommandGenerator_ad454eb64f15bce3eb1e5661815f36476} 
+Collection$<$ \hyperlink{classadf_1_1component_1_1communication_1_1CommunicationMessage}{Communication\+Message} $>$ {\bfseries get\+Result} ()
+\item 
+\hypertarget{classadf_1_1component_1_1command_1_1CommandGenerator_a713b9d5d2e15bfe2bc2c28d80ad0c4cb}{}\label{classadf_1_1component_1_1command_1_1CommandGenerator_a713b9d5d2e15bfe2bc2c28d80ad0c4cb} 
+\hyperlink{classadf_1_1component_1_1command_1_1CommandGenerator}{Command\+Generator} {\bfseries precompute} (\hyperlink{classadf_1_1agent_1_1precompute_1_1PrecomputeData}{Precompute\+Data} precompute\+Data)
+\item 
+\hypertarget{classadf_1_1component_1_1command_1_1CommandGenerator_a2fbfbc00ee2234b3769ab3160dab4b9c}{}\label{classadf_1_1component_1_1command_1_1CommandGenerator_a2fbfbc00ee2234b3769ab3160dab4b9c} 
+\hyperlink{classadf_1_1component_1_1command_1_1CommandGenerator}{Command\+Generator} {\bfseries resume} (\hyperlink{classadf_1_1agent_1_1precompute_1_1PrecomputeData}{Precompute\+Data} precompute\+Data)
+\item 
+\hypertarget{classadf_1_1component_1_1command_1_1CommandGenerator_aa2ab31b2efe2a69e1b0cdb89307ba2d5}{}\label{classadf_1_1component_1_1command_1_1CommandGenerator_aa2ab31b2efe2a69e1b0cdb89307ba2d5} 
+\hyperlink{classadf_1_1component_1_1command_1_1CommandGenerator}{Command\+Generator} {\bfseries preparate} ()
+\item 
+\hypertarget{classadf_1_1component_1_1command_1_1CommandGenerator_a14b257fa2988e8e44d51bac2f6f3a5fc}{}\label{classadf_1_1component_1_1command_1_1CommandGenerator_a14b257fa2988e8e44d51bac2f6f3a5fc} 
+\hyperlink{classadf_1_1component_1_1command_1_1CommandGenerator}{Command\+Generator} {\bfseries update\+Info} (\hyperlink{classadf_1_1agent_1_1communication_1_1MessageManager}{Message\+Manager} message\+Manager)
+\item 
+\hypertarget{classadf_1_1component_1_1command_1_1CommandGenerator_ae6e194bcec75cff40c427cc7ece619c3}{}\label{classadf_1_1component_1_1command_1_1CommandGenerator_ae6e194bcec75cff40c427cc7ece619c3} 
+int {\bfseries get\+Count\+Precompute} ()
+\item 
+\hypertarget{classadf_1_1component_1_1command_1_1CommandGenerator_a77ec8cae118f0d7e7ffff6df3c842d8b}{}\label{classadf_1_1component_1_1command_1_1CommandGenerator_a77ec8cae118f0d7e7ffff6df3c842d8b} 
+int {\bfseries get\+Count\+Resume} ()
+\item 
+\hypertarget{classadf_1_1component_1_1command_1_1CommandGenerator_a42075303fd034ffc65b444de8c7d3154}{}\label{classadf_1_1component_1_1command_1_1CommandGenerator_a42075303fd034ffc65b444de8c7d3154} 
+int {\bfseries get\+Count\+Preparate} ()
+\item 
+\hypertarget{classadf_1_1component_1_1command_1_1CommandGenerator_a25e01c383e24f7ec09190bcaf1313dec}{}\label{classadf_1_1component_1_1command_1_1CommandGenerator_a25e01c383e24f7ec09190bcaf1313dec} 
+int {\bfseries get\+Count\+Update\+Info} ()
+\item 
+\hypertarget{classadf_1_1component_1_1command_1_1CommandGenerator_a1fe8126306bfe9df5edb1947e4c0abae}{}\label{classadf_1_1component_1_1command_1_1CommandGenerator_a1fe8126306bfe9df5edb1947e4c0abae} 
+void {\bfseries reset\+Count\+Precompute} ()
+\item 
+\hypertarget{classadf_1_1component_1_1command_1_1CommandGenerator_ac15d08b0d27a142d5ee86f9595ee37c2}{}\label{classadf_1_1component_1_1command_1_1CommandGenerator_ac15d08b0d27a142d5ee86f9595ee37c2} 
+void {\bfseries reset\+Count\+Resume} ()
+\item 
+\hypertarget{classadf_1_1component_1_1command_1_1CommandGenerator_a4e90c7dc90e34174f8ad8da76bde85e9}{}\label{classadf_1_1component_1_1command_1_1CommandGenerator_a4e90c7dc90e34174f8ad8da76bde85e9} 
+void {\bfseries reset\+Count\+Preparate} ()
+\item 
+\hypertarget{classadf_1_1component_1_1command_1_1CommandGenerator_a11042e27effecc3cc82e2af5e1df1b7a}{}\label{classadf_1_1component_1_1command_1_1CommandGenerator_a11042e27effecc3cc82e2af5e1df1b7a} 
+void {\bfseries reset\+Count\+Update\+Info} ()
+\end{DoxyCompactItemize}
+\subsection*{限定公開変数類}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classadf_1_1component_1_1command_1_1CommandGenerator_a543633658836fd35a1a84863a6590db1}{}\label{classadf_1_1component_1_1command_1_1CommandGenerator_a543633658836fd35a1a84863a6590db1} 
+\hyperlink{classadf_1_1agent_1_1info_1_1ScenarioInfo}{Scenario\+Info} {\bfseries scenario\+Info}
+\item 
+\hypertarget{classadf_1_1component_1_1command_1_1CommandGenerator_a8d7f44b456637032255eacd51e8cfc27}{}\label{classadf_1_1component_1_1command_1_1CommandGenerator_a8d7f44b456637032255eacd51e8cfc27} 
+\hyperlink{classadf_1_1agent_1_1info_1_1AgentInfo}{Agent\+Info} {\bfseries agent\+Info}
+\item 
+\hypertarget{classadf_1_1component_1_1command_1_1CommandGenerator_ac0f8b8c16c071a23223d7485cd188c97}{}\label{classadf_1_1component_1_1command_1_1CommandGenerator_ac0f8b8c16c071a23223d7485cd188c97} 
+\hyperlink{classadf_1_1agent_1_1info_1_1WorldInfo}{World\+Info} {\bfseries world\+Info}
+\item 
+\hypertarget{classadf_1_1component_1_1command_1_1CommandGenerator_ab10faeffe7d6547cf5d27726c64a699d}{}\label{classadf_1_1component_1_1command_1_1CommandGenerator_ab10faeffe7d6547cf5d27726c64a699d} 
+\hyperlink{classadf_1_1agent_1_1module_1_1ModuleManager}{Module\+Manager} {\bfseries module\+Manager}
+\item 
+\hypertarget{classadf_1_1component_1_1command_1_1CommandGenerator_adce137b57368269f73e5259b0f844279}{}\label{classadf_1_1component_1_1command_1_1CommandGenerator_adce137b57368269f73e5259b0f844279} 
+\hyperlink{classadf_1_1agent_1_1develop_1_1DevelopData}{Develop\+Data} {\bfseries develop\+Data}
+\item 
+\hypertarget{classadf_1_1component_1_1command_1_1CommandGenerator_a60302b470fa7607d888d5545ea17d311}{}\label{classadf_1_1component_1_1command_1_1CommandGenerator_a60302b470fa7607d888d5545ea17d311} 
+Collection$<$ \hyperlink{classadf_1_1component_1_1communication_1_1CommunicationMessage}{Communication\+Message} $>$ {\bfseries result}
+\end{DoxyCompactItemize}
+
+
+このクラス詳解は次のファイルから抽出されました\+:\begin{DoxyCompactItemize}
+\item 
+src/main/java/adf/component/command/Command\+Generator.\+java\end{DoxyCompactItemize}

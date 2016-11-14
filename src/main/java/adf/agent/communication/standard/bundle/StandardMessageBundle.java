@@ -1,7 +1,7 @@
 package adf.agent.communication.standard.bundle;
 
 import adf.agent.communication.standard.bundle.information.*;
-import adf.agent.communication.standard.bundle.topdown.*;
+import adf.agent.communication.standard.bundle.centralized.*;
 import adf.component.communication.CommunicationMessage;
 import adf.component.communication.MessageBundle;
 
@@ -23,7 +23,7 @@ public class StandardMessageBundle extends MessageBundle
         messageClassList.add(MessageFireBrigade.class);
         messageClassList.add(MessagePoliceForce.class);
         messageClassList.add(MessageRoad.class);
-        //topdown
+        //centralized
         messageClassList.add(CommandAmbulance.class);
         messageClassList.add(CommandFire.class);
         messageClassList.add(CommandPolice.class);

@@ -1,4 +1,5 @@
 <map id="adf.agent.communication.standard.bundle.topdown.CommandAmbulance" name="adf.agent.communication.standard.bundle.topdown.CommandAmbulance">
-<area shape="rect" id="node2" href="$classadf_1_1agent_1_1communication_1_1standard_1_1bundle_1_1StandardMessage.html" title="adf.agent.communication.standard.bundle.\lStandardMessage" alt="" coords="5,109,307,151"/>
-<area shape="rect" id="node3" href="$classadf_1_1component_1_1communication_1_1CommunicationMessage.html" title="adf.component.communication.\lCommunicationMessage" alt="" coords="42,5,270,47"/>
+<area shape="rect" id="node2" href="$classadf_1_1agent_1_1communication_1_1standard_1_1bundle_1_1centralized_1_1CommandAmbulance.html" title="adf.agent.communication.standard.bundle.centralized.\lCommandAmbulance" alt="" coords="115,200,493,241"/>
+<area shape="rect" id="node3" href="$classadf_1_1agent_1_1communication_1_1standard_1_1bundle_1_1StandardMessage.html" title="adf.agent.communication.standard.bundle.\lStandardMessage" alt="" coords="5,109,307,151"/>
+<area shape="rect" id="node4" href="$classadf_1_1component_1_1communication_1_1CommunicationMessage.html" title="adf.component.communication.\lCommunicationMessage" alt="" coords="42,5,270,47"/>
 </map>

@@ -1,3 +1,4 @@
 <map id="adf.component.module.complex.RoadSelector" name="adf.component.module.complex.RoadSelector">
-<area shape="rect" id="node2" href="$classadf_1_1component_1_1module_1_1complex_1_1TargetSelector.html" title="adf.component.module.complex.\lTargetSelector\&lt; Road \&gt;" alt="" coords="5,5,241,47"/>
+<area shape="rect" id="node2" href="$classadf_1_1component_1_1module_1_1complex_1_1RoadDetector.html" title="adf.component.module.complex.\lRoadDetector" alt="" coords="5,95,241,136"/>
+<area shape="rect" id="node3" href="$classadf_1_1component_1_1module_1_1complex_1_1TargetDetector.html" title="adf.component.module.complex.\lTargetDetector\&lt; Road \&gt;" alt="" coords="5,5,241,47"/>
 </map>

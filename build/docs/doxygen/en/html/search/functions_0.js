@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['scenarioinfo',['ScenarioInfo',['../classadf_1_1agent_1_1info_1_1ScenarioInfo.html#a3fecc58b0e8396a6935653e872cdb8b6',1,'adf.agent.info.ScenarioInfo.ScenarioInfo(Config config, Mode mode)'],['../classadf_1_1agent_1_1info_1_1ScenarioInfo.html#a6150d210d4172e378c6d427ae48ce6ab',1,'adf.agent.info.ScenarioInfo.ScenarioInfo(Config config)']]],
-  ['setconfig',['setConfig',['../classadf_1_1agent_1_1info_1_1ScenarioInfo.html#afc3003e18c38d96a6466b09afd95ca82',1,'adf::agent::info::ScenarioInfo']]]
+  ['getcontrolambulance',['getControlAmbulance',['../classadf_1_1component_1_1AbstractLoader.html#a2044c317869b16349d4fdbf7d5d50dcd',1,'adf::component::AbstractLoader']]],
+  ['getcontrolfire',['getControlFire',['../classadf_1_1component_1_1AbstractLoader.html#a66e4649d775d291dda3e5b977596bccf',1,'adf::component::AbstractLoader']]],
+  ['getcontrolpolice',['getControlPolice',['../classadf_1_1component_1_1AbstractLoader.html#a2917adfedf677a3af006521e64996a42',1,'adf::component::AbstractLoader']]]
 ];

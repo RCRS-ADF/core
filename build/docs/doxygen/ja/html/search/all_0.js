@@ -14,5 +14,6 @@ var searchData=
   ['agent',['Agent',['../classadf_1_1agent_1_1Agent.html',1,'adf::agent']]],
   ['agent_3c_20e_20_3e',['Agent&lt; E &gt;',['../classadf_1_1agent_1_1Agent.html',1,'adf::agent']]],
   ['agentinfo',['AgentInfo',['../classadf_1_1agent_1_1info_1_1AgentInfo.html',1,'adf::agent::info']]],
-  ['agentlauncher',['AgentLauncher',['../classadf_1_1launcher_1_1AgentLauncher.html',1,'adf::launcher']]]
+  ['agentlauncher',['AgentLauncher',['../classadf_1_1launcher_1_1AgentLauncher.html',1,'adf::launcher']]],
+  ['ambulancetargetallocation',['AmbulanceTargetAllocation',['../classadf_1_1component_1_1module_1_1complex_1_1center_1_1AmbulanceTargetAllocation.html',1,'adf::component::module::complex::center']]]
 ];
