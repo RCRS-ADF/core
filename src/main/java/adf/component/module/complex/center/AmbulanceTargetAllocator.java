@@ -12,9 +12,9 @@ import rescuecore2.worldmodel.EntityID;
 
 import java.util.Map;
 
-public abstract class AmbulanceTargetAllocation extends TargetAllocation {
+public abstract class AmbulanceTargetAllocator extends TargetAllocator {
 
-    public AmbulanceTargetAllocation(AgentInfo ai, WorldInfo wi, ScenarioInfo si, ModuleManager moduleManager, DevelopData developData) {
+    public AmbulanceTargetAllocator(AgentInfo ai, WorldInfo wi, ScenarioInfo si, ModuleManager moduleManager, DevelopData developData) {
         super(ai, wi, si, moduleManager, developData);
     }
 
@@ -22,28 +22,28 @@ public abstract class AmbulanceTargetAllocation extends TargetAllocation {
     public abstract Map<EntityID, EntityID> getResult();
 
     @Override
-    public abstract AmbulanceTargetAllocation calc();
+    public abstract AmbulanceTargetAllocator calc();
 
     @Override
-    public AmbulanceTargetAllocation precompute(PrecomputeData precomputeData) {
+    public AmbulanceTargetAllocator precompute(PrecomputeData precomputeData) {
         super.precompute(precomputeData);
         return this;
     }
 
     @Override
-    public AmbulanceTargetAllocation resume(PrecomputeData precomputeData) {
+    public AmbulanceTargetAllocator resume(PrecomputeData precomputeData) {
         super.resume(precomputeData);
         return this;
     }
 
     @Override
-    public AmbulanceTargetAllocation preparate() {
+    public AmbulanceTargetAllocator preparate() {
         super.preparate();
         return this;
     }
 
     @Override
-    public AmbulanceTargetAllocation updateInfo(MessageManager messageManager) {
+    public AmbulanceTargetAllocator updateInfo(MessageManager messageManager) {
         super.updateInfo(messageManager);
         return this;
     }

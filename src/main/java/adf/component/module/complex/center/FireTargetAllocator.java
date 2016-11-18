@@ -11,8 +11,9 @@ import rescuecore2.worldmodel.EntityID;
 
 import java.util.Map;
 
-public abstract class PoliceTargetAllocation extends TargetAllocation {
-    public PoliceTargetAllocation(AgentInfo ai, WorldInfo wi, ScenarioInfo si, ModuleManager moduleManager, DevelopData developData) {
+public abstract class FireTargetAllocator extends TargetAllocator {
+
+    public FireTargetAllocator(AgentInfo ai, WorldInfo wi, ScenarioInfo si, ModuleManager moduleManager, DevelopData developData) {
         super(ai, wi, si, moduleManager, developData);
     }
 
@@ -20,28 +21,28 @@ public abstract class PoliceTargetAllocation extends TargetAllocation {
     public abstract Map<EntityID, EntityID> getResult();
 
     @Override
-    public abstract PoliceTargetAllocation calc();
+    public abstract FireTargetAllocator calc();
 
     @Override
-    public PoliceTargetAllocation precompute(PrecomputeData precomputeData) {
+    public FireTargetAllocator precompute(PrecomputeData precomputeData) {
         super.precompute(precomputeData);
         return this;
     }
 
     @Override
-    public PoliceTargetAllocation resume(PrecomputeData precomputeData) {
+    public FireTargetAllocator resume(PrecomputeData precomputeData) {
         super.resume(precomputeData);
         return this;
     }
 
     @Override
-    public PoliceTargetAllocation preparate() {
+    public FireTargetAllocator preparate() {
         super.preparate();
         return this;
     }
 
     @Override
-    public PoliceTargetAllocation updateInfo(MessageManager messageManager) {
+    public FireTargetAllocator updateInfo(MessageManager messageManager) {
         super.updateInfo(messageManager);
         return this;
     }

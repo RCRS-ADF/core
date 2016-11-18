@@ -12,38 +12,37 @@ import rescuecore2.worldmodel.EntityID;
 
 import java.util.Map;
 
-public abstract class FireTargetAllocation extends TargetAllocation {
+public abstract class TargetAllocator extends AbstractModule {
 
-    public FireTargetAllocation(AgentInfo ai, WorldInfo wi, ScenarioInfo si, ModuleManager moduleManager, DevelopData developData) {
+    public TargetAllocator(AgentInfo ai, WorldInfo wi, ScenarioInfo si, ModuleManager moduleManager, DevelopData developData) {
         super(ai, wi, si, moduleManager, developData);
     }
 
-    @Override
     public abstract Map<EntityID, EntityID> getResult();
 
     @Override
-    public abstract FireTargetAllocation calc();
+    public abstract TargetAllocator calc();
 
     @Override
-    public FireTargetAllocation precompute(PrecomputeData precomputeData) {
+    public TargetAllocator precompute(PrecomputeData precomputeData) {
         super.precompute(precomputeData);
         return this;
     }
 
     @Override
-    public FireTargetAllocation resume(PrecomputeData precomputeData) {
+    public TargetAllocator resume(PrecomputeData precomputeData) {
         super.resume(precomputeData);
         return this;
     }
 
     @Override
-    public FireTargetAllocation preparate() {
+    public TargetAllocator preparate() {
         super.preparate();
         return this;
     }
 
     @Override
-    public FireTargetAllocation updateInfo(MessageManager messageManager) {
+    public TargetAllocator updateInfo(MessageManager messageManager) {
         super.updateInfo(messageManager);
         return this;
     }
