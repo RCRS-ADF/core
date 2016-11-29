@@ -6,6 +6,8 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -30,7 +32,7 @@ public final class DevelopData
     private Map<String, List<String>> stringLists;
     private Map<String, List<Boolean>> boolLists;
 
-    public DevelopData(boolean developFlag, String developDataFileName, List<String> rawData)
+    public DevelopData(boolean developFlag, @Nonnull String developDataFileName, @Nonnull List<String> rawData)
     {
         this.developFlag = developFlag;
 
@@ -56,7 +58,8 @@ public final class DevelopData
         return this.developFlag;
     }
 
-    public Integer getInteger(String name, int defaultValue)
+    @Nonnull
+    public Integer getInteger(@Nonnull String name, int defaultValue)
     {
         if (this.developFlag)
         {
@@ -74,7 +77,8 @@ public final class DevelopData
         return defaultValue;
     }
 
-    public Double getDouble(String name, double defaultValue)
+    @Nonnull
+    public Double getDouble(@Nonnull String name, double defaultValue)
     {
         if (this.developFlag)
         {
@@ -92,7 +96,8 @@ public final class DevelopData
         return defaultValue;
     }
 
-    public Boolean getBoolean(String name, boolean defaultValue)
+    @Nonnull
+    public Boolean getBoolean(@Nonnull String name, boolean defaultValue)
     {
         if (this.developFlag)
         {
@@ -110,7 +115,8 @@ public final class DevelopData
         return defaultValue;
     }
 
-    public String getString(String name, String defaultValue)
+    @Nullable
+    public String getString(@Nonnull String name, @Nullable String defaultValue)
     {
         if (this.developFlag)
         {
@@ -120,7 +126,8 @@ public final class DevelopData
         return defaultValue;
     }
 
-    public List<Integer> getIntegerList(String name, List<Integer> defaultValue)
+    @Nullable
+    public List<Integer> getIntegerList(@Nonnull String name, @Nullable List<Integer> defaultValue)
     {
         if (this.developFlag)
         {
@@ -142,7 +149,8 @@ public final class DevelopData
         return defaultValue;
     }
 
-    public List<Double> getDoubleList(String name, List<Double> defaultValue)
+    @Nullable
+    public List<Double> getDoubleList(@Nonnull String name, @Nullable List<Double> defaultValue)
     {
         if (this.developFlag)
         {
@@ -164,7 +172,8 @@ public final class DevelopData
         return defaultValue;
     }
 
-    public List<Boolean> getBooleanList(String name, List<Boolean> defaultValue)
+    @Nullable
+    public List<Boolean> getBooleanList(@Nonnull String name, @Nullable List<Boolean> defaultValue)
     {
         if (this.developFlag)
         {
@@ -186,7 +195,8 @@ public final class DevelopData
         return defaultValue;
     }
 
-    public List<String> getStringList(String name, List<String> defaultValue)
+    @Nullable
+    public List<String> getStringList(@Nonnull String name, @Nullable List<String> defaultValue)
     {
         if (this.developFlag)
         {
@@ -196,7 +206,7 @@ public final class DevelopData
         return defaultValue;
     }
 
-    private void setRawData(String rawData, boolean isBase64)
+    private void setRawData(@Nonnull String rawData, boolean isBase64)
     {
         if (rawData.equals("")) { return; }
         String data = (isBase64 ? new String(Base64.getDecoder().decode(rawData)) : rawData);
@@ -232,15 +242,15 @@ public final class DevelopData
         }
     }
 
-    private void setRawData(List<String> rawData)
+    private void setRawData(@Nonnull List<String> rawData)
     {
         for (String data : rawData)
         { setRawData(data, true); }
     }
 
-    private void setDataFile(String developDataFileName)
+    private void setDataFile(@Nonnull String developDataFileName)
     {
-        if (developDataFileName == null || developDataFileName.equals("")) { return; }
+        if (developDataFileName.equals("")) { return; }
         File file = new File(developDataFileName);
         if (developDataFileName.equals(DEFAULT_FILE_NAME) && !(file.isFile())) { return; }
 

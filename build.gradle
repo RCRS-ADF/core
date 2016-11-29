@@ -16,9 +16,6 @@ dependencies {
     compile fileTree(dir: new File(rootDir, 'library/util/default'), include: '*.jar')
     compile fileTree(dir: new File(rootDir, 'library/rescue/core'), include: '*.jar')
     compile fileTree(dir: new File(rootDir, 'library/rescue/util'), include: '*.jar')
-//    compile project(':modules:util')
-    //compile 'org.msgpack:msgpack-core:0.7.0-M6'
-    //compile 'org.msgpack:jackson-dataformat-msgpack:0.7.0-M6'
     //testCompile 'junit:junit:4.11'
 }
 

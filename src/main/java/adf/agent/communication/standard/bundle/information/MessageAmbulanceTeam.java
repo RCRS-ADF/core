@@ -6,6 +6,9 @@ import adf.component.communication.util.BitStreamReader;
 import rescuecore2.standard.entities.AmbulanceTeam;
 import rescuecore2.worldmodel.EntityID;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 
 public class MessageAmbulanceTeam extends StandardMessage
 {
@@ -35,7 +38,7 @@ public class MessageAmbulanceTeam extends StandardMessage
 	protected EntityID myTargetID;
 	protected int myAction;
 
-	public MessageAmbulanceTeam(boolean isRadio, AmbulanceTeam ambulanceTeam, int action, EntityID target)
+	public MessageAmbulanceTeam(boolean isRadio, @Nonnull AmbulanceTeam ambulanceTeam, int action, @Nullable EntityID target)
 	{
 		super(isRadio);
 		this.agentID = ambulanceTeam.getID();
@@ -47,7 +50,7 @@ public class MessageAmbulanceTeam extends StandardMessage
 		this.myAction = action;
 	}
 
-	public MessageAmbulanceTeam(boolean isRadio, int from, int ttl, BitStreamReader bitStreamReader)
+	public MessageAmbulanceTeam(boolean isRadio, int from, int ttl, @Nonnull BitStreamReader bitStreamReader)
 	//public MessageAmbulanceTeam(int time, int ttl, int hp, int buriedness, int damage, int position, int id, int target, int action)
 	{
 		super(isRadio, from, ttl, bitStreamReader);
@@ -60,6 +63,7 @@ public class MessageAmbulanceTeam extends StandardMessage
 		this.myAction = bitStreamReader.getBits(SIZE_ACTION);
 	}
 
+	@Nonnull
 	public EntityID getAgentID() {
 		if (this.agentID == null) {
 			this.agentID = new EntityID(this.rawAgentID);
@@ -71,6 +75,7 @@ public class MessageAmbulanceTeam extends StandardMessage
 	    return this.myAction;
 	}
 
+	@Nullable
 	public EntityID getTargetID() {
 		if ( this.myTargetID == null ) {
 		    if(this.rawTargetID != -1) this.myTargetID = new EntityID(this.rawTargetID);
@@ -84,11 +89,13 @@ public class MessageAmbulanceTeam extends StandardMessage
 	}
 
 	@Override
+	@Nonnull
 	public byte[] toByteArray() {
 		return this.toBitOutputStream().toByteArray();
 	}
 
 	@Override
+	@Nonnull
 	public BitOutputStream toBitOutputStream() {
         BitOutputStream bitOutputStream = new BitOutputStream();
         bitOutputStream.writeBits(this.agentID.getValue(), SIZE_ID);
@@ -131,6 +138,7 @@ public class MessageAmbulanceTeam extends StandardMessage
 
 	public int getDamage() { return this.humanDamage; }
 
+	@Nullable
 	public EntityID getPosition() {
 		if (this.humanPosition == null) {
 		    if(this.rawHumanPosition != -1) this.humanPosition = new EntityID(this.rawHumanPosition);
@@ -159,6 +167,7 @@ public class MessageAmbulanceTeam extends StandardMessage
     }
 
 	@Override
+	@Nonnull
 	public String getCheckKey() {
 		EntityID tid = this.getTargetID();
 		String tidValue = tid == null ? "null" : tid.toString();

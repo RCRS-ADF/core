@@ -9,6 +9,8 @@ import adf.component.extaction.ExtAction;
 import adf.component.module.AbstractModule;
 import rescuecore2.config.NoSuchConfigOptionException;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
@@ -27,7 +29,7 @@ public class ModuleManager
 
     private DevelopData developData;
 
-    public ModuleManager(AgentInfo agentInfo, WorldInfo worldInfo, ScenarioInfo scenarioInfo, ModuleConfig moduleConfig, DevelopData developData) {
+    public ModuleManager(@Nonnull AgentInfo agentInfo, @Nonnull WorldInfo worldInfo, @Nonnull ScenarioInfo scenarioInfo, @Nonnull ModuleConfig moduleConfig, @Nonnull DevelopData developData) {
         this.agentInfo = agentInfo;
         this.worldInfo = worldInfo;
         this.scenarioInfo = scenarioInfo;
@@ -38,7 +40,8 @@ public class ModuleManager
     }
 
     @SuppressWarnings("unchecked")
-    public final <T extends AbstractModule> T getModule(String moduleName, String defaultClassName) {
+    @Nonnull
+    public final <T extends AbstractModule> T getModule(@Nonnull String moduleName, @Nullable String defaultClassName) {
         String className = moduleName;
         try
         { className = this.moduleConfig.getValue(moduleName); }
@@ -70,12 +73,14 @@ public class ModuleManager
     }
 
     @SuppressWarnings("unchecked")
-    public final <T extends AbstractModule> T getModule(String moduleName) {
-        return this.getModule(moduleName, null);
+    @Nonnull
+    public final <T extends AbstractModule> T getModule(@Nonnull String moduleName) {
+        return this.getModule(moduleName, "");
     }
 
     @SuppressWarnings("unchecked")
-    private AbstractModule getModule(Class<AbstractModule> moduleClass) {
+    @Nonnull
+    private AbstractModule getModule(@Nonnull Class<AbstractModule> moduleClass) {
         try {
             Constructor<AbstractModule> constructor = moduleClass.getConstructor(AgentInfo.class, WorldInfo.class, ScenarioInfo.class, ModuleManager.class, DevelopData.class);
             AbstractModule instance = constructor.newInstance(this.agentInfo, this.worldInfo, this.scenarioInfo, this, this.developData);
@@ -120,7 +125,7 @@ public class ModuleManager
 
     @SuppressWarnings("unchecked")
     public final <A extends ExtAction> A getExtAction(String actionName) {
-        return getExtAction(actionName, null);
+        return getExtAction(actionName, "");
     }
 
     @SuppressWarnings("unchecked")

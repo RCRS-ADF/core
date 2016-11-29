@@ -4,17 +4,30 @@ import adf.agent.communication.standard.bundle.information.*;
 import adf.agent.info.WorldInfo;
 import rescuecore2.standard.entities.*;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 public class MessageUtil {
 
-    public static Building reflectMessage(WorldInfo worldInfo, MessageBuilding message) {
+    @Nonnull
+    public static Building reflectMessage(@Nonnull WorldInfo worldInfo, @Nonnull MessageBuilding message) {
         Building building = (Building)worldInfo.getEntity(message.getBuildingID());
-        if(message.isFierynessDefined()) building.setFieryness(message.getFieryness());
-        if(message.isBrokennessDefined()) building.setBrokenness(message.getBrokenness());
-        if(message.isTemperatureDefined()) building.setTemperature(message.getTemperature());
+        if (building != null) {
+            if (message.isFierynessDefined()) building.setFieryness(message.getFieryness());
+            if (message.isBrokennessDefined()) building.setBrokenness(message.getBrokenness());
+            if (message.isTemperatureDefined()) building.setTemperature(message.getTemperature());
+        } else {
+            building = new Building(message.getBuildingID());
+            if (message.isFierynessDefined()) building.setFieryness(message.getFieryness());
+            if (message.isBrokennessDefined()) building.setBrokenness(message.getBrokenness());
+            if (message.isTemperatureDefined()) building.setTemperature(message.getTemperature());
+            worldInfo.addEntity(building);
+        }
         return building;
     }
 
-    public static AmbulanceTeam reflectMessage(WorldInfo worldInfo, MessageAmbulanceTeam message) {
+    @Nonnull
+    public static AmbulanceTeam reflectMessage(@Nonnull WorldInfo worldInfo, @Nonnull MessageAmbulanceTeam message) {
         AmbulanceTeam ambulanceteam = (AmbulanceTeam) worldInfo.getEntity(message.getAgentID());
         if (ambulanceteam != null) {
             if(message.isHPDefined()) ambulanceteam.setHP(message.getHP());
@@ -32,7 +45,8 @@ public class MessageUtil {
         return ambulanceteam;
     }
 
-    public static Civilian reflectMessage(WorldInfo worldInfo, MessageCivilian message) {
+    @Nonnull
+    public static Civilian reflectMessage(@Nonnull WorldInfo worldInfo, @Nonnull MessageCivilian message) {
         Civilian civilian = (Civilian)worldInfo.getEntity(message.getAgentID());
         if (civilian != null) {
             if(message.isHPDefined()) civilian.setHP(message.getHP());
@@ -50,7 +64,8 @@ public class MessageUtil {
         return civilian;
     }
 
-    public static FireBrigade reflectMessage(WorldInfo worldInfo, MessageFireBrigade message) {
+    @Nonnull
+    public static FireBrigade reflectMessage(@Nonnull WorldInfo worldInfo, @Nonnull MessageFireBrigade message) {
         FireBrigade firebrigade = (FireBrigade) worldInfo.getEntity(message.getAgentID());
         if (firebrigade != null) {
             if(message.isHPDefined()) firebrigade.setHP(message.getHP());
@@ -70,7 +85,8 @@ public class MessageUtil {
         return firebrigade;
     }
 
-    public static PoliceForce reflectMessage(WorldInfo worldInfo, MessagePoliceForce message) {
+    @Nonnull
+    public static PoliceForce reflectMessage(@Nonnull WorldInfo worldInfo, @Nonnull MessagePoliceForce message) {
         PoliceForce policeforce = (PoliceForce) worldInfo.getEntity(message.getAgentID());
         if (policeforce != null) {
             if(message.isHPDefined()) policeforce.setHP(message.getHP());
@@ -88,7 +104,8 @@ public class MessageUtil {
         return policeforce;
     }
 
-    public static Blockade reflectMessage(WorldInfo worldInfo, MessageRoad message) {
+    @Nullable
+    public static Blockade reflectMessage(@Nonnull WorldInfo worldInfo, @Nonnull MessageRoad message) {
         if(message.getBlockadeID() == null) return null;
 
         Blockade blockade = (Blockade) worldInfo.getEntity(message.getBlockadeID());

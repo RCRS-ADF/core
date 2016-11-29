@@ -5,6 +5,10 @@ import adf.component.communication.util.BitOutputStream;
 import adf.component.communication.util.BitStreamReader;
 import rescuecore2.worldmodel.EntityID;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.Objects;
+
 public class CommandPolice extends StandardMessage
 {
 	/* below id is same to information.MessagePoliceForce */
@@ -25,7 +29,7 @@ public class CommandPolice extends StandardMessage
 
 	protected boolean broadcast;
 
-	public CommandPolice(boolean isRadio, EntityID toID, EntityID targetID, int action)
+	public CommandPolice(boolean isRadio, @Nullable EntityID toID, @Nullable EntityID targetID, int action)
 	{
 		super(isRadio);
 		this.commandToID = toID;
@@ -34,7 +38,7 @@ public class CommandPolice extends StandardMessage
         this.broadcast = (toID == null);
 	}
 
-	public CommandPolice(boolean isRadio, int from, int ttl, BitStreamReader bitStreamReader)
+	public CommandPolice(boolean isRadio, int from, int ttl, @Nonnull BitStreamReader bitStreamReader)
 	{
 		super(isRadio, from, ttl, bitStreamReader);
         this.rawToID = (bitStreamReader.getBits(1) == 1) ? bitStreamReader.getBits(SIZE_TO) : -1;
@@ -53,11 +57,13 @@ public class CommandPolice extends StandardMessage
 	}
 
 	@Override
+    @Nonnull
 	public byte[] toByteArray() {
 		return this.toBitOutputStream().toByteArray();
 	}
 
     @Override
+    @Nonnull
     public BitOutputStream toBitOutputStream()
     {
         BitOutputStream bitOutputStream = new BitOutputStream();
@@ -79,6 +85,7 @@ public class CommandPolice extends StandardMessage
         return bitOutputStream;
     }
 
+    @Nullable
     public EntityID getToID() {
         if(this.broadcast) return null;
         if ( this.commandToID == null ) {
@@ -87,6 +94,7 @@ public class CommandPolice extends StandardMessage
         return this.commandToID;
     }
 
+    @Nullable
     public EntityID getTargetID() {
         if ( this.commandTargetID == null ) {
             if(this.rawTargetID != -1) this.commandTargetID = new EntityID(this.rawTargetID);
@@ -107,8 +115,9 @@ public class CommandPolice extends StandardMessage
     }
 
     @Override
+    @Nonnull
     public String getCheckKey() {
-        String toIDValue = this.broadcast ? "broadcast" : this.getToID().toString();
+        String toIDValue = this.broadcast ? "broadcast" : Objects.requireNonNull(this.getToID()).toString();
         EntityID tid = this.getTargetID();
         String tidValue = tid == null ? "null" : tid.toString();
         return getClass().getCanonicalName() + " > to:" + toIDValue + " target:" + tidValue + " action:" + this.myAction;

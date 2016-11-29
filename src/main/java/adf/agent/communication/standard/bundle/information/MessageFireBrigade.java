@@ -6,6 +6,9 @@ import adf.component.communication.util.BitStreamReader;
 import rescuecore2.standard.entities.FireBrigade;
 import rescuecore2.worldmodel.EntityID;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 
 public class MessageFireBrigade extends StandardMessage
 {
@@ -36,7 +39,7 @@ public class MessageFireBrigade extends StandardMessage
 	protected int myAction;
 	protected int fireBrigadeWater;
 
-	public MessageFireBrigade(boolean isRadio, FireBrigade fireBrigade, int action, EntityID target)
+	public MessageFireBrigade(boolean isRadio, @Nonnull FireBrigade fireBrigade, int action, @Nullable EntityID target)
 	{
 		super(isRadio);
 		this.agentID = fireBrigade.getID();
@@ -49,7 +52,7 @@ public class MessageFireBrigade extends StandardMessage
 		this.fireBrigadeWater = fireBrigade.isWaterDefined() ? fireBrigade.getWater() : -1;
 	}
 
-	public MessageFireBrigade(boolean isRadio, int from, int ttl, BitStreamReader bitStreamReader)
+	public MessageFireBrigade(boolean isRadio, int from, int ttl, @Nonnull BitStreamReader bitStreamReader)
 	{
         super(isRadio, from, ttl, bitStreamReader);
 		this.rawAgentID = bitStreamReader.getBits(SIZE_ID);
@@ -62,6 +65,7 @@ public class MessageFireBrigade extends StandardMessage
 		this.fireBrigadeWater = (bitStreamReader.getBits(1) == 1) ? bitStreamReader.getBits(SIZE_WATER) : -1;
 	}
 
+	@Nonnull
 	public EntityID getAgentID()
 	{
 		if (this.agentID == null) {
@@ -75,6 +79,7 @@ public class MessageFireBrigade extends StandardMessage
 	public int getAction()
 	{ return this.myAction; }
 
+	@Nullable
 	public EntityID getTargetID() {
 		if ( this.myTargetID == null ) {
 			if(this.rawTargetID != -1) this.myTargetID = new EntityID(this.rawTargetID);
@@ -89,11 +94,13 @@ public class MessageFireBrigade extends StandardMessage
 	}
 
 	@Override
+    @Nonnull
 	public byte[] toByteArray() {
 		return this.toBitOutputStream().toByteArray();
 	}
 
 	@Override
+    @Nonnull
 	public BitOutputStream toBitOutputStream()
 	{
 		BitOutputStream bitOutputStream = new BitOutputStream();
@@ -142,6 +149,7 @@ public class MessageFireBrigade extends StandardMessage
 
 	public int getDamage() { return this.humanDamage; }
 
+	@Nullable
 	public EntityID getPosition() {
 		if (this.humanPosition == null) {
 			if(this.rawHumanPosition != -1) this.humanPosition = new EntityID(this.rawHumanPosition);
@@ -174,6 +182,7 @@ public class MessageFireBrigade extends StandardMessage
 	}
 
 	@Override
+    @Nonnull
     public String getCheckKey() {
         EntityID tid = this.getTargetID();
         String tidValue = tid == null ? "null" : tid.toString();

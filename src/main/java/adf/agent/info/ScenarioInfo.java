@@ -3,6 +3,9 @@ package adf.agent.info;
 import adf.launcher.ConfigKey;
 import rescuecore2.config.Config;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 /**
  * \~english
  * \~japanese シナリオに関する情報を取得する
@@ -28,7 +31,7 @@ public class ScenarioInfo
 	 * @param config base config
 	 * @param mode agent run mode
 	 */
-	public ScenarioInfo(Config config, Mode mode)
+	public ScenarioInfo(@Nonnull Config config, @Nonnull Mode mode)
 	{
 		this.config = config;
 		this.mode = mode;
@@ -38,7 +41,7 @@ public class ScenarioInfo
 	 * (internal invoking only).
 	 * @param config base config
 	 */
-	public ScenarioInfo(Config config)
+	public ScenarioInfo(@Nonnull Config config)
 	{
 		this(config, Mode.NON_PRECOMPUTE);
 	}
@@ -47,7 +50,7 @@ public class ScenarioInfo
 	 * (internal invoking only).
 	 * @param config base config
 	 */
-	public void setConfig(Config config)
+	public void setConfig(@Nonnull Config config)
 	{
 		this.config = config;
 	}
@@ -57,6 +60,7 @@ public class ScenarioInfo
 	 * \~japanese エージェントの起動モードを返す
 	 * @return agent run mode
 	 */
+	@Nonnull
 	public Mode getMode()
 	{
 		return mode;
@@ -67,6 +71,7 @@ public class ScenarioInfo
 	 * \~japanese rescuecoreのConfigを返す
 	 * @return raw config
 	 */
+	@Nonnull
 	public Config getRawConfig()
 	{
 		return this.config;
@@ -111,6 +116,7 @@ public class ScenarioInfo
 		return config.getIntValue("kernel.startup.connect-time");
 	}
 
+	@Nullable
 	public String getKernelHost()
 	{
 		return config.getValue("kernel.host");
@@ -136,6 +142,7 @@ public class ScenarioInfo
 		return config.getIntValue("scenario.agents.po");
 	}
 
+	@Nullable
 	public String getKernelCommunicationModel()
 	{
 		return config.getValue("kernel.communication-model");
@@ -174,6 +181,7 @@ public class ScenarioInfo
 		return config.getIntValue("comms.channels.count");
 	}
 
+	@Nullable
 	public String getKernelPerception()
 	{
 		return config.getValue("kernel.perception");

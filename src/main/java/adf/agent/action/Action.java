@@ -3,6 +3,8 @@ package adf.agent.action;
 import rescuecore2.messages.Message;
 import rescuecore2.worldmodel.EntityID;
 
+import javax.annotation.Nonnull;
+
 public abstract class Action
 {
 	public Action()
@@ -21,5 +23,6 @@ public abstract class Action
 	}
 	*/
 
-	public abstract Message getCommand(EntityID agentID, int time);
+	@Nonnull
+	public abstract Message getCommand(@Nonnull EntityID agentID, int time);
 }

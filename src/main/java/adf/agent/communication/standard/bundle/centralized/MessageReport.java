@@ -5,6 +5,9 @@ import adf.component.communication.util.BitOutputStream;
 import adf.component.communication.util.BitStreamReader;
 import rescuecore2.worldmodel.EntityID;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 public class MessageReport extends StandardMessage
 {
 	private static final int SIZE_DONE = 1;
@@ -16,14 +19,14 @@ public class MessageReport extends StandardMessage
     private EntityID reportFromID;
     private int rawReportFromID;
 
-	public MessageReport(boolean isRadio, boolean isDone, boolean isBroadcast, EntityID fromID) {
+	public MessageReport(boolean isRadio, boolean isDone, boolean isBroadcast, @Nullable EntityID fromID) {
 		super(isRadio);
 		this.reportDone = isDone;
         this.reportBroadcast = isBroadcast;
         this.reportFromID = fromID;
 	}
 
-	public MessageReport(boolean isRadio, int from, int ttl, BitStreamReader bitStreamReader) {
+	public MessageReport(boolean isRadio, int from, int ttl, @Nonnull BitStreamReader bitStreamReader) {
 		super(isRadio, from, ttl, bitStreamReader);
 		this.reportDone = (0 != bitStreamReader.getBits(SIZE_DONE));
         this.reportBroadcast = (0 != bitStreamReader.getBits(SIZE_BROADCAST));
@@ -44,6 +47,7 @@ public class MessageReport extends StandardMessage
         return (this.reportFromID != null || this.rawReportFromID != -1);
     }
 
+    @Nullable
     public EntityID getFromID() {
         if ( this.reportFromID == null ) {
             if(this.rawReportFromID != -1) this.reportFromID = new EntityID(this.rawReportFromID);
@@ -58,11 +62,13 @@ public class MessageReport extends StandardMessage
 	}
 
 	@Override
+	@Nonnull
 	public byte[] toByteArray() {
 		return this.toBitOutputStream().toByteArray();
 	}
 
 	@Override
+	@Nonnull
 	public BitOutputStream toBitOutputStream()
 	{
 		BitOutputStream bitOutputStream = new BitOutputStream();
@@ -79,6 +85,7 @@ public class MessageReport extends StandardMessage
 	}
 
 	@Override
+	@Nonnull
 	public String getCheckKey() {
 		return getClass().getCanonicalName()
                 + " isBroadcast:" + this.isBroadcast()

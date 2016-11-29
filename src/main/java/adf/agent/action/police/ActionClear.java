@@ -11,6 +11,9 @@ import rescuecore2.standard.messages.AKClear;
 import rescuecore2.standard.messages.AKClearArea;
 import rescuecore2.worldmodel.EntityID;
 
+import javax.annotation.Nonnull;
+import java.util.Objects;
+
 public class ActionClear extends Action
 {
 	protected EntityID target;
@@ -18,19 +21,19 @@ public class ActionClear extends Action
 	private int posX;
 	private int posY;
 
-	public ActionClear(EntityID targetID)
+	public ActionClear(@Nonnull EntityID targetID)
 	{
 		super();
 		this.target = targetID;
 		this.useOldFunction = true;
 	}
 
-	public ActionClear(Blockade blockade)
+	public ActionClear(@Nonnull Blockade blockade)
 	{
 		this(blockade.getID());
 	}
 
-	public ActionClear(AgentInfo agent, Vector2D vector)
+	public ActionClear(@Nonnull AgentInfo agent, @Nonnull Vector2D vector)
 	{
 		this((int)(agent.getX() + vector.getX()), (int)(agent.getY() + vector.getY()));
 	}
@@ -43,12 +46,13 @@ public class ActionClear extends Action
 		this.posY = destY;
 	}
 
-    public ActionClear(int destX, int destY, Blockade blockade) {
+    public ActionClear(int destX, int destY, @Nonnull Blockade blockade) {
         this(destX, destY);
         this.target = blockade.getID();
     }
 
 	@Override
+	@Nonnull
 	public String toString()
 	{
 		return "ActionClear [target=" + target + ", useOldFunction=" + useOldFunction + ", posX=" + posX + ", posY=" + posY + "]";
@@ -59,6 +63,7 @@ public class ActionClear extends Action
 		return this.useOldFunction;
 	}
 
+	@Nonnull
 	public EntityID getTarget() {
 	    return this.target;
 	}
@@ -74,7 +79,8 @@ public class ActionClear extends Action
 	}
 
 	@Override
-	public Message getCommand(EntityID agentID, int time)
+	@Nonnull
+	public Message getCommand(@Nonnull EntityID agentID, int time)
 	{
 		if (this.useOldFunction)
 		{

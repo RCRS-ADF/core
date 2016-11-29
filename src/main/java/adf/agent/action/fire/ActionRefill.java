@@ -5,6 +5,8 @@ import rescuecore2.messages.Message;
 import rescuecore2.standard.messages.AKRest;
 import rescuecore2.worldmodel.EntityID;
 
+import javax.annotation.Nonnull;
+
 public class ActionRefill extends Action {
 
     public ActionRefill() {
@@ -12,12 +14,14 @@ public class ActionRefill extends Action {
     }
 
     @Override
+    @Nonnull
     public String toString() {
         return "ActionRefill []";
     }
 
     @Override
-    public Message getCommand(EntityID agentID, int time) {
+    @Nonnull
+    public Message getCommand(@Nonnull EntityID agentID, int time) {
         return new AKRest(agentID, time);
     }
 }

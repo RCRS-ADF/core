@@ -5,6 +5,8 @@ import rescuecore2.messages.Message;
 import rescuecore2.standard.messages.AKUnload;
 import rescuecore2.worldmodel.EntityID;
 
+import javax.annotation.Nonnull;
+
 public class ActionUnload extends Action
 {
 
@@ -14,13 +16,15 @@ public class ActionUnload extends Action
 	}
 
 	@Override
+	@Nonnull
 	public String toString()
 	{
 		return "ActionUnload []";
 	}
 
 	@Override
-	public Message getCommand(EntityID agentID, int time)
+	@Nonnull
+	public Message getCommand(@Nonnull EntityID agentID, int time)
 	{
 		return new AKUnload(agentID, time);
 	}

@@ -5,6 +5,10 @@ import adf.component.communication.util.BitOutputStream;
 import adf.component.communication.util.BitStreamReader;
 import rescuecore2.worldmodel.EntityID;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.Objects;
+
 public class CommandScout extends StandardMessage
 {
 	private static final int SIZE_TO = 32;
@@ -19,7 +23,7 @@ public class CommandScout extends StandardMessage
 
 	protected boolean broadcast;
 
-	public CommandScout(boolean isRadio, EntityID toID, EntityID targetID, int range)
+	public CommandScout(boolean isRadio, @Nullable EntityID toID, @Nullable EntityID targetID, int range)
 	{
 		super(isRadio);
 		this.commandToID = toID;
@@ -28,7 +32,7 @@ public class CommandScout extends StandardMessage
 		this.broadcast = (toID == null);
 	}
 
-	public CommandScout(boolean isRadio, int from, int ttl, BitStreamReader bitStreamReader)
+	public CommandScout(boolean isRadio, int from, int ttl, @Nonnull BitStreamReader bitStreamReader)
 	{
 		super(isRadio, from, ttl, bitStreamReader);
 		this.rawToID = (bitStreamReader.getBits(1) == 1) ? bitStreamReader.getBits(SIZE_TO) : -1;
@@ -47,11 +51,13 @@ public class CommandScout extends StandardMessage
 	}
 
 	@Override
+	@Nonnull
 	public byte[] toByteArray() {
 		return this.toBitOutputStream().toByteArray();
 	}
 
 	@Override
+	@Nonnull
 	public BitOutputStream toBitOutputStream()
 	{
 		BitOutputStream bitOutputStream = new BitOutputStream();
@@ -73,6 +79,7 @@ public class CommandScout extends StandardMessage
 		return bitOutputStream;
 	}
 
+	@Nullable
 	public EntityID getToID() {
 		if(this.broadcast) return null;
 		if ( this.commandToID == null ) {
@@ -81,6 +88,7 @@ public class CommandScout extends StandardMessage
 		return this.commandToID;
 	}
 
+	@Nullable
 	public EntityID getTargetID() {
 		if ( this.commandTargetID == null ) {
 			if(this.rawTargetID != -1) this.commandTargetID = new EntityID(this.rawTargetID);
@@ -101,8 +109,9 @@ public class CommandScout extends StandardMessage
 	}
 
 	@Override
+    @Nonnull
 	public String getCheckKey() {
-		String toIDValue = this.broadcast ? "broadcast" : this.getToID().toString();
+		String toIDValue = this.broadcast ? "broadcast" : Objects.requireNonNull(this.getToID()).toString();
 		EntityID tid = this.getTargetID();
 		String tidValue = tid == null ? "null" : tid.toString();
 		return getClass().getCanonicalName() + " > to:" + toIDValue + " target:" + tidValue;

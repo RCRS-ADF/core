@@ -13,6 +13,7 @@ import rescuecore2.standard.messages.AKSay;
 import rescuecore2.standard.messages.AKSpeak;
 import rescuecore2.worldmodel.EntityID;
 
+import javax.annotation.Nonnull;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Collection;
@@ -26,7 +27,7 @@ public class StandardCommunicationModule extends CommunicationModule
     private int channel = 1;
 
     @Override
-    public void receive(Agent agent, MessageManager messageManager)
+    public void receive(@Nonnull Agent agent, @Nonnull MessageManager messageManager)
     {
         Collection<Command> heardList = agent.agentInfo.getHeard();
 
@@ -48,7 +49,7 @@ public class StandardCommunicationModule extends CommunicationModule
 
                 if (isRadio)
                 {
-                    addReceivedMessage(messageManager, isRadio, senderID, receivedData);
+                    addReceivedMessage(messageManager, Boolean.TRUE, senderID, receivedData);
                 }
                 else
                 {
@@ -66,12 +67,12 @@ public class StandardCommunicationModule extends CommunicationModule
                         {
                             if ((i +1) >= receivedData.length)
                             {
-                                addReceivedMessage(messageManager, isRadio, senderID, messageTemp.toByteArray());
+                                addReceivedMessage(messageManager, Boolean.FALSE, senderID, messageTemp.toByteArray());
                                 break;
                             }
                             else if (receivedData[i +1] != ESCAPE_CHAR)
                             {
-                                addReceivedMessage(messageManager, isRadio, senderID, messageTemp.toByteArray());
+                                addReceivedMessage(messageManager, Boolean.FALSE, senderID, messageTemp.toByteArray());
                                 messageTemp.reset();
                                 continue;
                             }
@@ -88,7 +89,7 @@ public class StandardCommunicationModule extends CommunicationModule
 
     final Class<?>[] standardMessageArgTypes = {boolean.class, int.class, int.class, BitStreamReader.class};
 
-    private void addReceivedMessage(MessageManager messageManager, boolean isRadio, EntityID senderID, byte[] data)
+    private void addReceivedMessage(@Nonnull MessageManager messageManager, boolean isRadio, @Nonnull EntityID senderID, byte[] data)
     {
         BitStreamReader bitStreamReader = new BitStreamReader(data);
         int messageClassIndex = bitStreamReader.getBits(SIZE_ID);
@@ -105,9 +106,7 @@ public class StandardCommunicationModule extends CommunicationModule
             messageManager.addReceivedMessage(
                     messageManager.getMessageClass(messageClassIndex).getConstructor(standardMessageArgTypes).newInstance(args)
             );
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        } catch (IllegalArgumentException e) {
+        } catch (NoSuchMethodException | IllegalArgumentException e) {
             e.printStackTrace();
         } catch (ReflectiveOperationException e) {
             e.printStackTrace();
@@ -115,7 +114,7 @@ public class StandardCommunicationModule extends CommunicationModule
     }
 
     @Override
-    public void send(Agent agent, MessageManager messageManager)
+    public void send(@Nonnull Agent agent, @Nonnull MessageManager messageManager)
     {
         final int voiceLimitBytes = agent.scenarioInfo.getVoiceMessagesSize();
         int voiceMessageLeft = voiceLimitBytes;

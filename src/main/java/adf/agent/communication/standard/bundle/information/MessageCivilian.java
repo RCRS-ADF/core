@@ -6,6 +6,8 @@ import adf.component.communication.util.BitStreamReader;
 import rescuecore2.standard.entities.Civilian;
 import rescuecore2.worldmodel.EntityID;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class MessageCivilian extends StandardMessage
 {
@@ -23,7 +25,7 @@ public class MessageCivilian extends StandardMessage
 	protected int humanDamage;
 	protected EntityID humanPosition;
 
-	public MessageCivilian(boolean isRadio, Civilian civilian)
+	public MessageCivilian(boolean isRadio, @Nonnull Civilian civilian)
 	{
 		super(isRadio);
 		this.agentID = civilian.getID();
@@ -33,7 +35,7 @@ public class MessageCivilian extends StandardMessage
 		this.humanPosition = civilian.isPositionDefined() ? civilian.getPosition() : null;
 	}
 
-	public MessageCivilian(boolean isRadio, int from, int ttl, BitStreamReader bitStreamReader)
+	public MessageCivilian(boolean isRadio, int from, int ttl, @Nonnull BitStreamReader bitStreamReader)
 	{
         super(isRadio, from, ttl, bitStreamReader);
 		rawAgentID = bitStreamReader.getBits(SIZE_ID);
@@ -50,11 +52,13 @@ public class MessageCivilian extends StandardMessage
 	}
 
 	@Override
+	@Nonnull
 	public byte[] toByteArray() {
 		return this.toBitOutputStream().toByteArray();
 	}
 
 	@Override
+	@Nonnull
 	public BitOutputStream toBitOutputStream()
 	{
 		BitOutputStream bitOutputStream = new BitOutputStream();
@@ -84,6 +88,7 @@ public class MessageCivilian extends StandardMessage
 		return bitOutputStream;
 	}
 
+	@Nonnull
 	public EntityID getAgentID()
 	{
 		if (this.agentID == null) {
@@ -98,6 +103,7 @@ public class MessageCivilian extends StandardMessage
 
 	public int getDamage() { return this.humanDamage; }
 
+	@Nullable
 	public EntityID getPosition() {
 		if (this.humanPosition == null) {
 			if(this.rawHumanPosition != -1) this.humanPosition = new EntityID(this.rawHumanPosition);
@@ -122,6 +128,7 @@ public class MessageCivilian extends StandardMessage
 	}
 
 	@Override
+    @Nonnull
 	public String getCheckKey() {
 		return getClass().getCanonicalName() + " > agent:" + this.getAgentID().getValue();
 	}

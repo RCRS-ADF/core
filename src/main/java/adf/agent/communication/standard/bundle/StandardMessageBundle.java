@@ -5,12 +5,14 @@ import adf.agent.communication.standard.bundle.centralized.*;
 import adf.component.communication.CommunicationMessage;
 import adf.component.communication.MessageBundle;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
 public class StandardMessageBundle extends MessageBundle
 {
     @Override
+    @Nonnull
     public List<Class<? extends CommunicationMessage>> getMessageClassList()
     {
         List<Class<? extends CommunicationMessage>> messageClassList = new ArrayList<>();

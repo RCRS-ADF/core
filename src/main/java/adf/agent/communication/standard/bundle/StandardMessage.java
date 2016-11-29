@@ -4,6 +4,9 @@ import adf.component.communication.util.BitStreamReader;
 import adf.component.communication.CommunicationMessage;
 import rescuecore2.worldmodel.EntityID;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 abstract public class StandardMessage extends CommunicationMessage
 {
 	int rawSenderID = -1;
@@ -21,6 +24,7 @@ abstract public class StandardMessage extends CommunicationMessage
 		this.ttl = ttl;
 	}
 
+	@Nonnull
 	public EntityID getSenderID()
 	{
 		if ( mySenderID == null )

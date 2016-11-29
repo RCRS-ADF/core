@@ -6,6 +6,8 @@ import adf.component.communication.util.BitStreamReader;
 import rescuecore2.standard.entities.Building;
 import rescuecore2.worldmodel.EntityID;
 
+import javax.annotation.Nonnull;
+
 
 public class MessageBuilding extends StandardMessage
 {
@@ -20,7 +22,7 @@ public class MessageBuilding extends StandardMessage
 	protected int buildingFieryness;
 	protected int buildingTemperature;
 
-	public MessageBuilding(boolean isRadio, Building building)
+	public MessageBuilding(boolean isRadio, @Nonnull Building building)
 	{
 		super(isRadio);
 		this.buildingID = building.getID();
@@ -29,7 +31,7 @@ public class MessageBuilding extends StandardMessage
 		this.buildingTemperature = building.isTemperatureDefined() ? building.getTemperature() : -1;
 	}
 
-	public MessageBuilding(boolean isRadio, int from, int ttl, BitStreamReader bitStreamReader) {
+	public MessageBuilding(boolean isRadio, int from, int ttl, @Nonnull BitStreamReader bitStreamReader) {
 		super(isRadio, from, ttl, bitStreamReader);
 		this.rawBuildingID = bitStreamReader.getBits(SIZE_ID);
 		this.buildingBrokenness = (bitStreamReader.getBits(1) == 1) ? bitStreamReader.getBits(SIZE_BROKENNESS) : -1;
@@ -37,6 +39,7 @@ public class MessageBuilding extends StandardMessage
 		this.buildingTemperature = (bitStreamReader.getBits(1) == 1) ? bitStreamReader.getBits(SIZE_TEMPERATURE) : -1;
 	}
 
+	@Nonnull
 	public EntityID getBuildingID() {
 		if (this.buildingID == null) {
             this.buildingID = new EntityID(this.rawBuildingID);
@@ -63,11 +66,13 @@ public class MessageBuilding extends StandardMessage
 	}
 
 	@Override
+    @Nonnull
 	public byte[] toByteArray() {
 		return this.toBitOutputStream().toByteArray();
 	}
 
 	@Override
+    @Nonnull
 	public BitOutputStream toBitOutputStream() {
 		BitOutputStream bitOutputStream = new BitOutputStream();
 		bitOutputStream.writeBits(this.buildingID.getValue(), SIZE_ID);
@@ -100,6 +105,7 @@ public class MessageBuilding extends StandardMessage
 	}
 
 	@Override
+    @Nonnull
 	public String getCheckKey() {
 		return getClass().getCanonicalName() + " > building:" + this.getBuildingID().getValue();
 	}

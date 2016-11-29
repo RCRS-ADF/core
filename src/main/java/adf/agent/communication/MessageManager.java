@@ -5,6 +5,8 @@ import adf.component.communication.CommunicationMessage;
 import adf.component.communication.MessageBundle;
 import adf.launcher.ConsoleOutput;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.*;
 
 public class MessageManager
@@ -31,7 +33,7 @@ public class MessageManager
         heardAgentHelpCount = 0;
     }
 
-    public boolean registerMessageClass(int index, Class<? extends CommunicationMessage> messageClass)
+    public boolean registerMessageClass(int index, @Nonnull Class<? extends CommunicationMessage> messageClass)
     {
         if (index > 31)
         {
@@ -51,7 +53,7 @@ public class MessageManager
         return true;
     }
 
-    public void registerMessageBundle(MessageBundle messageBundle)
+    public void registerMessageBundle(@Nonnull MessageBundle messageBundle)
     {
         for (Class<? extends CommunicationMessage> messageClass : messageBundle.getMessageClassList())
         {
@@ -61,6 +63,7 @@ public class MessageManager
         }
     }
 
+    @Nullable
     public Class<? extends CommunicationMessage> getMessageClass(int index)
     {
         if (!messageClassMap.containsKey(index))
@@ -71,7 +74,7 @@ public class MessageManager
         return messageClassMap.get(index);
     }
 
-    public int getMessageClassIndex(CommunicationMessage message)
+    public int getMessageClassIndex(@Nonnull CommunicationMessage message)
     {
         if (!messageClassMap.containsValue(message.getClass()))
         {
@@ -81,39 +84,40 @@ public class MessageManager
         return messageClassIDMap.get(message.getClass());
     }
 
-    public void addMessage(CommunicationMessage message) {
+    public void addMessage(@Nonnull CommunicationMessage message) {
         this.addMessage(message, true);
     }
 
-    public void addMessage(CommunicationMessage message, boolean checkDuplication) {
+    public void addMessage(@Nonnull CommunicationMessage message, boolean checkDuplication) {
         String checkKey = message.getCheckKey();
-        if(checkDuplication) {
-            if(!this.checkDuplicationCache.contains(checkKey)) {
-                this.sendMessageList.add(message);
-                this.checkDuplicationCache.add(checkKey);
-            }
+        if(checkDuplication && !this.checkDuplicationCache.contains(checkKey)) {
+            this.sendMessageList.add(message);
+            this.checkDuplicationCache.add(checkKey);
         }else {
             this.sendMessageList.add(message);
             this.checkDuplicationCache.add(checkKey);
         }
     }
 
+    @Nonnull
     public List<CommunicationMessage> getSendMessageList()
     {
         return this.sendMessageList;
     }
 
-    public void addReceivedMessage(CommunicationMessage message)
+    public void addReceivedMessage(@Nonnull CommunicationMessage message)
     {
         receivedMessageList.add(message);
     }
 
+    @Nonnull
     public List<CommunicationMessage> getReceivedMessageList()
     {
         return this.receivedMessageList;
     }
 
     @SafeVarargs
+    @Nonnull
     public final List<CommunicationMessage> getReceivedMessageList(Class<? extends CommunicationMessage>... messageClasses)
     {
         List<CommunicationMessage> resultList = new ArrayList<>();

@@ -24,7 +24,7 @@ public abstract class Platoon<E extends StandardEntity> extends Agent<E> {
 		//model.indexClass(StandardEntityURN.ROAD);
 		//distance = config.getIntValue(DISTANCE_KEY);
 
-		this.agentInfo = new AgentInfo(this, this.model, this.config);
+		this.agentInfo = new AgentInfo(this, this.model);
 		this.moduleManager = new ModuleManager(this.agentInfo, this.worldInfo, this.scenarioInfo, this.moduleConfig, this.developData);
 
 		this.rootTactics.initialize(this.agentInfo, this.worldInfo, this.scenarioInfo, this.moduleManager, this.messageManager, this.developData);

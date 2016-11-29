@@ -7,6 +7,9 @@ import rescuecore2.standard.entities.Blockade;
 import rescuecore2.standard.entities.Road;
 import rescuecore2.worldmodel.EntityID;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 public class MessageRoad extends StandardMessage
 {
 	private static final int SIZE_ROADID = 32;
@@ -26,11 +29,11 @@ public class MessageRoad extends StandardMessage
 	protected Integer blockadeY;
     protected boolean sendLocation;
 
-	public MessageRoad(boolean isRadio, Road road, Blockade blockade, boolean isPassable) {
+	public MessageRoad(boolean isRadio, @Nonnull Road road, @Nullable Blockade blockade, boolean isPassable) {
 		this(isRadio, road, blockade, isPassable, false);
 	}
 
-	public MessageRoad(boolean isRadio, Road road, Blockade blockade, boolean isPassable, boolean sendBlockadeLocation) {
+	public MessageRoad(boolean isRadio, @Nonnull Road road, @Nullable Blockade blockade, boolean isPassable, boolean sendBlockadeLocation) {
 		super(isRadio);
 		this.roadID = road.getID();
 		if (blockade != null) {
@@ -49,7 +52,7 @@ public class MessageRoad extends StandardMessage
         this.sendLocation = sendBlockadeLocation;
 	}
 
-	public MessageRoad(boolean isRadio, int from, int ttl, BitStreamReader bitStreamReader) {
+	public MessageRoad(boolean isRadio, int from, int ttl, @Nonnull BitStreamReader bitStreamReader) {
 		super(isRadio, from, ttl, bitStreamReader);
 		this.rawRoadID = bitStreamReader.getBits(SIZE_ROADID);
 		this.rawBlockadeID = (bitStreamReader.getBits(1) == 1) ? bitStreamReader.getBits(SIZE_BLOCKADEID) : -1;
@@ -59,6 +62,7 @@ public class MessageRoad extends StandardMessage
 		this.roadPassable = (0 != bitStreamReader.getBits(SIZE_PASSABLE));
 	}
 
+	@Nonnull
 	public EntityID getRoadID() {
 		if (this.roadID == null) {
 			this.roadID = new EntityID(this.rawRoadID);
@@ -66,6 +70,7 @@ public class MessageRoad extends StandardMessage
 		return this.roadID;
 	}
 
+	@Nullable
 	public EntityID getBlockadeID() {
 		if (this.roadBlockadeID == null) {
 			if(this.rawBlockadeID != -1) this.roadBlockadeID = new EntityID(this.rawBlockadeID);
@@ -114,11 +119,13 @@ public class MessageRoad extends StandardMessage
     }
 
     @Override
+	@Nonnull
     public byte[] toByteArray() {
         return this.toBitOutputStream().toByteArray();
     }
 
     @Override
+	@Nonnull
     public BitOutputStream toBitOutputStream()
     {
         BitOutputStream bitOutputStream = new BitOutputStream();
@@ -155,6 +162,7 @@ public class MessageRoad extends StandardMessage
     }
 
 	@Override
+	@Nonnull
 	public String getCheckKey() {
 		return getClass().getCanonicalName() + " > road:" + this.getRoadID().getValue();
 	}

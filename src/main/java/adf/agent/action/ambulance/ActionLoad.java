@@ -6,34 +6,40 @@ import rescuecore2.standard.entities.Civilian;
 import rescuecore2.standard.messages.AKLoad;
 import rescuecore2.worldmodel.EntityID;
 
+import javax.annotation.Nonnull;
+import java.util.Objects;
+
 public class ActionLoad extends Action
 {
 	protected EntityID target;
 
-	public ActionLoad(EntityID targetID)
+	public ActionLoad(@Nonnull EntityID targetID)
 	{
 		super();
 		this.target = targetID;
 	}
 
-	public ActionLoad(Civilian civilian)
+	public ActionLoad(@Nonnull Civilian civilian)
 	{
 		this(civilian.getID());
 	}
 
 	@Override
+	@Nonnull
 	public String toString()
 	{
 		return "ActionLoad [target=" + target + "]";
 	}
 
+	@Nonnull
 	public EntityID getTarget()
 	{
 		return this.target;
 	}
 
 	@Override
-	public Message getCommand(EntityID agentID, int time)
+	@Nonnull
+	public Message getCommand(@Nonnull EntityID agentID, int time)
 	{
 		return new AKLoad(agentID, time, this.target);
 	}

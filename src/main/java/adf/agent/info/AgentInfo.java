@@ -2,31 +2,31 @@ package adf.agent.info;
 
 import adf.agent.Agent;
 import adf.agent.action.Action;
-import rescuecore2.config.Config;
 import rescuecore2.messages.Command;
 import rescuecore2.standard.entities.*;
 import rescuecore2.worldmodel.ChangeSet;
 import rescuecore2.worldmodel.EntityID;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class AgentInfo {
 	private Agent agent;
 	private StandardWorldModel world;
-	private Config config;
-	private int time;
+    private int time;
 	private ChangeSet changed;
 	private Collection<Command> heard;
 
     private Map<Integer, Action> actionHistory;
 
-	public AgentInfo(Agent agent, StandardWorldModel world, Config config) {
-		this.agent = agent;
-		this.world = world;
-		this.config = config;
-		this.time = 0;
+	public AgentInfo(@Nonnull Agent agent, @Nonnull StandardWorldModel world) {
+		this.agent  = Objects.requireNonNull(agent);
+		this.world  = Objects.requireNonNull(world);
+        this.time = 0;
         this.actionHistory = new HashMap<>();
 	}
 
@@ -40,21 +40,24 @@ public class AgentInfo {
 		return this.time;
 	}
 
-	public void setHeard(Collection<Command> heard)
+	public void setHeard(@Nonnull Collection<Command> heard)
 	{
 		this.heard = heard;
 	}
 
+	@Nullable
 	public Collection<Command> getHeard()
 	{
 		return this.heard;
 	}
 
+	@Nonnull
 	public EntityID getID()
 	{
 		return agent.getID();
 	}
 
+	@Nonnull
 	public StandardEntity me() {
 		return this.world.getEntity(this.agent.getID());
 	}
@@ -69,28 +72,32 @@ public class AgentInfo {
 		return agent.getY();
 	}
 
-	public EntityID getPosition()
-	{
-		return ((Human)this.world.getEntity(this.agent.getID())).getPosition();
-	}
+	@Nonnull
+	public EntityID getPosition() {
+	    StandardEntity entity = this.world.getEntity(this.agent.getID());
+        return (entity instanceof Human) ? ((Human) entity).getPosition() : entity.getID();
+    }
 
+    @Nonnull
 	public Area getPositionArea()
 	{
 		return (Area)this.world.getEntity(this.getPosition());
 	}
 
-	public void setChanged(ChangeSet changed)
+	public void setChanged(@Nonnull ChangeSet changed)
 	{
 		this.changed = changed;
 	}
 
+	@Nullable
     public ChangeSet getChanged() {
         return this.changed;
     }
 
+    @Nullable
 	public Human someoneOnBoard() {
-		EntityID id = agent.getID();
-		for (StandardEntity next : world.getEntitiesOfType(StandardEntityURN.CIVILIAN)) {
+		EntityID id = this.agent.getID();
+		for (StandardEntity next : this.world.getEntitiesOfType(StandardEntityURN.CIVILIAN)) {
 			Human human = (Human)next;
 			if (human.getPosition().equals(id)) {
 				return human;
@@ -112,12 +119,13 @@ public class AgentInfo {
 		return 0;
 	}
 
+	@Nullable
 	public Action getExecutedAction(int time) {
 	    if(time > 0) return this.actionHistory.get(time);
         return this.actionHistory.get(this.getTime() + time);
     }
 
-    public void setExecutedAction(int time, Action action) {
+    public void setExecutedAction(int time, @Nullable Action action) {
         this.actionHistory.put(time > 0 ? time : this.getTime() + time, action);
     }
 }
