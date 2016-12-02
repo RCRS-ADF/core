@@ -28,14 +28,14 @@ public class ConnectorPoliceForce extends Connector
 			for (int i = 0; i != count; ++i)
 			{
 				TacticsPoliceForce tacticsPoliceForce;
-				if (loader.getTacticsPolice() == null)
+				if (loader.getTacticsPoliceForce() == null)
 				{
 					ConsoleOutput.error("Cannot Load PoliceForce Tactics");
 					tacticsPoliceForce = new DummyTacticsPoliceForce();
 				}
 				else
 				{
-					tacticsPoliceForce = loader.getTacticsPolice();
+					tacticsPoliceForce = loader.getTacticsPoliceForce();
 				}
 				DevelopData developData = new DevelopData(
 						config.getBooleanValue(ConfigKey.KEY_DEVELOP_FLAG, false),

@@ -27,14 +27,14 @@ public class ConnectorFireStation extends Connector
 		try {
 			for (int i = 0; i != count; ++i) {
 				TacticsFireStation tacticsFireStation;
-				if (loader.getTacticsFireCenter() == null && loader.getControlFire() == null)
+				if (loader.getTacticsFireStation() == null && loader.getControlFire() == null)
 				{
 					ConsoleOutput.error("Cannot Load FireStation Tactics");
 					tacticsFireStation = new DummyTacticsFireStation();
 				}
 				else
 				{
-					tacticsFireStation = loader.getTacticsFireCenter();
+					tacticsFireStation = loader.getTacticsFireStation();
 					if(tacticsFireStation == null) {
 						tacticsFireStation = loader.getControlFire();
 					}

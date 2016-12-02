@@ -14,16 +14,16 @@ abstract public class AbstractLoader
 {
 	abstract public String getTeamName();
 
-	abstract public TacticsAmbulanceTeam getTacticsAmbulance();
-	abstract public TacticsFireBrigade getTacticsFire();
-	abstract public TacticsPoliceForce getTacticsPolice();
+	abstract public TacticsAmbulanceTeam getTacticsAmbulanceTeam();
+	abstract public TacticsFireBrigade getTacticsFireBrigade();
+	abstract public TacticsPoliceForce getTacticsPoliceForce();
 
-    abstract public TacticsAmbulanceCentre getTacticsAmbulanceCenter();
-    abstract public TacticsFireStation getTacticsFireCenter();
-    abstract public TacticsPoliceOffice getTacticsPoliceCenter();
+    abstract public TacticsAmbulanceCentre getTacticsAmbulanceCentre();
+    abstract public TacticsFireStation getTacticsFireStation();
+    abstract public TacticsPoliceOffice getTacticsPoliceOffice();
 
 	/**
-	 * @deprecated change method name {@link #getTacticsAmbulanceCenter()}
+	 * @deprecated change method name {@link #getTacticsAmbulanceCentre()}
 	 */
     @Deprecated
 	public ControlAmbulance getControlAmbulance() {
@@ -31,7 +31,7 @@ abstract public class AbstractLoader
 	}
 
     /**
-     * @deprecated change method name {@link #getTacticsFireCenter()}
+     * @deprecated change method name {@link #getTacticsFireStation()}
      */
     @Deprecated
 	public ControlFire getControlFire() {
@@ -39,7 +39,7 @@ abstract public class AbstractLoader
     }
 
     /**
-     * @deprecated change method name {@link #getTacticsPoliceCenter()}
+     * @deprecated change method name {@link #getTacticsPoliceOffice()}
      */
     @Deprecated
 	public ControlPolice getControlPolice() {

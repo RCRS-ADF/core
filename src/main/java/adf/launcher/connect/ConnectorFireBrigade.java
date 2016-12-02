@@ -26,14 +26,14 @@ public class ConnectorFireBrigade extends Connector {
 		try {
 			for (int i = 0; i != count; ++i) {
 				TacticsFireBrigade tacticsFireBrigade;
-				if (loader.getTacticsFire() == null)
+				if (loader.getTacticsFireBrigade() == null)
 				{
 					ConsoleOutput.error("Cannot Load FireBrigade Tactics");
 					tacticsFireBrigade = new DummyTacticsFireBrigade();
 				}
 				else
 				{
-					tacticsFireBrigade = loader.getTacticsFire();
+					tacticsFireBrigade = loader.getTacticsFireBrigade();
 				}
 				DevelopData developData = new DevelopData(
 						config.getBooleanValue(ConfigKey.KEY_DEVELOP_FLAG, false),

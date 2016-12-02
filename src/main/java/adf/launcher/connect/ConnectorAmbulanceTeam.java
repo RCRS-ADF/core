@@ -27,14 +27,14 @@ public class ConnectorAmbulanceTeam extends Connector {
 		try {
 			for (int i = 0; i != count; ++i) {
 				TacticsAmbulanceTeam tacticsAmbulanceTeam;
-				if (loader.getTacticsAmbulance() == null)
+				if (loader.getTacticsAmbulanceTeam() == null)
 				{
 					ConsoleOutput.error("Cannot Load AmbulanceTeam Tactics");
 					tacticsAmbulanceTeam = new DummyTacticsAmbulanceTeam();
 				}
 				else
 				{
-					tacticsAmbulanceTeam = loader.getTacticsAmbulance();
+					tacticsAmbulanceTeam = loader.getTacticsAmbulanceTeam();
 				}
 				DevelopData developData = new DevelopData(
 						config.getBooleanValue(ConfigKey.KEY_DEVELOP_FLAG, false),

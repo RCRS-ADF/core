@@ -28,14 +28,14 @@ public class ConnectorPoliceOffice extends Connector
 		try {
 			for (int i = 0; i != count; ++i) {
 				TacticsPoliceOffice tacticsPoliceOffice;
-				if (loader.getTacticsPoliceCenter() == null && loader.getControlPolice() == null)
+				if (loader.getTacticsPoliceOffice() == null && loader.getControlPolice() == null)
 				{
 					ConsoleOutput.error("Cannot Load PoliceOffice Tactics");
 					tacticsPoliceOffice = new DummyTacticsPoliceOffice();
 				}
 				else
 				{
-					tacticsPoliceOffice = loader.getTacticsPoliceCenter();
+					tacticsPoliceOffice = loader.getTacticsPoliceOffice();
 					if(tacticsPoliceOffice == null) {
 						tacticsPoliceOffice = loader.getControlPolice();
 					}
