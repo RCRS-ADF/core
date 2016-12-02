@@ -1,12 +1,12 @@
 package adf.component.control;
 
-import adf.component.tactics.center.TacticsAmbulanceCenter;
+import adf.component.tactics.center.TacticsAmbulanceCentre;
 
 /**
- * @deprecated change class name {@link TacticsAmbulanceCenter}
+ * @deprecated change class name {@link TacticsAmbulanceCentre}
  */
 @Deprecated
-public abstract class ControlAmbulance extends TacticsAmbulanceCenter
+public abstract class ControlAmbulance extends TacticsAmbulanceCentre
 {
 	public ControlAmbulance(ControlAmbulance parent)
 	{

@@ -11,7 +11,9 @@ import adf.component.module.AbstractModule;
 import rescuecore2.standard.entities.StandardEntity;
 import rescuecore2.worldmodel.EntityID;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 public abstract class Clustering extends AbstractModule{
 
@@ -28,6 +30,24 @@ public abstract class Clustering extends AbstractModule{
     public abstract Collection<StandardEntity> getClusterEntities(int index);
 
     public abstract Collection<EntityID> getClusterEntityIDs(int index);
+
+    public List<Collection<StandardEntity>> getAllClusterEntities() {
+        int number = this.getClusterNumber();
+        List<Collection<StandardEntity>> result = new ArrayList<>(number);
+        for(int i = 0; i < number; i++) {
+            result.add(i, this.getClusterEntities(i));
+        }
+        return result;
+    }
+
+    public List<Collection<EntityID>> getAllClusterEntityIDs() {
+        int number = this.getClusterNumber();
+        List<Collection<EntityID>> result = new ArrayList<>(number);
+        for(int i = 0; i < number; i++) {
+            result.add(i, this.getClusterEntityIDs(i));
+        }
+        return result;
+    }
 
     @Override
     public Clustering precompute(PrecomputeData precomputeData) {

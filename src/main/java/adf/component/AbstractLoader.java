@@ -3,24 +3,24 @@ package adf.component;
 import adf.component.control.ControlAmbulance;
 import adf.component.control.ControlFire;
 import adf.component.control.ControlPolice;
-import adf.component.tactics.TacticsAmbulance;
-import adf.component.tactics.TacticsFire;
-import adf.component.tactics.TacticsPolice;
-import adf.component.tactics.center.TacticsAmbulanceCenter;
-import adf.component.tactics.center.TacticsFireCenter;
-import adf.component.tactics.center.TacticsPoliceCenter;
+import adf.component.tactics.TacticsAmbulanceTeam;
+import adf.component.tactics.TacticsFireBrigade;
+import adf.component.tactics.TacticsPoliceForce;
+import adf.component.tactics.center.TacticsAmbulanceCentre;
+import adf.component.tactics.center.TacticsFireStation;
+import adf.component.tactics.center.TacticsPoliceOffice;
 
 abstract public class AbstractLoader
 {
 	abstract public String getTeamName();
 
-	abstract public TacticsAmbulance getTacticsAmbulance();
-	abstract public TacticsFire getTacticsFire();
-	abstract public TacticsPolice getTacticsPolice();
+	abstract public TacticsAmbulanceTeam getTacticsAmbulance();
+	abstract public TacticsFireBrigade getTacticsFire();
+	abstract public TacticsPoliceForce getTacticsPolice();
 
-    abstract public TacticsAmbulanceCenter getTacticsAmbulanceCenter();
-    abstract public TacticsFireCenter getTacticsFireCenter();
-    abstract public TacticsPoliceCenter getTacticsPoliceCenter();
+    abstract public TacticsAmbulanceCentre getTacticsAmbulanceCenter();
+    abstract public TacticsFireStation getTacticsFireCenter();
+    abstract public TacticsPoliceOffice getTacticsPoliceCenter();
 
 	/**
 	 * @deprecated change method name {@link #getTacticsAmbulanceCenter()}

@@ -4,10 +4,10 @@ import adf.agent.config.ModuleConfig;
 import adf.agent.develop.DevelopData;
 import adf.agent.office.OfficeAmbulance;
 import adf.component.AbstractLoader;
-import adf.component.tactics.center.TacticsAmbulanceCenter;
+import adf.component.tactics.center.TacticsAmbulanceCentre;
 import adf.launcher.ConfigKey;
 import adf.launcher.ConsoleOutput;
-import adf.launcher.dummy.control.DummyTacticsAmbulanceCenter;
+import adf.launcher.dummy.tactics.center.DummyTacticsAmbulanceCentre;
 import rescuecore2.components.ComponentConnectionException;
 import rescuecore2.components.ComponentLauncher;
 import rescuecore2.config.Config;
@@ -25,11 +25,11 @@ public class ConnectorAmbulanceCentre extends Connector {
 
 		try {
 			for (int i = 0; i != count; ++i) {
-				TacticsAmbulanceCenter tacticsAmbulanceCenter;
+				TacticsAmbulanceCentre tacticsAmbulanceCenter;
 				if (loader.getTacticsAmbulanceCenter() == null && loader.getControlAmbulance() == null)
 				{
 				    ConsoleOutput.error("Cannot Load AmbulanceCentre Tactics");
-					tacticsAmbulanceCenter = new DummyTacticsAmbulanceCenter();
+					tacticsAmbulanceCenter = new DummyTacticsAmbulanceCentre();
 				}
 				else
 				{

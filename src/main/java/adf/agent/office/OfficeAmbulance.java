@@ -1,7 +1,7 @@
 package adf.agent.office;
 
 import adf.agent.develop.DevelopData;
-import adf.component.tactics.center.TacticsAmbulanceCenter;
+import adf.component.tactics.center.TacticsAmbulanceCentre;
 import rescuecore2.standard.entities.Building;
 import rescuecore2.standard.entities.StandardEntityURN;
 
@@ -9,7 +9,7 @@ import java.util.EnumSet;
 
 public class OfficeAmbulance extends Office<Building>
 {
-	public OfficeAmbulance(TacticsAmbulanceCenter tacticsAmbulanceCenter, String moduleConfigFileName, boolean isPrecompute, boolean isDebugMode, DevelopData developData)
+	public OfficeAmbulance(TacticsAmbulanceCentre tacticsAmbulanceCenter, String moduleConfigFileName, boolean isPrecompute, boolean isDebugMode, DevelopData developData)
 	{
 		super(tacticsAmbulanceCenter, moduleConfigFileName, isPrecompute, DATASTORAGE_FILE_NAME_AMBULANCE, isDebugMode, developData);
 	}

@@ -3,11 +3,11 @@ package adf.launcher.connect;
 import adf.agent.config.ModuleConfig;
 import adf.agent.develop.DevelopData;
 import adf.agent.platoon.PlatoonPolice;
-import adf.component.tactics.TacticsPolice;
+import adf.component.tactics.TacticsPoliceForce;
 import adf.component.AbstractLoader;
 import adf.launcher.ConfigKey;
 import adf.launcher.ConsoleOutput;
-import adf.launcher.dummy.tactics.DummyTacticsPolice;
+import adf.launcher.dummy.tactics.DummyTacticsPoliceForce;
 import rescuecore2.components.ComponentConnectionException;
 import rescuecore2.components.ComponentLauncher;
 import rescuecore2.config.Config;
@@ -27,15 +27,15 @@ public class ConnectorPoliceForce extends Connector
 		try {
 			for (int i = 0; i != count; ++i)
 			{
-				TacticsPolice tacticsPolice;
+				TacticsPoliceForce tacticsPoliceForce;
 				if (loader.getTacticsPolice() == null)
 				{
 					ConsoleOutput.error("Cannot Load PoliceForce Tactics");
-					tacticsPolice = new DummyTacticsPolice();
+					tacticsPoliceForce = new DummyTacticsPoliceForce();
 				}
 				else
 				{
-					tacticsPolice = loader.getTacticsPolice();
+					tacticsPoliceForce = loader.getTacticsPolice();
 				}
 				DevelopData developData = new DevelopData(
 						config.getBooleanValue(ConfigKey.KEY_DEVELOP_FLAG, false),
@@ -43,7 +43,7 @@ public class ConnectorPoliceForce extends Connector
 						config.getArrayValue(ConfigKey.KEY_DEVELOP_DATA, "")
 				);
 				launcher.connect(new PlatoonPolice(
-						tacticsPolice,
+                        tacticsPoliceForce,
 						config.getValue(ConfigKey.KEY_MODULE_CONFIG_FILE_NAME, ModuleConfig.DEFAULT_CONFIG_FILE_NAME),
 						config.getBooleanValue(ConfigKey.KEY_PRECOMPUTE, false),
 						config.getBooleanValue(ConfigKey.KEY_DEBUG_FLAG, false),

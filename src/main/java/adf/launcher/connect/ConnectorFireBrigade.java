@@ -3,11 +3,11 @@ package adf.launcher.connect;
 import adf.agent.config.ModuleConfig;
 import adf.agent.develop.DevelopData;
 import adf.agent.platoon.PlatoonFire;
-import adf.component.tactics.TacticsFire;
+import adf.component.tactics.TacticsFireBrigade;
 import adf.component.AbstractLoader;
 import adf.launcher.ConfigKey;
 import adf.launcher.ConsoleOutput;
-import adf.launcher.dummy.tactics.DummyTacticsFire;
+import adf.launcher.dummy.tactics.DummyTacticsFireBrigade;
 import rescuecore2.components.ComponentConnectionException;
 import rescuecore2.components.ComponentLauncher;
 import rescuecore2.config.Config;
@@ -25,15 +25,15 @@ public class ConnectorFireBrigade extends Connector {
 
 		try {
 			for (int i = 0; i != count; ++i) {
-				TacticsFire tacticsFire;
+				TacticsFireBrigade tacticsFireBrigade;
 				if (loader.getTacticsFire() == null)
 				{
 					ConsoleOutput.error("Cannot Load FireBrigade Tactics");
-					tacticsFire = new DummyTacticsFire();
+					tacticsFireBrigade = new DummyTacticsFireBrigade();
 				}
 				else
 				{
-					tacticsFire = loader.getTacticsFire();
+					tacticsFireBrigade = loader.getTacticsFire();
 				}
 				DevelopData developData = new DevelopData(
 						config.getBooleanValue(ConfigKey.KEY_DEVELOP_FLAG, false),
@@ -41,7 +41,7 @@ public class ConnectorFireBrigade extends Connector {
 						config.getArrayValue(ConfigKey.KEY_DEVELOP_DATA, "")
 				);
 				launcher.connect(new PlatoonFire(
-						tacticsFire,
+                        tacticsFireBrigade,
 						config.getValue(ConfigKey.KEY_MODULE_CONFIG_FILE_NAME, ModuleConfig.DEFAULT_CONFIG_FILE_NAME),
 						config.getBooleanValue(ConfigKey.KEY_PRECOMPUTE, false),
 						config.getBooleanValue(ConfigKey.KEY_DEBUG_FLAG, false),

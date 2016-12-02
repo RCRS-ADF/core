@@ -8,9 +8,9 @@ import adf.agent.info.WorldInfo;
 import adf.agent.module.ModuleManager;
 import adf.agent.develop.DevelopData;
 import adf.agent.precompute.PrecomputeData;
-import adf.component.tactics.TacticsPolice;
+import adf.component.tactics.TacticsFireBrigade;
 
-public class DummyTacticsPolice extends TacticsPolice
+public class DummyTacticsFireBrigade extends TacticsFireBrigade
 {
     @Override
     public void initialize(AgentInfo agentInfo, WorldInfo worldInfo, ScenarioInfo scenarioInfo, ModuleManager moduleManager, MessageManager messageManager, DevelopData developData)

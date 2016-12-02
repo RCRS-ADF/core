@@ -4,10 +4,10 @@ import adf.agent.config.ModuleConfig;
 import adf.agent.develop.DevelopData;
 import adf.agent.platoon.PlatoonAmbulance;
 import adf.component.AbstractLoader;
-import adf.component.tactics.TacticsAmbulance;
+import adf.component.tactics.TacticsAmbulanceTeam;
 import adf.launcher.ConfigKey;
 import adf.launcher.ConsoleOutput;
-import adf.launcher.dummy.tactics.DummyTacticsAmbulance;
+import adf.launcher.dummy.tactics.DummyTacticsAmbulanceTeam;
 import rescuecore2.components.ComponentConnectionException;
 import rescuecore2.components.ComponentLauncher;
 import rescuecore2.config.Config;
@@ -26,15 +26,15 @@ public class ConnectorAmbulanceTeam extends Connector {
         //connect
 		try {
 			for (int i = 0; i != count; ++i) {
-				TacticsAmbulance tacticsAmbulance;
+				TacticsAmbulanceTeam tacticsAmbulanceTeam;
 				if (loader.getTacticsAmbulance() == null)
 				{
 					ConsoleOutput.error("Cannot Load AmbulanceTeam Tactics");
-					tacticsAmbulance = new DummyTacticsAmbulance();
+					tacticsAmbulanceTeam = new DummyTacticsAmbulanceTeam();
 				}
 				else
 				{
-					tacticsAmbulance = loader.getTacticsAmbulance();
+					tacticsAmbulanceTeam = loader.getTacticsAmbulance();
 				}
 				DevelopData developData = new DevelopData(
 						config.getBooleanValue(ConfigKey.KEY_DEVELOP_FLAG, false),
@@ -42,7 +42,7 @@ public class ConnectorAmbulanceTeam extends Connector {
 						config.getArrayValue(ConfigKey.KEY_DEVELOP_DATA, "")
 				);
 				launcher.connect(new PlatoonAmbulance(
-						tacticsAmbulance,
+                        tacticsAmbulanceTeam,
 						config.getValue(ConfigKey.KEY_MODULE_CONFIG_FILE_NAME, ModuleConfig.DEFAULT_CONFIG_FILE_NAME),
 						config.getBooleanValue(ConfigKey.KEY_PRECOMPUTE, false),
 						config.getBooleanValue(ConfigKey.KEY_DEBUG_FLAG, false),
