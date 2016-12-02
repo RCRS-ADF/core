@@ -5,6 +5,7 @@ import adf.agent.develop.DevelopData;
 import adf.agent.info.AgentInfo;
 import adf.agent.info.ScenarioInfo;
 import adf.agent.info.WorldInfo;
+import adf.component.extaction.CommandExecutor;
 import adf.component.extaction.ExtAction;
 import adf.component.module.AbstractModule;
 import rescuecore2.config.NoSuchConfigOptionException;
@@ -20,6 +21,7 @@ public class ModuleManager
 {
     private Map<String, AbstractModule> moduleMap;
     private Map<String, ExtAction> actionMap;
+    private Map<String, CommandExecutor> executorMap;
 
     private AgentInfo agentInfo;
     private WorldInfo worldInfo;
@@ -37,6 +39,7 @@ public class ModuleManager
         this.developData = developData;
         this.moduleMap = new HashMap<>();
         this.actionMap = new HashMap<>();
+        this.executorMap = new HashMap<>();
     }
 
     @SuppressWarnings("unchecked")
@@ -92,7 +95,7 @@ public class ModuleManager
     }
 
     @SuppressWarnings("unchecked")
-    public final <A extends ExtAction> A getExtAction(String actionName, String defaultClassName) {
+    public final ExtAction getExtAction(String actionName, String defaultClassName) {
         String className = actionName;
         try
         { className = this.moduleConfig.getValue(actionName); }
@@ -109,13 +112,13 @@ public class ModuleManager
 
             ExtAction instance = this.actionMap.get(className);
             if(instance != null) {
-                return (A)instance;
+                return instance;
             }
 
             if (ExtAction.class.isAssignableFrom(actionClass)) {
                 instance = this.getExtAction((Class<ExtAction>) actionClass);
                 this.actionMap.put(className, instance);
-                return (A)instance;
+                return instance;
             }
         }catch (ClassNotFoundException | NullPointerException e) {
             throw new RuntimeException(e);
@@ -124,7 +127,7 @@ public class ModuleManager
     }
 
     @SuppressWarnings("unchecked")
-    public final <A extends ExtAction> A getExtAction(String actionName) {
+    public final ExtAction getExtAction(String actionName) {
         return getExtAction(actionName, "");
     }
 
@@ -134,6 +137,55 @@ public class ModuleManager
             Constructor<ExtAction> constructor = actionClass.getConstructor(AgentInfo.class, WorldInfo.class, ScenarioInfo.class, ModuleManager.class, DevelopData.class);
             ExtAction instance = constructor.newInstance(this.agentInfo, this.worldInfo, this.scenarioInfo, this, this.developData);
             this.actionMap.put(actionClass.getCanonicalName(), instance);
+            return instance;
+        } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    public final CommandExecutor getCommandExecutor(String executorName, String defaultClassName) {
+        String className = executorName;
+        try
+        { className = this.moduleConfig.getValue(executorName); }
+        catch (NoSuchConfigOptionException ignored) { }
+
+        try {
+            Class<?> actionClass;
+            try {
+                actionClass = Class.forName(className);
+            }catch (ClassNotFoundException | NullPointerException e) {
+                className = defaultClassName;
+                actionClass = Class.forName(className);
+            }
+
+            CommandExecutor instance = this.executorMap.get(className);
+            if(instance != null) {
+                return instance;
+            }
+
+            if (ExtAction.class.isAssignableFrom(actionClass)) {
+                instance = this.getCommandExecutor((Class<CommandExecutor>) actionClass);
+                this.executorMap.put(className, instance);
+                return instance;
+            }
+        }catch (ClassNotFoundException | NullPointerException e) {
+            throw new RuntimeException(e);
+        }
+        throw new IllegalArgumentException("CommandExecutor name is not found : " + className);
+    }
+
+    @SuppressWarnings("unchecked")
+    public final CommandExecutor getCommandExecutor(String executorName) {
+        return getCommandExecutor(executorName, "");
+    }
+
+    @SuppressWarnings("unchecked")
+    private CommandExecutor getCommandExecutor(Class<CommandExecutor> actionClass) {
+        try {
+            Constructor<CommandExecutor> constructor = actionClass.getConstructor(AgentInfo.class, WorldInfo.class, ScenarioInfo.class, ModuleManager.class, DevelopData.class);
+            CommandExecutor instance = constructor.newInstance(this.agentInfo, this.worldInfo, this.scenarioInfo, this, this.developData);
+            this.executorMap.put(actionClass.getCanonicalName(), instance);
             return instance;
         } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
             throw new RuntimeException(e);

@@ -1,6 +1,5 @@
 package adf.agent.communication.standard.bundle.centralized;
 
-import adf.agent.communication.standard.bundle.StandardMessage;
 import adf.component.communication.util.BitOutputStream;
 import adf.component.communication.util.BitStreamReader;
 import rescuecore2.worldmodel.EntityID;
@@ -9,7 +8,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Objects;
 
-public class CommandPolice extends StandardMessage
+public class CommandPolice extends MessageCommand
 {
 	/* below id is same to information.MessagePoliceForce */
 	public static final int ACTION_REST = 0;
