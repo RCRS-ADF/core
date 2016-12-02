@@ -1,4 +1,4 @@
-package adf.component.command;
+package adf.component.extaction;
 
 import adf.agent.communication.MessageManager;
 import adf.agent.develop.DevelopData;
@@ -14,7 +14,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
 
-abstract public class CommandGenerator {
+abstract public class CommandPicker {
     protected ScenarioInfo scenarioInfo;
     protected AgentInfo agentInfo;
     protected WorldInfo worldInfo;
@@ -29,7 +29,7 @@ abstract public class CommandGenerator {
 
     protected Collection<CommunicationMessage> result;
 
-    public CommandGenerator(AgentInfo ai, WorldInfo wi, ScenarioInfo si, ModuleManager moduleManager, DevelopData developData) {
+    public CommandPicker(AgentInfo ai, WorldInfo wi, ScenarioInfo si, ModuleManager moduleManager, DevelopData developData) {
         this.worldInfo = wi;
         this.agentInfo = ai;
         this.scenarioInfo = si;
@@ -43,28 +43,28 @@ abstract public class CommandGenerator {
         this.result = new HashSet<>();
     }
 
-    public abstract CommandGenerator setData(Map<EntityID, EntityID> allocationData);
+    public abstract CommandPicker setData(Map<EntityID, EntityID> allocationData);
 
     public Collection<CommunicationMessage> getResult() {
         return result;
     }
 
-    public CommandGenerator precompute(PrecomputeData precomputeData) {
+    public CommandPicker precompute(PrecomputeData precomputeData) {
         this.countPrecompute++;
         return this;
     }
 
-    public CommandGenerator resume(PrecomputeData precomputeData) {
+    public CommandPicker resume(PrecomputeData precomputeData) {
         this.countResume++;
         return this;
     }
 
-    public CommandGenerator preparate() {
+    public CommandPicker preparate() {
         this.countPreparate++;
         return this;
     }
 
-    public CommandGenerator updateInfo(MessageManager messageManager){
+    public CommandPicker updateInfo(MessageManager messageManager){
         if (this.countUpdateInfoCurrentTime != this.agentInfo.getTime())
         {
             this.countUpdateInfo = 0;

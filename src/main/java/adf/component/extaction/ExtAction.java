@@ -2,6 +2,8 @@ package adf.component.extaction;
 
 import adf.agent.action.Action;
 import adf.agent.communication.MessageManager;
+import adf.agent.communication.standard.bundle.centralized.CommandAmbulance;
+import adf.agent.communication.standard.bundle.centralized.CommandFire;
 import adf.agent.develop.DevelopData;
 import adf.agent.info.AgentInfo;
 import adf.agent.info.ScenarioInfo;
@@ -41,11 +43,7 @@ abstract public class ExtAction {
         this.countUpdateInfoCurrentTime = 0;
 	}
 
-    public abstract ExtAction setTarget(EntityID... targets);
-
-	public ExtAction setTarget(Collection<EntityID> targets) {
-        return setTarget(targets.toArray(new EntityID[targets.size()]));
-    }
+    public abstract ExtAction setTarget(EntityID targets);
 
 	public abstract ExtAction calc();
 
