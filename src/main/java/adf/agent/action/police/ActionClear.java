@@ -12,6 +12,7 @@ import rescuecore2.standard.messages.AKClearArea;
 import rescuecore2.worldmodel.EntityID;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Objects;
 
 public class ActionClear extends Action
@@ -63,7 +64,7 @@ public class ActionClear extends Action
 		return this.useOldFunction;
 	}
 
-	@Nonnull
+	@Nullable
 	public EntityID getTarget() {
 	    return this.target;
 	}
