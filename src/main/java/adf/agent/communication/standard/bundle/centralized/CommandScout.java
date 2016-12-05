@@ -1,5 +1,6 @@
 package adf.agent.communication.standard.bundle.centralized;
 
+import adf.agent.communication.standard.bundle.StandardMessage;
 import adf.component.communication.util.BitOutputStream;
 import adf.component.communication.util.BitStreamReader;
 import rescuecore2.worldmodel.EntityID;
@@ -8,8 +9,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Objects;
 
-public class CommandScout extends MessageCommand
-{
+public class CommandScout extends StandardMessage {
 	private static final int SIZE_TO = 32;
 	private static final int SIZE_TARGET = 32;
 	private static final int SIZE_RANGE = 32;

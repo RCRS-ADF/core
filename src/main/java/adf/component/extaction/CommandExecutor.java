@@ -2,15 +2,15 @@ package adf.component.extaction;
 
 import adf.agent.action.Action;
 import adf.agent.communication.MessageManager;
-import adf.agent.communication.standard.bundle.centralized.MessageCommand;
 import adf.agent.develop.DevelopData;
 import adf.agent.info.AgentInfo;
 import adf.agent.info.ScenarioInfo;
 import adf.agent.info.WorldInfo;
 import adf.agent.module.ModuleManager;
 import adf.agent.precompute.PrecomputeData;
+import adf.component.communication.CommunicationMessage;
 
-public abstract class CommandExecutor {
+public abstract class CommandExecutor<C extends CommunicationMessage> {
     protected ScenarioInfo scenarioInfo;
     protected AgentInfo agentInfo;
     protected WorldInfo worldInfo;
@@ -39,7 +39,7 @@ public abstract class CommandExecutor {
         this.countUpdateInfoCurrentTime = 0;
     }
 
-    public abstract CommandExecutor setCommand(MessageCommand command);
+    public abstract CommandExecutor setCommand(C command);
 
     public abstract CommandExecutor calc();
 
