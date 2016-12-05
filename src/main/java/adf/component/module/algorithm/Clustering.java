@@ -29,11 +29,7 @@ public abstract class Clustering extends AbstractModule{
 
     public abstract Collection<StandardEntity> getClusterEntities(int index);
 
-    public abstract List<Collection<StandardEntity>> getClusterEntitiesTable();
-
     public abstract Collection<EntityID> getClusterEntityIDs(int index);
-
-    public abstract List<Collection<EntityID>> getClusterEintityIDsTable();
 
     public List<Collection<StandardEntity>> getAllClusterEntities() {
         int number = this.getClusterNumber();
