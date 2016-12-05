@@ -1,4 +1,4 @@
-package adf.component.extaction;
+package adf.component.centralized;
 
 import adf.agent.communication.MessageManager;
 import adf.agent.develop.DevelopData;

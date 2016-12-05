@@ -1,7 +1,7 @@
 package adf.agent.office;
 
 import adf.agent.develop.DevelopData;
-import adf.component.tactics.center.TacticsFireStation;
+import adf.component.tactics.TacticsFireStation;
 import rescuecore2.standard.entities.Building;
 import rescuecore2.standard.entities.StandardEntityURN;
 

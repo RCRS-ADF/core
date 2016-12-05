@@ -5,8 +5,9 @@ import adf.agent.develop.DevelopData;
 import adf.agent.info.AgentInfo;
 import adf.agent.info.ScenarioInfo;
 import adf.agent.info.WorldInfo;
-import adf.component.extaction.CommandExecutor;
-import adf.component.extaction.CommandPicker;
+import adf.component.communication.CommunicationMessage;
+import adf.component.centralized.CommandExecutor;
+import adf.component.centralized.CommandPicker;
 import adf.component.extaction.ExtAction;
 import adf.component.module.AbstractModule;
 import rescuecore2.config.NoSuchConfigOptionException;
@@ -22,7 +23,7 @@ public class ModuleManager
 {
     private Map<String, AbstractModule> moduleMap;
     private Map<String, ExtAction> actionMap;
-    private Map<String, CommandExecutor> executorMap;
+    private Map<String, CommandExecutor<CommunicationMessage>> executorMap;
     private Map<String, CommandPicker> pickerMap;
 
     private AgentInfo agentInfo;
@@ -151,7 +152,7 @@ public class ModuleManager
 
     @SuppressWarnings("unchecked")
     @Nonnull
-    public final CommandExecutor getCommandExecutor(String executorName, String defaultClassName) {
+    public final <E extends CommandExecutor<? extends CommunicationMessage>> E getCommandExecutor(String executorName, String defaultClassName) {
         String className = executorName;
         try
         { className = this.moduleConfig.getValue(executorName); }
@@ -166,15 +167,15 @@ public class ModuleManager
                 actionClass = Class.forName(className);
             }
 
-            CommandExecutor instance = this.executorMap.get(className);
+            CommandExecutor<CommunicationMessage> instance = this.executorMap.get(className);
             if(instance != null) {
-                return instance;
+                return (E)instance;
             }
 
             if (CommandExecutor.class.isAssignableFrom(actionClass)) {
-                instance = this.getCommandExecutor((Class<CommandExecutor>) actionClass);
+                instance = this.getCommandExecutor((Class<CommandExecutor<CommunicationMessage>>) actionClass);
                 this.executorMap.put(className, instance);
-                return instance;
+                return (E)instance;
             }
         }catch (ClassNotFoundException | NullPointerException e) {
             throw new RuntimeException(e);
@@ -184,17 +185,17 @@ public class ModuleManager
 
     @SuppressWarnings("unchecked")
     @Nonnull
-    public final CommandExecutor getCommandExecutor(String executorName) {
+    public final <E extends CommandExecutor<? extends CommunicationMessage>> E getCommandExecutor(String executorName) {
         return getCommandExecutor(executorName, "");
     }
 
     @SuppressWarnings("unchecked")
     @Nonnull
-    private CommandExecutor getCommandExecutor(Class<CommandExecutor> actionClass) {
+    private <E extends CommandExecutor<? extends CommunicationMessage>> E getCommandExecutor(Class<E> actionClass) {
         try {
-            Constructor<CommandExecutor> constructor = actionClass.getConstructor(AgentInfo.class, WorldInfo.class, ScenarioInfo.class, ModuleManager.class, DevelopData.class);
-            CommandExecutor instance = constructor.newInstance(this.agentInfo, this.worldInfo, this.scenarioInfo, this, this.developData);
-            this.executorMap.put(actionClass.getCanonicalName(), instance);
+            Constructor<E> constructor = actionClass.getConstructor(AgentInfo.class, WorldInfo.class, ScenarioInfo.class, ModuleManager.class, DevelopData.class);
+            E instance = constructor.newInstance(this.agentInfo, this.worldInfo, this.scenarioInfo, this, this.developData);
+            this.executorMap.put(actionClass.getCanonicalName(), (CommandExecutor<CommunicationMessage>) instance);
             return instance;
         } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
             throw new RuntimeException(e);

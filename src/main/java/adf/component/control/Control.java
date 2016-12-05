@@ -7,7 +7,7 @@ import adf.agent.info.WorldInfo;
 import adf.agent.module.ModuleManager;
 import adf.agent.develop.DevelopData;
 import adf.agent.precompute.PrecomputeData;
-import adf.component.tactics.center.TacticsCenter;
+import adf.component.tactics.TacticsCenter;
 
 /**
  * @deprecated change class name {@link TacticsCenter}

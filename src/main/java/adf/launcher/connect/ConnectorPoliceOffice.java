@@ -4,7 +4,7 @@ import adf.agent.config.ModuleConfig;
 import adf.agent.develop.DevelopData;
 import adf.agent.office.OfficePolice;
 import adf.component.AbstractLoader;
-import adf.component.tactics.center.TacticsPoliceOffice;
+import adf.component.tactics.TacticsPoliceOffice;
 import adf.launcher.ConfigKey;
 import adf.launcher.ConsoleOutput;
 import adf.launcher.dummy.tactics.center.DummyTacticsPoliceOffice;

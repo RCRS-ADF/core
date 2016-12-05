@@ -4,7 +4,7 @@ import adf.agent.config.ModuleConfig;
 import adf.agent.develop.DevelopData;
 import adf.agent.office.OfficeAmbulance;
 import adf.component.AbstractLoader;
-import adf.component.tactics.center.TacticsAmbulanceCentre;
+import adf.component.tactics.TacticsAmbulanceCentre;
 import adf.launcher.ConfigKey;
 import adf.launcher.ConsoleOutput;
 import adf.launcher.dummy.tactics.center.DummyTacticsAmbulanceCentre;

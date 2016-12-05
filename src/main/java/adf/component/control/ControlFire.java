@@ -1,6 +1,6 @@
 package adf.component.control;
 
-import adf.component.tactics.center.TacticsFireStation;
+import adf.component.tactics.TacticsFireStation;
 
 /**
  * @deprecated change class name {@link TacticsFireStation}

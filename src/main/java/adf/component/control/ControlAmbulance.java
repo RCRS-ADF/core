@@ -1,6 +1,6 @@
 package adf.component.control;
 
-import adf.component.tactics.center.TacticsAmbulanceCentre;
+import adf.component.tactics.TacticsAmbulanceCentre;
 
 /**
  * @deprecated change class name {@link TacticsAmbulanceCentre}

@@ -4,6 +4,8 @@ import rescuecore2.misc.Pair;
 import rescuecore2.standard.entities.*;
 import rescuecore2.worldmodel.*;
 
+import javax.annotation.CheckForNull;
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.awt.geom.Rectangle2D;
@@ -51,18 +53,18 @@ public class WorldInfo implements Iterable<StandardEntity> {
 
 	// getEntity ///////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    @Nullable
+    @CheckForNull
 	public StandardEntity getEntity(@Nonnull EntityID entityID) {
 		return this.world.getEntity(entityID);
 	}
 
-	@Nullable
+	@CheckForNull
     public StandardEntity getEntity(int targetTime, @Nonnull EntityID entityID) {
         return this.getEntity(targetTime, Objects.requireNonNull(this.getEntity(entityID)));
 
     }
 
-    @Nullable
+    @CheckForNull
 	public StandardEntity getEntity(int targetTime, @Nonnull StandardEntity entity) {
         if(targetTime <= 0) {
             targetTime = this.time + targetTime;
@@ -166,17 +168,17 @@ public class WorldInfo implements Iterable<StandardEntity> {
 	// getObjectsInRange ///////////////////////////////////////////////////////////////////////////////////////////////
 
     @Nonnull
-	public Collection<StandardEntity> getObjectsInRange(@Nonnull EntityID entityID, int range) {
+	public Collection<StandardEntity> getObjectsInRange(@Nonnull EntityID entityID, @Nonnegative int range) {
 		return this.world.getObjectsInRange(entityID, range);
 	}
 
 	@Nonnull
-	public Collection<StandardEntity> getObjectsInRange(@Nonnull StandardEntity entity, int range) {
+	public Collection<StandardEntity> getObjectsInRange(@Nonnull StandardEntity entity, @Nonnegative int range) {
 		return this.world.getObjectsInRange(entity, range);
 	}
 
     @Nonnull
-	public Collection<StandardEntity> getObjectsInRange(int x, int y, int range) {
+	public Collection<StandardEntity> getObjectsInRange(int x, int y, @Nonnegative int range) {
 		return this.world.getObjectsInRange(x, y, range);
 	}
 
@@ -186,22 +188,22 @@ public class WorldInfo implements Iterable<StandardEntity> {
 	}
 
     @Nonnull
-	public Collection<StandardEntity> getObjectsInRange(int targetTime, @Nonnull EntityID entityID, int range) {
+	public Collection<StandardEntity> getObjectsInRange(int targetTime, @Nonnull EntityID entityID, @Nonnegative int range) {
 		return this.getObjectsInRange(targetTime, entityID, range, false);
 	}
 
     @Nonnull
-	public Collection<StandardEntity> getObjectsInRange(int targetTime, @Nonnull EntityID entityID, int range, boolean ignoreHuman) {
+	public Collection<StandardEntity> getObjectsInRange(int targetTime, @Nonnull EntityID entityID, @Nonnegative int range, boolean ignoreHuman) {
 		return this.getObjectsInRange(targetTime, Objects.requireNonNull(this.getEntity(entityID)), range, ignoreHuman);
 	}
 
     @Nonnull
-	public Collection<StandardEntity> getObjectsInRange(int targetTime, @Nonnull StandardEntity entity, int range) {
+	public Collection<StandardEntity> getObjectsInRange(int targetTime, @Nonnull StandardEntity entity, @Nonnegative int range) {
 		return this.getObjectsInRange(targetTime, entity, range, false);
 	}
 
     @Nonnull
-	public Collection<StandardEntity> getObjectsInRange(int targetTime, @Nonnull StandardEntity entity, int range, boolean ignoreHuman) {
+	public Collection<StandardEntity> getObjectsInRange(int targetTime, @Nonnull StandardEntity entity, @Nonnegative int range, boolean ignoreHuman) {
         Pair<Integer, Integer> location = this.getLocation(entity);
 		if (location == null) return new HashSet<>();
 
@@ -209,12 +211,12 @@ public class WorldInfo implements Iterable<StandardEntity> {
 	}
 
     @Nonnull
-	public Collection<StandardEntity> getObjectsInRange(int targetTime, int x, int y, int range) {
+	public Collection<StandardEntity> getObjectsInRange(int targetTime, int x, int y, @Nonnegative int range) {
 		return this.getObjectsInRange(targetTime, x, y, range, false);
 	}
 
     @Nonnull
-	public Collection<StandardEntity> getObjectsInRange(int targetTime, int x, int y, int range, boolean ignoreHuman) {
+	public Collection<StandardEntity> getObjectsInRange(int targetTime, int x, int y, @Nonnegative int range, boolean ignoreHuman) {
 		return this.getObjectsInRectangle(targetTime, x - range, y - range, x + range, y + range, ignoreHuman);
 	}
 

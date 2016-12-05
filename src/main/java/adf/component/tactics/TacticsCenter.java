@@ -1,4 +1,4 @@
-package adf.component.tactics.center;
+package adf.component.tactics;
 
 import adf.agent.communication.MessageManager;
 import adf.agent.develop.DevelopData;

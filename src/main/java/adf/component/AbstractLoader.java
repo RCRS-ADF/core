@@ -6,9 +6,9 @@ import adf.component.control.ControlPolice;
 import adf.component.tactics.TacticsAmbulanceTeam;
 import adf.component.tactics.TacticsFireBrigade;
 import adf.component.tactics.TacticsPoliceForce;
-import adf.component.tactics.center.TacticsAmbulanceCentre;
-import adf.component.tactics.center.TacticsFireStation;
-import adf.component.tactics.center.TacticsPoliceOffice;
+import adf.component.tactics.TacticsAmbulanceCentre;
+import adf.component.tactics.TacticsFireStation;
+import adf.component.tactics.TacticsPoliceOffice;
 
 abstract public class AbstractLoader
 {

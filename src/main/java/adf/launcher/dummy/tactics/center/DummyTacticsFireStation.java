@@ -7,7 +7,7 @@ import adf.agent.info.ScenarioInfo;
 import adf.agent.info.WorldInfo;
 import adf.agent.module.ModuleManager;
 import adf.agent.precompute.PrecomputeData;
-import adf.component.tactics.center.TacticsFireStation;
+import adf.component.tactics.TacticsFireStation;
 
 public class DummyTacticsFireStation extends TacticsFireStation
 {

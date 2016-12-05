@@ -1,4 +1,4 @@
-package adf.component.tactics.center;
+package adf.component.tactics;
 
 public abstract class TacticsAmbulanceCentre extends TacticsCenter {
     public TacticsAmbulanceCentre(TacticsAmbulanceCentre parent)

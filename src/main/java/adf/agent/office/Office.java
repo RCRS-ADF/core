@@ -4,7 +4,7 @@ import adf.agent.Agent;
 import adf.agent.develop.DevelopData;
 import adf.agent.info.AgentInfo;
 import adf.agent.module.ModuleManager;
-import adf.component.tactics.center.TacticsCenter;
+import adf.component.tactics.TacticsCenter;
 import rescuecore2.standard.entities.StandardEntity;
 
 public abstract class Office<E extends StandardEntity> extends Agent<E> {
