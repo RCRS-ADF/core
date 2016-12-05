@@ -6,6 +6,7 @@ import adf.agent.info.AgentInfo;
 import adf.agent.info.ScenarioInfo;
 import adf.agent.info.WorldInfo;
 import adf.component.extaction.CommandExecutor;
+import adf.component.extaction.CommandPicker;
 import adf.component.extaction.ExtAction;
 import adf.component.module.AbstractModule;
 import rescuecore2.config.NoSuchConfigOptionException;
@@ -22,6 +23,7 @@ public class ModuleManager
     private Map<String, AbstractModule> moduleMap;
     private Map<String, ExtAction> actionMap;
     private Map<String, CommandExecutor> executorMap;
+    private Map<String, CommandPicker> pickerMap;
 
     private AgentInfo agentInfo;
     private WorldInfo worldInfo;
@@ -40,6 +42,7 @@ public class ModuleManager
         this.moduleMap = new HashMap<>();
         this.actionMap = new HashMap<>();
         this.executorMap = new HashMap<>();
+        this.pickerMap = new HashMap<>();
     }
 
     @SuppressWarnings("unchecked")
@@ -95,6 +98,7 @@ public class ModuleManager
     }
 
     @SuppressWarnings("unchecked")
+    @Nonnull
     public final ExtAction getExtAction(String actionName, String defaultClassName) {
         String className = actionName;
         try
@@ -127,11 +131,13 @@ public class ModuleManager
     }
 
     @SuppressWarnings("unchecked")
+    @Nonnull
     public final ExtAction getExtAction(String actionName) {
         return getExtAction(actionName, "");
     }
 
     @SuppressWarnings("unchecked")
+    @Nonnull
     private ExtAction getExtAction(Class<ExtAction> actionClass) {
         try {
             Constructor<ExtAction> constructor = actionClass.getConstructor(AgentInfo.class, WorldInfo.class, ScenarioInfo.class, ModuleManager.class, DevelopData.class);
@@ -144,6 +150,7 @@ public class ModuleManager
     }
 
     @SuppressWarnings("unchecked")
+    @Nonnull
     public final CommandExecutor getCommandExecutor(String executorName, String defaultClassName) {
         String className = executorName;
         try
@@ -164,7 +171,7 @@ public class ModuleManager
                 return instance;
             }
 
-            if (ExtAction.class.isAssignableFrom(actionClass)) {
+            if (CommandExecutor.class.isAssignableFrom(actionClass)) {
                 instance = this.getCommandExecutor((Class<CommandExecutor>) actionClass);
                 this.executorMap.put(className, instance);
                 return instance;
@@ -176,11 +183,13 @@ public class ModuleManager
     }
 
     @SuppressWarnings("unchecked")
+    @Nonnull
     public final CommandExecutor getCommandExecutor(String executorName) {
         return getCommandExecutor(executorName, "");
     }
 
     @SuppressWarnings("unchecked")
+    @Nonnull
     private CommandExecutor getCommandExecutor(Class<CommandExecutor> actionClass) {
         try {
             Constructor<CommandExecutor> constructor = actionClass.getConstructor(AgentInfo.class, WorldInfo.class, ScenarioInfo.class, ModuleManager.class, DevelopData.class);
@@ -192,6 +201,59 @@ public class ModuleManager
         }
     }
 
+    @SuppressWarnings("unchecked")
+    @Nonnull
+    public final CommandPicker getCommandPicker(String pickerName, String defaultClassName) {
+        String className = pickerName;
+        try
+        { className = this.moduleConfig.getValue(pickerName); }
+        catch (NoSuchConfigOptionException ignored) { }
+
+        try {
+            Class<?> actionClass;
+            try {
+                actionClass = Class.forName(className);
+            }catch (ClassNotFoundException | NullPointerException e) {
+                className = defaultClassName;
+                actionClass = Class.forName(className);
+            }
+
+            CommandPicker instance = this.pickerMap.get(className);
+            if(instance != null) {
+                return instance;
+            }
+
+            if (CommandPicker.class.isAssignableFrom(actionClass)) {
+                instance = this.getCommandPicker((Class<CommandPicker>) actionClass);
+                this.pickerMap.put(className, instance);
+                return instance;
+            }
+        }catch (ClassNotFoundException | NullPointerException e) {
+            throw new RuntimeException(e);
+        }
+        throw new IllegalArgumentException("CommandExecutor name is not found : " + className);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Nonnull
+    public final CommandPicker getCommandPicker(String pickerName) {
+        return getCommandPicker(pickerName, "");
+    }
+
+    @SuppressWarnings("unchecked")
+    @Nonnull
+    private CommandPicker getCommandPicker(Class<CommandPicker> actionClass) {
+        try {
+            Constructor<CommandPicker> constructor = actionClass.getConstructor(AgentInfo.class, WorldInfo.class, ScenarioInfo.class, ModuleManager.class, DevelopData.class);
+            CommandPicker instance = constructor.newInstance(this.agentInfo, this.worldInfo, this.scenarioInfo, this, this.developData);
+            this.pickerMap.put(actionClass.getCanonicalName(), instance);
+            return instance;
+        } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Nonnull
     public ModuleConfig getModuleConfig()
     {
         return this.moduleConfig;
