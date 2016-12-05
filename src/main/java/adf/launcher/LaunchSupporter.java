@@ -3,10 +3,7 @@ package adf.launcher;
 import adf.launcher.annotation.NoStructureWarning;
 
 import java.io.*;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
+import java.lang.reflect.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -333,6 +330,31 @@ public class LaunchSupporter
                                         for (Class paramClass : method.getParameterTypes())
                                         { sign += paramClass.getName() + ","; }
                                         methodList.remove(sign);
+
+                                        boolean hasGenericsParam = false;
+                                        for (int i = 0; (i < method.getParameterTypes().length) && (!hasGenericsParam); i++)
+                                        {
+                                            Class<?> paramType = method.getParameterTypes()[i];
+                                            Type genericParamType = method.getGenericParameterTypes()[i];
+                                            if (!(paramType.getName().equals(genericParamType.getTypeName())) && genericParamType.getTypeName().split("\\.").length == 1)
+                                            { hasGenericsParam = true; }
+                                        }
+
+                                        if (hasGenericsParam)
+                                        {
+                                            String regex = "^" + method.getReturnType().getName() + ":" + method.getName() + ":";
+                                            for (Class paramClass : method.getParameterTypes())
+                                            { regex += ".*,"; }
+                                            regex += "$";
+
+                                            ArrayList<String> removeMethodList = new ArrayList<>();
+                                            for (String methodSign : methodList)
+                                            {
+                                                if (methodSign.matches(regex))
+                                                { removeMethodList.add(methodSign); }
+                                            }
+                                            methodList.removeAll(removeMethodList);
+                                        }
                                     }
                                 }
 
@@ -345,7 +367,7 @@ public class LaunchSupporter
 
                             if (isAdfChild && methodList.size() > 0)
                             {
-                                ConsoleOutput.warn("Original public method is exist in " + loaderClass + " :");
+                                ConsoleOutput.warn("Independent public method is exist in " + loaderClass + " :");
                                 countAgentCheckWarning++;
                                 for (String methodSign : methodList)
                                 {
