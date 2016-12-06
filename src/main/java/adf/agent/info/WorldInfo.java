@@ -1,5 +1,6 @@
 package adf.agent.info;
 
+import adf.component.module.complex.BuildingDetector;
 import rescuecore2.misc.Pair;
 import rescuecore2.standard.entities.*;
 import rescuecore2.worldmodel.*;
@@ -47,7 +48,10 @@ public class WorldInfo implements Iterable<StandardEntity> {
 
     // get Flag ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	// 廃止
+    /**
+     * @deprecated change method name {@link #isRequestedRollback()}
+     */
+	@Deprecated
     public boolean needRollback() {
         return this.runRollback;
     }
@@ -608,6 +612,11 @@ public class WorldInfo implements Iterable<StandardEntity> {
         this.world = world;
     }
 
+    @Nonnull
+    public StandardWorldModel getRawWorld() {
+	    return this.world;
+    }
+
     public void setChanged(@Nonnull ChangeSet changed) {
         this.changed = changed;
     }
@@ -624,7 +633,7 @@ public class WorldInfo implements Iterable<StandardEntity> {
     // rollback ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public void registerRollbackListener() {
-        if(this.needRollback()) {
+        if(this.isRequestedRollback()) {
             this.world.addWorldModelListener(new RollbackListener());
             for (StandardEntity entity : this.getAllEntities()) {
                 entity.addEntityListener(new ChangeListener());
