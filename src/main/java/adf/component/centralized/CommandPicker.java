@@ -27,8 +27,6 @@ abstract public class CommandPicker {
     private int countUpdateInfo;
     private int countUpdateInfoCurrentTime;
 
-    protected Collection<CommunicationMessage> result;
-
     public CommandPicker(AgentInfo ai, WorldInfo wi, ScenarioInfo si, ModuleManager moduleManager, DevelopData developData) {
         this.worldInfo = wi;
         this.agentInfo = ai;
@@ -40,14 +38,13 @@ abstract public class CommandPicker {
         this.countPreparate = 0;
         this.countUpdateInfo = 0;
         this.countUpdateInfoCurrentTime = 0;
-        this.result = new HashSet<>();
     }
 
     public abstract CommandPicker setData(Map<EntityID, EntityID> allocationData);
 
-    public Collection<CommunicationMessage> getResult() {
-        return result;
-    }
+    public abstract CommandPicker calc();
+
+    public abstract Collection<CommunicationMessage> getResult();
 
     public CommandPicker precompute(PrecomputeData precomputeData) {
         this.countPrecompute++;
