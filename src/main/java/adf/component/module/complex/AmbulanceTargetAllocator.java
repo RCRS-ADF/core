@@ -1,4 +1,5 @@
-package adf.component.module.complex.center;
+package adf.component.module.complex;
+
 
 import adf.agent.communication.MessageManager;
 import adf.agent.develop.DevelopData;
@@ -11,8 +12,9 @@ import rescuecore2.worldmodel.EntityID;
 
 import java.util.Map;
 
-public abstract class PoliceTargetAllocator extends TargetAllocator {
-    public PoliceTargetAllocator(AgentInfo ai, WorldInfo wi, ScenarioInfo si, ModuleManager moduleManager, DevelopData developData) {
+public abstract class AmbulanceTargetAllocator extends TargetAllocator {
+
+    public AmbulanceTargetAllocator(AgentInfo ai, WorldInfo wi, ScenarioInfo si, ModuleManager moduleManager, DevelopData developData) {
         super(ai, wi, si, moduleManager, developData);
     }
 
@@ -20,28 +22,28 @@ public abstract class PoliceTargetAllocator extends TargetAllocator {
     public abstract Map<EntityID, EntityID> getResult();
 
     @Override
-    public abstract PoliceTargetAllocator calc();
+    public abstract AmbulanceTargetAllocator calc();
 
     @Override
-    public PoliceTargetAllocator precompute(PrecomputeData precomputeData) {
+    public AmbulanceTargetAllocator precompute(PrecomputeData precomputeData) {
         super.precompute(precomputeData);
         return this;
     }
 
     @Override
-    public PoliceTargetAllocator resume(PrecomputeData precomputeData) {
+    public AmbulanceTargetAllocator resume(PrecomputeData precomputeData) {
         super.resume(precomputeData);
         return this;
     }
 
     @Override
-    public PoliceTargetAllocator preparate() {
+    public AmbulanceTargetAllocator preparate() {
         super.preparate();
         return this;
     }
 
     @Override
-    public PoliceTargetAllocator updateInfo(MessageManager messageManager) {
+    public AmbulanceTargetAllocator updateInfo(MessageManager messageManager) {
         super.updateInfo(messageManager);
         return this;
     }
