@@ -612,6 +612,10 @@ public class WorldInfo implements Iterable<StandardEntity> {
         this.world = world;
     }
 
+    /**
+     * @deprecated Maybe, Operations requiring the WorldModel can be done directly from WorldInfo.
+     */
+    @Deprecated
     @Nonnull
     public StandardWorldModel getRawWorld() {
 	    return this.world;
