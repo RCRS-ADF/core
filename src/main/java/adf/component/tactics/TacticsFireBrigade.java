@@ -9,6 +9,6 @@ public abstract class TacticsFireBrigade extends Tactics
 
 	public TacticsFireBrigade()
 	{
-		this(null);
+		super(null);
 	}
 }

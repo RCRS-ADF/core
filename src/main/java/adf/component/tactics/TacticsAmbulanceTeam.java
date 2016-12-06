@@ -9,6 +9,6 @@ public abstract class TacticsAmbulanceTeam extends Tactics
 
 	public TacticsAmbulanceTeam()
 	{
-		this(null);
+		super(null);
 	}
 }

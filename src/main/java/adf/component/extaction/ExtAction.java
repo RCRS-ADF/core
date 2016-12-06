@@ -10,6 +10,7 @@ import adf.agent.info.ScenarioInfo;
 import adf.agent.info.WorldInfo;
 import adf.agent.module.ModuleManager;
 import adf.agent.precompute.PrecomputeData;
+import adf.component.module.complex.BuildingDetector;
 import rescuecore2.worldmodel.EntityID;
 
 import java.util.Collection;
@@ -44,6 +45,17 @@ abstract public class ExtAction {
 	}
 
     public abstract ExtAction setTarget(EntityID targets);
+
+    /**
+     * @deprecated  {@link #setTarget(EntityID)}
+     */
+	@Deprecated
+	public ExtAction setTarget(EntityID... targets) {
+	    if(targets != null && targets.length > 0) {
+	        return this.setTarget(targets[0]);
+        }
+        return this;
+    }
 
 	public abstract ExtAction calc();
 
