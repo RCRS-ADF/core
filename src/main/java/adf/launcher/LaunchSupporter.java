@@ -52,10 +52,10 @@ public class LaunchSupporter
             CoreUpdater coreUpdater = new CoreUpdater();
             if (coreUpdater.checkUpdate() && args.contains(OPTION_UPDATECORE))
             {
-                removeOption(args, OPTION_UPDATECORE);
                 coreUpdater.updateCore();
                 System.exit(5);
             }
+            removeOption(args, OPTION_UPDATECORE);
         }
 
         if (args.contains(OPTION_UPDATECORE))
