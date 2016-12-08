@@ -2,6 +2,7 @@ package adf.launcher;
 
 import java.io.*;
 import java.net.*;
+import java.util.Random;
 
 public class CoreUpdater
 {
@@ -20,12 +21,13 @@ public class CoreUpdater
         File coreFile = new File(System.getProperty("java.class.path"));
         String corePath = coreFile.getAbsolutePath();
         String sourcePath = coreFile.getParentFile().getAbsolutePath() + File.separator + SOURCES_DIR + File.separator + SOURCES_FILE;
+        Random random = new Random();
 
         try
         {
             ConsoleOutput.start("Download jars");
-            download(CORE_URL, corePath);
-            download(CORESRC_URL, sourcePath);
+            download(CORE_URL+"?"+random.nextInt(), corePath, true);
+            download(CORESRC_URL+"?"+random.nextInt(), sourcePath, false);
             ConsoleOutput.finish("Download jars");
         }
         catch (Exception e)
@@ -40,7 +42,8 @@ public class CoreUpdater
     public boolean checkUpdate()
     {
         try {
-            URL url = new URL(CORE_URL);
+            Random random = new Random();
+            URL url = new URL(CORE_URL+"?"+random.nextInt());
 
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setAllowUserInteraction(false);
@@ -71,36 +74,7 @@ public class CoreUpdater
         return false;
     }
 
-    private void updateEtag()
-    {
-        try {
-            URL url = new URL(CORE_URL);
-
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setAllowUserInteraction(false);
-            connection.setInstanceFollowRedirects(true);
-            connection.setRequestMethod("GET");
-            connection.connect();
-
-            int httpStatusCode = connection.getResponseCode();
-            if(httpStatusCode != HttpURLConnection.HTTP_OK)
-            {
-                return;
-            }
-
-            String etag = connection.getHeaderField("ETag");
-            try{
-                FileWriter fileWriter = new FileWriter(new File(getEtagPath()));
-                fileWriter.write(etag);
-                fileWriter.flush();
-                fileWriter.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } catch (Exception e) { }
-    }
-
-    private void download(String urlStr, String fileStr) throws Exception
+    private void download(String urlStr, String fileStr, boolean isUpdateEtag) throws Exception
     {
         URL url = new URL(urlStr);
 
@@ -114,6 +88,15 @@ public class CoreUpdater
         if(httpStatusCode != HttpURLConnection.HTTP_OK)
         {
             throw new Exception();
+        }
+
+        if (isUpdateEtag)
+        {
+            String etag = connection.getHeaderField("ETag");
+            FileWriter fileWriter = new FileWriter(new File(getEtagPath()));
+            fileWriter.write(etag);
+            fileWriter.flush();
+            fileWriter.close();
         }
 
         InputStream dataInStream = new DataInputStream( connection.getInputStream());
