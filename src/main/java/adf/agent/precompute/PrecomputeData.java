@@ -336,6 +336,6 @@ public final class PrecomputeData {
 
 	private String makeReadyID(WorldInfo worldInfo)
 	{
-		return "" + worldInfo.getBounds().getX() + "" + worldInfo.getBounds().getY();
+		return "" + worldInfo.getBounds().getX() + "" + worldInfo.getBounds().getY() + "" + worldInfo.getAllEntities().size();
 	}
 }
