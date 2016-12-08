@@ -414,10 +414,16 @@ public class WorldInfo implements Iterable<StandardEntity> {
     @Nonnull
 	public Collection<Blockade> getBlockades(@Nonnull Area area) {
         if(area.isBlockadesDefined()) {
-            return area.getBlockades()
-                    .stream()
-                    .map(entityID -> (Blockade) this.getEntity(entityID))
-                    .collect(Collectors.toSet());
+            Collection<Blockade> blockages = new HashSet<>();
+            for(EntityID id : area.getBlockades()) {
+                if(id != null) {
+                    StandardEntity blockade = this.getEntity(id);
+                    if(blockade != null && blockade.getStandardURN() == BLOCKADE) {
+                        blockages.add((Blockade)blockade);
+                    }
+                }
+            }
+            return blockages;
         }
         return new HashSet<>();
     }

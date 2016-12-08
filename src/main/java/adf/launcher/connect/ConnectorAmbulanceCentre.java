@@ -26,7 +26,7 @@ public class ConnectorAmbulanceCentre extends Connector {
 		try {
 			for (int i = 0; i != count; ++i) {
 				TacticsAmbulanceCentre tacticsAmbulanceCenter;
-				if (loader.getTacticsAmbulanceCentre() == null && loader.getControlAmbulance() == null)
+				if (loader.getTacticsAmbulanceCentre() == null)
 				{
 				    ConsoleOutput.error("Cannot Load AmbulanceCentre Tactics");
 					tacticsAmbulanceCenter = new DummyTacticsAmbulanceCentre();
@@ -34,9 +34,6 @@ public class ConnectorAmbulanceCentre extends Connector {
 				else
 				{
 					tacticsAmbulanceCenter = loader.getTacticsAmbulanceCentre();
-					if(tacticsAmbulanceCenter == null) {
-						tacticsAmbulanceCenter = loader.getControlAmbulance();
-					}
 				}
 				DevelopData developData = new DevelopData(
 						config.getBooleanValue(ConfigKey.KEY_DEVELOP_FLAG, false),
