@@ -40,7 +40,7 @@ abstract public class CommandPicker {
         this.countUpdateInfoCurrentTime = 0;
     }
 
-    public abstract CommandPicker setData(Map<EntityID, EntityID> allocationData);
+    public abstract CommandPicker setAllocatorResult(Map<EntityID, EntityID> allocationData);
 
     public abstract CommandPicker calc();
 

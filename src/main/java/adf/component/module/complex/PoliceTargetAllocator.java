@@ -23,12 +23,6 @@ public abstract class PoliceTargetAllocator extends TargetAllocator {
     public abstract PoliceTargetAllocator calc();
 
     @Override
-    public PoliceTargetAllocator precompute(PrecomputeData precomputeData) {
-        super.precompute(precomputeData);
-        return this;
-    }
-
-    @Override
     public PoliceTargetAllocator resume(PrecomputeData precomputeData) {
         super.resume(precomputeData);
         return this;
