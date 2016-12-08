@@ -17,6 +17,8 @@ public class LaunchSupporter
     private final String OPTION_CHECK = "-check";
     private final String OPTION_AUTOCLASSPATH = "-autocp";
     private final String OPTION_AUTOLOADERCLASS = "-autolc";
+    private final String OPTION_UPDATECORE = "-updatecore";
+    private final String OPTION_CHECKUPDATE = "-checkupdate";
     private final String DIRECTORY_LIBRARY = "library";
     private final String DIRECTORY_SRC = "src";
     private final String DIRECTORY_BUILD = "build";
@@ -43,6 +45,25 @@ public class LaunchSupporter
         alias(args, "-debug", "-d", "true");
         alias(args, "-develop", "-dev", "true");
         alias(args, OPTION_CHECK, OPTION_AUTOCLASSPATH, OPTION_CHECK);
+
+        if (args.contains(OPTION_CHECKUPDATE))
+        {
+            removeOption(args, OPTION_CHECKUPDATE);
+            CoreUpdater coreUpdater = new CoreUpdater();
+            if (coreUpdater.checkUpdate() && args.contains(OPTION_UPDATECORE))
+            {
+                removeOption(args, OPTION_UPDATECORE);
+                coreUpdater.updateCore();
+                System.exit(5);
+            }
+        }
+
+        if (args.contains(OPTION_UPDATECORE))
+        {
+            removeOption(args, OPTION_UPDATECORE);
+            (new CoreUpdater()).updateCore();
+            System.exit(5);
+        }
 
         if (args.contains(OPTION_JAVAHOME))
         {
@@ -114,6 +135,8 @@ public class LaunchSupporter
         System.out.println("-autolc\t\t\t\t\tauto load loader class form " + DIRECTORY_BUILD);
         System.out.println("-d [0|1]\t\t\t\tDebug flag");
         System.out.println("-check\t\t\t\t\tsimple agent class check (with -autocp)");
+        System.out.println("-checkupdate\t\t\t\tcheck adf-core update available");
+        System.out.println("-updatecore\t\t\t\tupdate adf-core");
         System.out.println("-auto\t\t\t\t\t[alias] -autocp -autolc");
         System.out.println("-all\t\t\t\t\t[alias] -t -1,-1,-1,-1,-1,-1");
         System.out.println("-allp\t\t\t\t\t[alias] -t 1,0,1,0,1,0");
