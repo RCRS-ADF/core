@@ -38,6 +38,7 @@ public class LaunchSupporter
         alias(args, "-auto", "-autocp", "-autolc");
         alias(args, "-local", "-h", "localhost");
         alias(args, "-all", "-t", "-1,-1,-1,-1,-1,-1");
+        alias(args, "-allp", "-t", "1,0,1,0,1,0");
         alias(args, "-precompute", "-pre", "true");
         alias(args, "-debug", "-d", "true");
         alias(args, "-develop", "-dev", "true");
@@ -115,6 +116,7 @@ public class LaunchSupporter
         System.out.println("-check\t\t\t\t\tsimple agent class check (with -autocp)");
         System.out.println("-auto\t\t\t\t\t[alias] -autocp -autolc");
         System.out.println("-all\t\t\t\t\t[alias] -t -1,-1,-1,-1,-1,-1");
+        System.out.println("-allp\t\t\t\t\t[alias] -t 1,0,1,0,1,0");
         System.out.println("-local\t\t\t\t\t[alias] -h localhost");
         System.out.println("-precompute\t\t\t\t[alias] -pre true");
         System.out.println("-debug\t\t\t\t\t[alias] -d true");
