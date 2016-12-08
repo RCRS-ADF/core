@@ -5,6 +5,7 @@ import adf.Main;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.concurrent.Semaphore;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
 
@@ -14,10 +15,13 @@ public class ConsoleOutput
 {
     private static final int titleLength = 6;
 
+    private static final Semaphore semaphore = new Semaphore(1, true);
+
     public static enum State {INFO, WARN, ERROR, NOTICE, START, FINISH};
 
     public static void out(State state, String out)
     {
+
         boolean colorMode = System.getProperty("color", "0").equals("1");
         if (colorMode)
         {
@@ -36,12 +40,19 @@ public class ConsoleOutput
                     System.out.print("\u001B[32m"); break;
             }
         }
-        System.out.print('[');
-        System.out.print(state.name());
-        for (int i = state.name().length(); i < titleLength; i++)
-        { System.out.print(' '); }
-        System.out.print("]" + (colorMode ? "\u001B[0m " : " "));
-        System.out.println(out);
+        try
+        {
+            semaphore.acquire();
+            System.out.print('[');
+            System.out.print(state.name());
+            for (int i = state.name().length(); i < titleLength; i++)
+            { System.out.print(' '); }
+            System.out.print("]" + (colorMode ? "\u001B[0m " : " "));
+            System.out.println(out);
+            semaphore.release();
+        }
+        catch (InterruptedException e)
+        { e.printStackTrace(); }
     }
 
     public static void info(String out)
