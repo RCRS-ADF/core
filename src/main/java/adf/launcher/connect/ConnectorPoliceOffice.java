@@ -28,7 +28,7 @@ public class ConnectorPoliceOffice extends Connector
 		try {
 			for (int i = 0; i != count; ++i) {
 				TacticsPoliceOffice tacticsPoliceOffice;
-				if (loader.getTacticsPoliceOffice() == null && loader.getControlPolice() == null)
+				if (loader.getTacticsPoliceOffice() == null)
 				{
 					ConsoleOutput.error("Cannot Load PoliceOffice Tactics");
 					tacticsPoliceOffice = new DummyTacticsPoliceOffice();
@@ -36,9 +36,6 @@ public class ConnectorPoliceOffice extends Connector
 				else
 				{
 					tacticsPoliceOffice = loader.getTacticsPoliceOffice();
-					if(tacticsPoliceOffice == null) {
-						tacticsPoliceOffice = loader.getControlPolice();
-					}
 				}
 				DevelopData developData = new DevelopData(
 						config.getBooleanValue(ConfigKey.KEY_DEVELOP_FLAG, false),

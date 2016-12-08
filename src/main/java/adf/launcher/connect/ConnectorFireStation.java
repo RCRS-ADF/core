@@ -27,7 +27,7 @@ public class ConnectorFireStation extends Connector
 		try {
 			for (int i = 0; i != count; ++i) {
 				TacticsFireStation tacticsFireStation;
-				if (loader.getTacticsFireStation() == null && loader.getControlFire() == null)
+				if (loader.getTacticsFireStation() == null)
 				{
 					ConsoleOutput.error("Cannot Load FireStation Tactics");
 					tacticsFireStation = new DummyTacticsFireStation();
@@ -35,9 +35,6 @@ public class ConnectorFireStation extends Connector
 				else
 				{
 					tacticsFireStation = loader.getTacticsFireStation();
-					if(tacticsFireStation == null) {
-						tacticsFireStation = loader.getControlFire();
-					}
 				}
 				DevelopData developData = new DevelopData(
 						config.getBooleanValue(ConfigKey.KEY_DEVELOP_FLAG, false),
