@@ -25,12 +25,6 @@ public abstract class AmbulanceTargetAllocator extends TargetAllocator {
     public abstract AmbulanceTargetAllocator calc();
 
     @Override
-    public AmbulanceTargetAllocator precompute(PrecomputeData precomputeData) {
-        super.precompute(precomputeData);
-        return this;
-    }
-
-    @Override
     public AmbulanceTargetAllocator resume(PrecomputeData precomputeData) {
         super.resume(precomputeData);
         return this;

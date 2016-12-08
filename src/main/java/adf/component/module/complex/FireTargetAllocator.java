@@ -24,12 +24,6 @@ public abstract class FireTargetAllocator extends TargetAllocator {
     public abstract FireTargetAllocator calc();
 
     @Override
-    public FireTargetAllocator precompute(PrecomputeData precomputeData) {
-        super.precompute(precomputeData);
-        return this;
-    }
-
-    @Override
     public FireTargetAllocator resume(PrecomputeData precomputeData) {
         super.resume(precomputeData);
         return this;

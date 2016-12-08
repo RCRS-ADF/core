@@ -24,7 +24,7 @@ public abstract class TargetAllocator extends AbstractModule {
     public abstract TargetAllocator calc();
 
     @Override
-    public TargetAllocator precompute(PrecomputeData precomputeData) {
+    public final TargetAllocator precompute(PrecomputeData precomputeData) {
         super.precompute(precomputeData);
         return this;
     }
