@@ -1,9 +1,0 @@
-<map id="adf.component.module.complex.center.PoliceTargetAllocation" name="adf.component.module.complex.center.PoliceTargetAllocation">
-<area shape="rect" id="node2" href="$classadf_1_1component_1_1module_1_1complex_1_1center_1_1TargetAllocation.html" title="adf.component.module.complex.center.\lTargetAllocation" alt="" coords="933,99,1213,141"/>
-<area shape="rect" id="node3" href="$classadf_1_1component_1_1module_1_1AbstractModule.html" title="adf.component.module.Abstract\lModule" alt="" coords="653,99,884,141"/>
-<area shape="rect" id="node4" href="$classadf_1_1agent_1_1info_1_1AgentInfo.html" title="adf.agent.info.AgentInfo" alt="" coords="285,5,464,32"/>
-<area shape="rect" id="node5" href="$classadf_1_1agent_1_1module_1_1ModuleManager.html" title="adf.agent.module.ModuleManager" alt="" coords="253,56,496,83"/>
-<area shape="rect" id="node6" href="$classadf_1_1agent_1_1info_1_1WorldInfo.html" title="adf.agent.info.WorldInfo" alt="" coords="285,107,464,133"/>
-<area shape="rect" id="node8" href="$classadf_1_1agent_1_1develop_1_1DevelopData.html" title="adf.agent.develop.DevelopData" alt="" coords="261,157,489,184"/>
-<area shape="rect" id="node9" href="$classadf_1_1agent_1_1info_1_1ScenarioInfo.html" title="adf.agent.info.ScenarioInfo" alt="" coords="276,208,473,235"/>
-</map>

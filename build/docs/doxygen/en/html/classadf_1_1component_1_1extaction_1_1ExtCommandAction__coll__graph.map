@@ -1,9 +1,0 @@
-<map id="adf.component.extaction.ExtCommandAction" name="adf.component.extaction.ExtCommandAction">
-<area shape="rect" id="node2" href="$classadf_1_1component_1_1extaction_1_1ExtAction.html" title="adf.component.extaction.\lExtAction" alt="" coords="653,123,841,165"/>
-<area shape="rect" id="node3" href="$classadf_1_1agent_1_1action_1_1Action.html" title="adf.agent.action.Action" alt="" coords="289,5,461,32"/>
-<area shape="rect" id="node4" href="$classadf_1_1agent_1_1info_1_1AgentInfo.html" title="adf.agent.info.AgentInfo" alt="" coords="285,56,464,83"/>
-<area shape="rect" id="node5" href="$classadf_1_1agent_1_1module_1_1ModuleManager.html" title="adf.agent.module.ModuleManager" alt="" coords="253,107,496,133"/>
-<area shape="rect" id="node6" href="$classadf_1_1agent_1_1info_1_1WorldInfo.html" title="adf.agent.info.WorldInfo" alt="" coords="285,157,464,184"/>
-<area shape="rect" id="node8" href="$classadf_1_1agent_1_1develop_1_1DevelopData.html" title="adf.agent.develop.DevelopData" alt="" coords="261,208,489,235"/>
-<area shape="rect" id="node9" href="$classadf_1_1agent_1_1info_1_1ScenarioInfo.html" title="adf.agent.info.ScenarioInfo" alt="" coords="276,259,473,285"/>
-</map>
