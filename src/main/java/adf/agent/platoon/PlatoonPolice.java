@@ -5,6 +5,7 @@ import adf.component.tactics.TacticsPoliceForce;
 import rescuecore2.standard.entities.PoliceForce;
 import rescuecore2.standard.entities.StandardEntityURN;
 
+import javax.annotation.Nonnull;
 import java.util.EnumSet;
 
 public class PlatoonPolice extends Platoon<PoliceForce>
@@ -14,7 +15,8 @@ public class PlatoonPolice extends Platoon<PoliceForce>
 		super(tactics, moduleConfigFileName, isPrecompute, DATASTORAGE_FILE_NAME_POLICE, isDebugMode, developData);
 	}
 
-	@Override
+	@Nonnull
+    @Override
 	protected EnumSet<StandardEntityURN> getRequestedEntityURNsEnum()
 	{
 		return EnumSet.of(StandardEntityURN.POLICE_FORCE);

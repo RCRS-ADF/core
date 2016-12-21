@@ -10,11 +10,18 @@ import adf.agent.module.ModuleManager;
 import adf.agent.precompute.PrecomputeData;
 import adf.component.communication.CommunicationMessage;
 
+import javax.annotation.*;
+
 public abstract class CommandExecutor<C extends CommunicationMessage> {
+    @Nonnull
     protected ScenarioInfo scenarioInfo;
+    @Nonnull
     protected AgentInfo agentInfo;
+    @Nonnull
     protected WorldInfo worldInfo;
+    @Nonnull
     protected ModuleManager moduleManager;
+    @Nonnull
     protected DevelopData developData;
 
     private int countPrecompute;
@@ -23,9 +30,10 @@ public abstract class CommandExecutor<C extends CommunicationMessage> {
     private int countUpdateInfo;
     private int countUpdateInfoCurrentTime;
 
+    @Nullable
     protected Action result;
 
-    public CommandExecutor(AgentInfo ai, WorldInfo wi, ScenarioInfo si, ModuleManager moduleManager, DevelopData developData) {
+    public CommandExecutor(@Nonnull AgentInfo ai, @Nonnull WorldInfo wi, @Nonnull ScenarioInfo si, @Nonnull ModuleManager moduleManager, @Nonnull DevelopData developData) {
         this.worldInfo = wi;
         this.agentInfo = ai;
         this.scenarioInfo = si;
@@ -39,30 +47,41 @@ public abstract class CommandExecutor<C extends CommunicationMessage> {
         this.countUpdateInfoCurrentTime = 0;
     }
 
-    public abstract CommandExecutor setCommand(C command);
+    @Nonnull
+    public abstract CommandExecutor setCommand(@Nonnull C command);
 
+    @Nonnull
     public abstract CommandExecutor calc();
 
+    @CheckForNull
     public Action getAction() {
         return result;
     }
 
-    public CommandExecutor precompute(PrecomputeData precomputeData) {
+    @Nonnull
+    @OverridingMethodsMustInvokeSuper
+    public CommandExecutor precompute(@Nonnull PrecomputeData precomputeData) {
         this.countPrecompute++;
         return this;
     }
 
-    public CommandExecutor resume(PrecomputeData precomputeData) {
+    @Nonnull
+    @OverridingMethodsMustInvokeSuper
+    public CommandExecutor resume(@Nonnull PrecomputeData precomputeData) {
         this.countResume++;
         return this;
     }
 
+    @Nonnull
+    @OverridingMethodsMustInvokeSuper
     public CommandExecutor preparate() {
         this.countPreparate++;
         return this;
     }
 
-    public CommandExecutor updateInfo(MessageManager messageManager){
+    @Nonnull
+    @OverridingMethodsMustInvokeSuper
+    public CommandExecutor updateInfo(@Nonnull MessageManager messageManager){
         if (this.countUpdateInfoCurrentTime != this.agentInfo.getTime())
         {
             this.countUpdateInfo = 0;
@@ -72,18 +91,22 @@ public abstract class CommandExecutor<C extends CommunicationMessage> {
         return this;
     }
 
+    @Nonnegative
     public int getCountPrecompute() {
         return this.countPrecompute;
     }
 
+    @Nonnegative
     public int getCountResume() {
         return this.countResume;
     }
 
+    @Nonnegative
     public int getCountPreparate() {
         return this.countPreparate;
     }
 
+    @Nonnegative
     public int getCountUpdateInfo() {
         if (this.countUpdateInfoCurrentTime != this.agentInfo.getTime())
         {

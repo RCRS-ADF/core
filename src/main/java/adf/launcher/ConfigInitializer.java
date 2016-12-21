@@ -4,6 +4,7 @@ import adf.launcher.option.*;
 import rescuecore2.config.Config;
 import rescuecore2.config.ConfigException;
 
+import javax.annotation.Nonnull;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
@@ -12,7 +13,7 @@ class ConfigInitializer
 {
     private static final File DEFAULT_PATH = new File(System.getProperty("user.dir"), "config" + File.separator + "launch.cfg");
     
-    static Config getConfig(String... args)
+    static Config getConfig(@Nonnull String... args)
     {
         Config commandLine = analysis(args);
         try {
@@ -29,7 +30,7 @@ class ConfigInitializer
         return commandLine;
     }
     
-    private static Config analysis(String... args)
+    private static Config analysis(@Nonnull String... args)
     {
 		if(args.length > 0)
         {
@@ -83,7 +84,7 @@ class ConfigInitializer
 		return options;
 	}
 
-	private static void registerOption(Map<String, Option> options, Option option)
+	private static void registerOption(@Nonnull Map<String, Option> options, @Nonnull Option option)
     {
 		options.put(option.getKey(), option);
 	}

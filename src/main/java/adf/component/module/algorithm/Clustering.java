@@ -11,26 +11,32 @@ import adf.component.module.AbstractModule;
 import rescuecore2.standard.entities.StandardEntity;
 import rescuecore2.worldmodel.EntityID;
 
+import javax.annotation.CheckReturnValue;
+import javax.annotation.Nonnull;
+import javax.annotation.OverridingMethodsMustInvokeSuper;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 public abstract class Clustering extends AbstractModule{
 
-    public Clustering(AgentInfo ai, WorldInfo wi, ScenarioInfo si, ModuleManager moduleManager, DevelopData developData) {
+    public Clustering(@Nonnull AgentInfo ai, @Nonnull WorldInfo wi, @Nonnull ScenarioInfo si, @Nonnull ModuleManager moduleManager, @Nonnull DevelopData developData) {
         super(ai, wi, si, moduleManager, developData);
     }
 
     public abstract int getClusterNumber();
 
-    public abstract int getClusterIndex(StandardEntity entity);
+    public abstract int getClusterIndex(@Nonnull StandardEntity entity);
 
-    public abstract int getClusterIndex(EntityID id);
+    public abstract int getClusterIndex(@Nonnull EntityID id);
 
+    @CheckReturnValue
     public abstract Collection<StandardEntity> getClusterEntities(int index);
 
+    @CheckReturnValue
     public abstract Collection<EntityID> getClusterEntityIDs(int index);
 
+    @Nonnull
     public List<Collection<StandardEntity>> getAllClusterEntities() {
         int number = this.getClusterNumber();
         List<Collection<StandardEntity>> result = new ArrayList<>(number);
@@ -40,6 +46,7 @@ public abstract class Clustering extends AbstractModule{
         return result;
     }
 
+    @Nonnull
     public List<Collection<EntityID>> getAllClusterEntityIDs() {
         int number = this.getClusterNumber();
         List<Collection<EntityID>> result = new ArrayList<>(number);
@@ -49,30 +56,39 @@ public abstract class Clustering extends AbstractModule{
         return result;
     }
 
+    @Nonnull
+    @OverridingMethodsMustInvokeSuper
     @Override
-    public Clustering precompute(PrecomputeData precomputeData) {
+    public Clustering precompute(@Nonnull PrecomputeData precomputeData) {
         super.precompute(precomputeData);
         return this;
     }
 
+    @Nonnull
+    @OverridingMethodsMustInvokeSuper
     @Override
-    public Clustering resume(PrecomputeData precomputeData) {
+    public Clustering resume(@Nonnull PrecomputeData precomputeData) {
         super.resume(precomputeData);
         return this;
     }
 
+    @Nonnull
+    @OverridingMethodsMustInvokeSuper
     @Override
     public Clustering preparate() {
         super.preparate();
         return this;
     }
 
+    @Nonnull
+    @OverridingMethodsMustInvokeSuper
     @Override
-    public Clustering updateInfo(MessageManager messageManager) {
+    public Clustering updateInfo(@Nonnull MessageManager messageManager) {
         super.updateInfo(messageManager);
         return this;
     }
 
+    @Nonnull
     @Override
     public abstract Clustering calc();
 }

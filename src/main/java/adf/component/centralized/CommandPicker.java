@@ -10,15 +10,20 @@ import adf.agent.precompute.PrecomputeData;
 import adf.component.communication.CommunicationMessage;
 import rescuecore2.worldmodel.EntityID;
 
+import javax.annotation.*;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Map;
 
 abstract public class CommandPicker {
+    @Nonnull
     protected ScenarioInfo scenarioInfo;
+    @Nonnull
     protected AgentInfo agentInfo;
+    @Nonnull
     protected WorldInfo worldInfo;
+    @Nonnull
     protected ModuleManager moduleManager;
+    @Nonnull
     protected DevelopData developData;
 
     private int countPrecompute;
@@ -27,7 +32,7 @@ abstract public class CommandPicker {
     private int countUpdateInfo;
     private int countUpdateInfoCurrentTime;
 
-    public CommandPicker(AgentInfo ai, WorldInfo wi, ScenarioInfo si, ModuleManager moduleManager, DevelopData developData) {
+    public CommandPicker(@Nonnull AgentInfo ai, @Nonnull WorldInfo wi, @Nonnull ScenarioInfo si, @Nonnull ModuleManager moduleManager, @Nonnull DevelopData developData) {
         this.worldInfo = wi;
         this.agentInfo = ai;
         this.scenarioInfo = si;
@@ -40,28 +45,39 @@ abstract public class CommandPicker {
         this.countUpdateInfoCurrentTime = 0;
     }
 
-    public abstract CommandPicker setAllocatorResult(Map<EntityID, EntityID> allocationData);
+    @Nonnull
+    public abstract CommandPicker setAllocatorResult(@Nonnull Map<EntityID, EntityID> allocationData);
 
+    @Nonnull
     public abstract CommandPicker calc();
 
+    @CheckForNull
     public abstract Collection<CommunicationMessage> getResult();
 
-    public CommandPicker precompute(PrecomputeData precomputeData) {
+    @Nonnull
+    @OverridingMethodsMustInvokeSuper
+    public CommandPicker precompute(@Nonnull PrecomputeData precomputeData) {
         this.countPrecompute++;
         return this;
     }
 
-    public CommandPicker resume(PrecomputeData precomputeData) {
+    @Nonnull
+    @OverridingMethodsMustInvokeSuper
+    public CommandPicker resume(@Nonnull PrecomputeData precomputeData) {
         this.countResume++;
         return this;
     }
 
+    @Nonnull
+    @OverridingMethodsMustInvokeSuper
     public CommandPicker preparate() {
         this.countPreparate++;
         return this;
     }
 
-    public CommandPicker updateInfo(MessageManager messageManager){
+    @Nonnull
+    @OverridingMethodsMustInvokeSuper
+    public CommandPicker updateInfo(@Nonnull MessageManager messageManager){
         if (this.countUpdateInfoCurrentTime != this.agentInfo.getTime())
         {
             this.countUpdateInfo = 0;
@@ -71,18 +87,22 @@ abstract public class CommandPicker {
         return this;
     }
 
+    @Nonnegative
     public int getCountPrecompute() {
         return this.countPrecompute;
     }
 
+    @Nonnegative
     public int getCountResume() {
         return this.countResume;
     }
 
+    @Nonnegative
     public int getCountPreparate() {
         return this.countPreparate;
     }
 
+    @Nonnegative
     public int getCountUpdateInfo() {
         if (this.countUpdateInfoCurrentTime != this.agentInfo.getTime())
         {

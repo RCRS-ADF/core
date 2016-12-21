@@ -1,7 +1,9 @@
 package adf.component.tactics;
 
+import javax.annotation.Nullable;
+
 public abstract class TacticsAmbulanceCentre extends TacticsCenter {
-    public TacticsAmbulanceCentre(TacticsAmbulanceCentre parent)
+    public TacticsAmbulanceCentre(@Nullable TacticsAmbulanceCentre parent)
     {
         super(parent);
     }

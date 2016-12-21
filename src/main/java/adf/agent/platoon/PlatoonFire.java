@@ -5,6 +5,7 @@ import adf.component.tactics.TacticsFireBrigade;
 import rescuecore2.standard.entities.FireBrigade;
 import rescuecore2.standard.entities.StandardEntityURN;
 
+import javax.annotation.Nonnull;
 import java.util.EnumSet;
 
 public class PlatoonFire extends Platoon<FireBrigade>
@@ -14,7 +15,8 @@ public class PlatoonFire extends Platoon<FireBrigade>
 		super(tactics, moduleConfigFileName, isPrecompute, DATASTORAGE_FILE_NAME_FIRE, isDebugMode, developData);
 	}
 
-	@Override
+	@Nonnull
+    @Override
 	protected EnumSet<StandardEntityURN> getRequestedEntityURNsEnum()
 	{
 		return EnumSet.of(StandardEntityURN.FIRE_BRIGADE);

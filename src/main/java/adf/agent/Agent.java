@@ -24,6 +24,7 @@ import rescuecore2.standard.entities.StandardWorldModel;
 import rescuecore2.standard.messages.AKSubscribe;
 import rescuecore2.worldmodel.ChangeSet;
 
+import javax.annotation.Nonnull;
 import java.util.*;
 
 public abstract class Agent<E extends StandardEntity> extends AbstractAgent<StandardWorldModel, E>
@@ -47,7 +48,7 @@ public abstract class Agent<E extends StandardEntity> extends AbstractAgent<Stan
 	private int ignoreTime;
 
 	//public Agent(String moduleConfigFileName, boolean isPrecompute, String dataStorageName, boolean isDevelopMode, String developDataFileName, List<String> rawdevelopData)
-	public Agent(String moduleConfigFileName, boolean isPrecompute, String dataStorageName, boolean isDebugMode, DevelopData developData)
+	public Agent(@Nonnull String moduleConfigFileName, boolean isPrecompute, @Nonnull String dataStorageName, boolean isDebugMode, @Nonnull DevelopData developData)
 	{
 		this.isPrecompute = isPrecompute;
 		this.isDebugMode = isDebugMode;
@@ -69,6 +70,7 @@ public abstract class Agent<E extends StandardEntity> extends AbstractAgent<Stan
 		this.messageManager = new MessageManager();
 	}
 
+	@Nonnull
 	@Override
 	public final String[] getRequestedEntityURNs() {
 		EnumSet<StandardEntityURN> set = getRequestedEntityURNsEnum();
@@ -80,8 +82,10 @@ public abstract class Agent<E extends StandardEntity> extends AbstractAgent<Stan
 		return result;
 	}
 
+	@Nonnull
 	protected abstract EnumSet<StandardEntityURN> getRequestedEntityURNsEnum();
 
+	@Nonnull
 	@Override
 	protected StandardWorldModel createWorldModel()
 	{
@@ -126,7 +130,7 @@ public abstract class Agent<E extends StandardEntity> extends AbstractAgent<Stan
 	}
 
 	@Override
-	protected void processSense(KASense sense) {
+	protected void processSense(@Nonnull KASense sense) {
 		int time = sense.getTime();
 		ChangeSet changed = sense.getChangeSet();
 		this.worldInfo.setTime(time);
@@ -136,7 +140,7 @@ public abstract class Agent<E extends StandardEntity> extends AbstractAgent<Stan
 	}
 
 	@Override
-	protected void think(int time, ChangeSet changed, Collection<Command> heard) {
+	protected void think(int time, @Nonnull ChangeSet changed, @Nonnull Collection<Command> heard) {
 		this.agentInfo.setTime(time);
 
 		if ( 1 == time ) {

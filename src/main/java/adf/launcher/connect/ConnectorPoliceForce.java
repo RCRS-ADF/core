@@ -13,10 +13,12 @@ import rescuecore2.components.ComponentLauncher;
 import rescuecore2.config.Config;
 import rescuecore2.connection.ConnectionException;
 
+import javax.annotation.Nonnull;
+
 public class ConnectorPoliceForce extends Connector
 {
 	@Override
-	public void connect(ComponentLauncher launcher, Config config, AbstractLoader loader)
+	public void connect(@Nonnull ComponentLauncher launcher, @Nonnull Config config, @Nonnull AbstractLoader loader)
 	{
 		int count = config.getIntValue(ConfigKey.KEY_POLICE_FORCE_COUNT, 0);
 

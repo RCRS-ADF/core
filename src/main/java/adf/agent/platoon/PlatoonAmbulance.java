@@ -5,6 +5,7 @@ import adf.component.tactics.TacticsAmbulanceTeam;
 import rescuecore2.standard.entities.AmbulanceTeam;
 import rescuecore2.standard.entities.StandardEntityURN;
 
+import javax.annotation.Nonnull;
 import java.util.EnumSet;
 
 public class PlatoonAmbulance extends Platoon<AmbulanceTeam>
@@ -14,7 +15,8 @@ public class PlatoonAmbulance extends Platoon<AmbulanceTeam>
 		super(tactics, moduleConfigFileName, isPrecompute, DATASTORAGE_FILE_NAME_AMBULANCE, isDebugMode, developData);
 	}
 
-	@Override
+	@Nonnull
+    @Override
 	protected EnumSet<StandardEntityURN> getRequestedEntityURNsEnum()
 	{
 		return EnumSet.of(StandardEntityURN.AMBULANCE_TEAM);

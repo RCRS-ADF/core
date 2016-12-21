@@ -1,8 +1,10 @@
 package adf.component.tactics;
 
+import javax.annotation.Nullable;
+
 public abstract class TacticsFireBrigade extends Tactics
 {
-	public TacticsFireBrigade(TacticsFireBrigade parent)
+	public TacticsFireBrigade(@Nullable TacticsFireBrigade parent)
 	{
 		super(parent);
 	}

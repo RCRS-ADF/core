@@ -9,6 +9,8 @@ import adf.agent.module.ModuleManager;
 import adf.agent.precompute.PrecomputeData;
 import rescuecore2.standard.entities.Building;
 
+import javax.annotation.Nonnull;
+
 /**
  * @deprecated change class name {@link BuildingDetector}
  */
@@ -19,30 +21,35 @@ public abstract class BuildingSelector extends BuildingDetector {
         super(ai, wi, si, moduleManager, developData);
     }
 
+    @Nonnull
     @Override
-    public BuildingSelector precompute(PrecomputeData precomputeData) {
+    public BuildingSelector precompute(@Nonnull PrecomputeData precomputeData) {
         super.precompute(precomputeData);
         return this;
     }
 
+    @Nonnull
     @Override
-    public BuildingSelector resume(PrecomputeData precomputeData) {
+    public BuildingSelector resume(@Nonnull PrecomputeData precomputeData) {
         super.resume(precomputeData);
         return this;
     }
 
+    @Nonnull
     @Override
     public BuildingSelector preparate() {
         super.preparate();
         return this;
     }
 
+    @Nonnull
     @Override
-    public BuildingSelector updateInfo(MessageManager messageManager) {
+    public BuildingSelector updateInfo(@Nonnull MessageManager messageManager) {
         super.updateInfo(messageManager);
         return this;
     }
 
+    @Nonnull
     @Override
     public abstract BuildingSelector calc();
 }

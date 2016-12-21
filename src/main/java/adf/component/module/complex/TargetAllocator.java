@@ -10,39 +10,51 @@ import adf.agent.precompute.PrecomputeData;
 import adf.component.module.AbstractModule;
 import rescuecore2.worldmodel.EntityID;
 
+import javax.annotation.CheckReturnValue;
+import javax.annotation.Nonnull;
+import javax.annotation.OverridingMethodsMustInvokeSuper;
 import java.util.Map;
 
 public abstract class TargetAllocator extends AbstractModule {
 
-    public TargetAllocator(AgentInfo ai, WorldInfo wi, ScenarioInfo si, ModuleManager moduleManager, DevelopData developData) {
+    public TargetAllocator(@Nonnull AgentInfo ai, @Nonnull WorldInfo wi, @Nonnull ScenarioInfo si, @Nonnull ModuleManager moduleManager, @Nonnull DevelopData developData) {
         super(ai, wi, si, moduleManager, developData);
     }
 
+    @CheckReturnValue
     public abstract Map<EntityID, EntityID> getResult();
 
+    @Nonnull
     @Override
     public abstract TargetAllocator calc();
 
+    @Nonnull
     @Override
-    public final TargetAllocator precompute(PrecomputeData precomputeData) {
+    public final TargetAllocator precompute(@Nonnull PrecomputeData precomputeData) {
         super.precompute(precomputeData);
         return this;
     }
 
+    @Nonnull
+    @OverridingMethodsMustInvokeSuper
     @Override
-    public TargetAllocator resume(PrecomputeData precomputeData) {
+    public TargetAllocator resume(@Nonnull PrecomputeData precomputeData) {
         super.resume(precomputeData);
         return this;
     }
 
+    @Nonnull
+    @OverridingMethodsMustInvokeSuper
     @Override
     public TargetAllocator preparate() {
         super.preparate();
         return this;
     }
 
+    @Nonnull
+    @OverridingMethodsMustInvokeSuper
     @Override
-    public TargetAllocator updateInfo(MessageManager messageManager) {
+    public TargetAllocator updateInfo(@Nonnull MessageManager messageManager) {
         super.updateInfo(messageManager);
         return this;
     }

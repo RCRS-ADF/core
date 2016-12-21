@@ -5,6 +5,7 @@ import adf.component.tactics.TacticsAmbulanceCentre;
 import rescuecore2.standard.entities.Building;
 import rescuecore2.standard.entities.StandardEntityURN;
 
+import javax.annotation.Nonnull;
 import java.util.EnumSet;
 
 public class OfficeAmbulance extends Office<Building>
@@ -14,7 +15,8 @@ public class OfficeAmbulance extends Office<Building>
 		super(tacticsAmbulanceCenter, moduleConfigFileName, isPrecompute, DATASTORAGE_FILE_NAME_AMBULANCE, isDebugMode, developData);
 	}
 
-	@Override
+	@Nonnull
+    @Override
 	protected EnumSet<StandardEntityURN> getRequestedEntityURNsEnum()
 	{
 		return EnumSet.of(StandardEntityURN.AMBULANCE_CENTRE);

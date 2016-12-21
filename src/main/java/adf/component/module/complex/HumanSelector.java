@@ -10,6 +10,8 @@ import adf.agent.module.ModuleManager;
 import adf.agent.precompute.PrecomputeData;
 import rescuecore2.standard.entities.Human;
 
+import javax.annotation.Nonnull;
+
 /**
  * @deprecated change class name {@link HumanDetector}
  */
@@ -20,30 +22,35 @@ public abstract class HumanSelector extends HumanDetector {
         super(ai, wi, si, moduleManager, developData);
     }
 
+    @Nonnull
     @Override
-    public HumanSelector precompute(PrecomputeData precomputeData) {
+    public HumanSelector precompute(@Nonnull PrecomputeData precomputeData) {
         super.precompute(precomputeData);
         return this;
     }
 
+    @Nonnull
     @Override
-    public HumanSelector resume(PrecomputeData precomputeData) {
+    public HumanSelector resume(@Nonnull PrecomputeData precomputeData) {
         super.resume(precomputeData);
         return this;
     }
 
+    @Nonnull
     @Override
     public HumanSelector preparate() {
         super.preparate();
         return this;
     }
 
+    @Nonnull
     @Override
-    public HumanSelector updateInfo(MessageManager messageManager) {
+    public HumanSelector updateInfo(@Nonnull MessageManager messageManager) {
         super.updateInfo(messageManager);
         return this;
     }
 
+    @Nonnull
     @Override
     public abstract HumanSelector calc();
 }

@@ -7,9 +7,11 @@ import adf.agent.info.ScenarioInfo;
 import adf.agent.info.WorldInfo;
 import adf.agent.module.ModuleManager;
 
+import javax.annotation.Nonnull;
+
 public abstract class DynamicClustering extends Clustering {
 
-    public DynamicClustering(AgentInfo ai, WorldInfo wi, ScenarioInfo si, ModuleManager moduleManager, DevelopData developData) {
+    public DynamicClustering(@Nonnull AgentInfo ai, @Nonnull WorldInfo wi, @Nonnull ScenarioInfo si, @Nonnull ModuleManager moduleManager, @Nonnull DevelopData developData) {
         super(ai, wi, si, moduleManager, developData);
     }
 }

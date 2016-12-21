@@ -12,16 +12,19 @@ import adf.component.module.AbstractModule;
 import rescuecore2.misc.Pair;
 import rescuecore2.worldmodel.EntityID;
 
+import javax.annotation.CheckReturnValue;
+import javax.annotation.Nonnull;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
 public abstract class PathPlanning extends AbstractModule{
 
-    public PathPlanning(AgentInfo ai, WorldInfo wi, ScenarioInfo si, ModuleManager moduleManager, DevelopData developData) {
+    public PathPlanning(@Nonnull AgentInfo ai, @Nonnull WorldInfo wi, @Nonnull ScenarioInfo si, @Nonnull ModuleManager moduleManager, @Nonnull DevelopData developData) {
         super(ai, wi, si, moduleManager, developData);
     }
 
+    @CheckReturnValue
     public abstract List<EntityID> getResult();
 
     public abstract PathPlanning setFrom(EntityID id);
@@ -32,30 +35,35 @@ public abstract class PathPlanning extends AbstractModule{
         return this.setDestination(Arrays.asList(targets));
     }
 
+    @Nonnull
     @Override
-    public PathPlanning precompute(PrecomputeData precomputeData) {
+    public PathPlanning precompute(@Nonnull PrecomputeData precomputeData) {
         super.precompute(precomputeData);
         return this;
     }
 
+    @Nonnull
     @Override
-    public PathPlanning resume(PrecomputeData precomputeData) {
+    public PathPlanning resume(@Nonnull PrecomputeData precomputeData) {
         super.resume(precomputeData);
         return this;
     }
 
+    @Nonnull
     @Override
     public PathPlanning preparate() {
         super.preparate();
         return this;
     }
 
+    @Nonnull
     @Override
-    public PathPlanning updateInfo(MessageManager messageManager){
+    public PathPlanning updateInfo(@Nonnull MessageManager messageManager){
         super.updateInfo(messageManager);
         return this;
     }
 
+    @Nonnull
     @Override
     public abstract PathPlanning calc();
 

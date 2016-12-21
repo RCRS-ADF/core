@@ -13,9 +13,11 @@ import rescuecore2.components.ComponentLauncher;
 import rescuecore2.config.Config;
 import rescuecore2.connection.ConnectionException;
 
+import javax.annotation.Nonnull;
+
 public class ConnectorAmbulanceCentre extends Connector {
 	@Override
-	public void connect(ComponentLauncher launcher, Config config, AbstractLoader loader)
+	public void connect(@Nonnull ComponentLauncher launcher, @Nonnull Config config, @Nonnull AbstractLoader loader)
 	{
 		int count = config.getIntValue(ConfigKey.KEY_AMBULANCE_CENTRE_COUNT, 0);
 

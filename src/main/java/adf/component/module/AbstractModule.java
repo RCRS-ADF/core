@@ -8,12 +8,21 @@ import adf.agent.info.WorldInfo;
 import adf.agent.module.ModuleManager;
 import adf.agent.precompute.PrecomputeData;
 
+import javax.annotation.Nonnegative;
+import javax.annotation.Nonnull;
+import javax.annotation.OverridingMethodsMustInvokeSuper;
+
 public abstract class AbstractModule
 {
+    @Nonnull
     protected ScenarioInfo scenarioInfo;
+    @Nonnull
     protected AgentInfo agentInfo;
+    @Nonnull
     protected WorldInfo worldInfo;
+    @Nonnull
     protected ModuleManager moduleManager;
+    @Nonnull
     protected DevelopData developData;
 
     private int countPrecompute;
@@ -22,7 +31,7 @@ public abstract class AbstractModule
     private int countUpdateInfo;
     private int countUpdateInfoCurrentTime;
 
-    public AbstractModule(AgentInfo ai, WorldInfo wi, ScenarioInfo si, ModuleManager moduleManager, DevelopData developData) {
+    public AbstractModule(@Nonnull AgentInfo ai, @Nonnull WorldInfo wi, @Nonnull ScenarioInfo si, @Nonnull ModuleManager moduleManager, @Nonnull DevelopData developData) {
         this.worldInfo = wi;
         this.agentInfo = ai;
         this.scenarioInfo = si;
@@ -35,22 +44,30 @@ public abstract class AbstractModule
         this.countUpdateInfoCurrentTime = 0;
     }
 
-    public AbstractModule precompute(PrecomputeData precomputeData) {
+    @Nonnull
+    @OverridingMethodsMustInvokeSuper
+    public AbstractModule precompute(@Nonnull PrecomputeData precomputeData) {
         this.countPrecompute++;
         return this;
     }
 
-    public AbstractModule resume(PrecomputeData precomputeData) {
+    @Nonnull
+    @OverridingMethodsMustInvokeSuper
+    public AbstractModule resume(@Nonnull PrecomputeData precomputeData) {
         this.countResume++;
         return this;
     }
 
+    @Nonnull
+    @OverridingMethodsMustInvokeSuper
     public AbstractModule preparate() {
         this.countPreparate++;
         return this;
     }
 
-    public AbstractModule updateInfo(MessageManager messageManager){
+    @Nonnull
+    @OverridingMethodsMustInvokeSuper
+    public AbstractModule updateInfo(@Nonnull MessageManager messageManager){
         if (this.countUpdateInfoCurrentTime != this.agentInfo.getTime())
         {
             this.countUpdateInfo = 0;
@@ -60,20 +77,25 @@ public abstract class AbstractModule
         return this;
     }
 
+    @Nonnull
     public abstract AbstractModule calc();
 
+    @Nonnegative
     public int getCountPrecompute() {
         return this.countPrecompute;
     }
 
+    @Nonnegative
     public int getCountResume() {
         return this.countResume;
     }
 
+    @Nonnegative
     public int getCountPreparate() {
         return this.countPreparate;
     }
 
+    @Nonnegative
     public int getCountUpdateInfo() {
         if (this.countUpdateInfoCurrentTime != this.agentInfo.getTime())
         {

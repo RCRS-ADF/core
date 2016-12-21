@@ -12,6 +12,7 @@ import rescuecore2.standard.entities.StandardEntityFactory;
 import rescuecore2.standard.entities.StandardPropertyFactory;
 import rescuecore2.standard.messages.StandardMessageFactory;
 
+import javax.annotation.Nonnull;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +31,7 @@ public class AgentLauncher
         this.init(args);
     }
 
-    private void init(String... args) throws ClassNotFoundException, ClassCastException, InstantiationException, IllegalAccessException
+    private void init(@Nonnull String... args) throws ClassNotFoundException, ClassCastException, InstantiationException, IllegalAccessException
     {
         this.initSystem();
         this.config = ConfigInitializer.getConfig(args);
@@ -63,7 +64,7 @@ public class AgentLauncher
         this.registerConnector(new ConnectorPoliceOffice());
     }
 
-    private void registerConnector(Connector connector)
+    private void registerConnector(@Nonnull Connector connector)
     {
         this.connectors.add(connector);
     }

@@ -8,10 +8,14 @@ import adf.agent.info.WorldInfo;
 import adf.agent.module.ModuleManager;
 import adf.agent.precompute.PrecomputeData;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 public abstract class TacticsCenter {
+    @Nullable
     private TacticsCenter parentControl;
 
-    public TacticsCenter(TacticsCenter parent)
+    public TacticsCenter(@Nullable TacticsCenter parent)
     {
         this.parentControl = parent;
     }
@@ -21,11 +25,12 @@ public abstract class TacticsCenter {
         this(null);
     }
 
-    abstract public void initialize(AgentInfo agentInfo, WorldInfo worldInfo, ScenarioInfo scenarioInfo, ModuleManager moduleManager, MessageManager messageManager, DevelopData developData);
-    abstract public void resume(AgentInfo agentInfo, WorldInfo worldInfo, ScenarioInfo scenarioInfo, ModuleManager moduleManager, PrecomputeData precomputeInfo, DevelopData developData);
-    abstract public void preparate(AgentInfo agentInfo, WorldInfo worldInfo, ScenarioInfo scenarioInfo, ModuleManager moduleManager, DevelopData developData);
-    abstract public void think(AgentInfo agentInfo, WorldInfo worldInfo, ScenarioInfo scenarioInfo, ModuleManager moduleManager, MessageManager messageManager, DevelopData developData);
+    abstract public void initialize(@Nonnull AgentInfo agentInfo, @Nonnull WorldInfo worldInfo, @Nonnull ScenarioInfo scenarioInfo, @Nonnull ModuleManager moduleManager, @Nonnull MessageManager messageManager, @Nonnull DevelopData developData);
+    abstract public void resume(@Nonnull AgentInfo agentInfo, @Nonnull WorldInfo worldInfo, @Nonnull ScenarioInfo scenarioInfo, @Nonnull ModuleManager moduleManager, @Nonnull PrecomputeData precomputeInfo, @Nonnull DevelopData developData);
+    abstract public void preparate(@Nonnull AgentInfo agentInfo, @Nonnull WorldInfo worldInfo, @Nonnull ScenarioInfo scenarioInfo, @Nonnull ModuleManager moduleManager, @Nonnull DevelopData developData);
+    abstract public void think(@Nonnull AgentInfo agentInfo, @Nonnull WorldInfo worldInfo, @Nonnull ScenarioInfo scenarioInfo, @Nonnull ModuleManager moduleManager, @Nonnull MessageManager messageManager, @Nonnull DevelopData developData);
 
+    @Nullable
     public TacticsCenter getParentControl()
     {
         return parentControl;

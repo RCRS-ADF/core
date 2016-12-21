@@ -9,36 +9,48 @@ import adf.agent.module.ModuleManager;
 import adf.agent.precompute.PrecomputeData;
 import rescuecore2.standard.entities.Area;
 
+import javax.annotation.Nonnull;
+import javax.annotation.OverridingMethodsMustInvokeSuper;
+
 public abstract class Search extends TargetDetector<Area> {
 
-    public Search(AgentInfo ai, WorldInfo wi, ScenarioInfo si, ModuleManager moduleManager, DevelopData developData) {
+    public Search(@Nonnull AgentInfo ai, @Nonnull WorldInfo wi, @Nonnull ScenarioInfo si, @Nonnull ModuleManager moduleManager, @Nonnull DevelopData developData) {
         super(ai, wi, si, moduleManager, developData);
     }
 
+    @Nonnull
+    @OverridingMethodsMustInvokeSuper
     @Override
-    public Search precompute(PrecomputeData precomputeData) {
+    public Search precompute(@Nonnull PrecomputeData precomputeData) {
         super.precompute(precomputeData);
         return this;
     }
 
+    @Nonnull
+    @OverridingMethodsMustInvokeSuper
     @Override
-    public Search resume(PrecomputeData precomputeData) {
+    public Search resume(@Nonnull PrecomputeData precomputeData) {
         super.resume(precomputeData);
         return this;
     }
 
+    @Nonnull
+    @OverridingMethodsMustInvokeSuper
     @Override
     public Search preparate() {
         super.preparate();
         return this;
     }
 
+    @Nonnull
+    @OverridingMethodsMustInvokeSuper
     @Override
-    public Search updateInfo(MessageManager messageManager) {
+    public Search updateInfo(@Nonnull MessageManager messageManager) {
         super.updateInfo(messageManager);
         return this;
     }
 
+    @Nonnull
     @Override
     public abstract Search calc();
 }

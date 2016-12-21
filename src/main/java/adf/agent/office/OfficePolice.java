@@ -5,6 +5,7 @@ import adf.component.tactics.TacticsPoliceOffice;
 import rescuecore2.standard.entities.Building;
 import rescuecore2.standard.entities.StandardEntityURN;
 
+import javax.annotation.Nonnull;
 import java.util.EnumSet;
 
 public class OfficePolice extends Office<Building>
@@ -14,7 +15,8 @@ public class OfficePolice extends Office<Building>
 		super(tacticsPoliceOffice, moduleConfigFileName, isPrecompute, DATASTORAGE_FILE_NAME_POLICE, isDebugMode, developData);
 	}
 
-	@Override
+	@Nonnull
+    @Override
 	protected EnumSet<StandardEntityURN> getRequestedEntityURNsEnum()
 	{
 		return EnumSet.of(StandardEntityURN.POLICE_OFFICE);

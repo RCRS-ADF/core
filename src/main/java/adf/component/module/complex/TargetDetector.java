@@ -11,37 +11,50 @@ import adf.component.module.AbstractModule;
 import rescuecore2.standard.entities.StandardEntity;
 import rescuecore2.worldmodel.EntityID;
 
+import javax.annotation.Nonnull;
+import javax.annotation.OverridingMethodsMustInvokeSuper;
+
 public abstract class TargetDetector<E extends StandardEntity> extends AbstractModule {
 
-    public TargetDetector(AgentInfo ai, WorldInfo wi, ScenarioInfo si, ModuleManager moduleManager, DevelopData developData) {
+    public TargetDetector(@Nonnull AgentInfo ai, @Nonnull WorldInfo wi, @Nonnull ScenarioInfo si, @Nonnull ModuleManager moduleManager, @Nonnull DevelopData developData) {
         super(ai, wi, si, moduleManager, developData);
     }
 
+    @Nonnull
     public abstract EntityID getTarget();
 
+    @Nonnull
     @Override
     public abstract TargetDetector<E> calc();
 
+    @Nonnull
+    @OverridingMethodsMustInvokeSuper
     @Override
-    public TargetDetector<E> precompute(PrecomputeData precomputeData) {
+    public TargetDetector<E> precompute(@Nonnull PrecomputeData precomputeData) {
         super.precompute(precomputeData);
         return this;
     }
 
+    @Nonnull
+    @OverridingMethodsMustInvokeSuper
     @Override
-    public TargetDetector<E> resume(PrecomputeData precomputeData) {
+    public TargetDetector<E> resume(@Nonnull PrecomputeData precomputeData) {
         super.resume(precomputeData);
         return this;
     }
 
+    @Nonnull
+    @OverridingMethodsMustInvokeSuper
     @Override
     public TargetDetector<E> preparate() {
         super.preparate();
         return this;
     }
 
+    @Nonnull
+    @OverridingMethodsMustInvokeSuper
     @Override
-    public TargetDetector<E> updateInfo(MessageManager messageManager) {
+    public TargetDetector<E> updateInfo(@Nonnull MessageManager messageManager) {
         super.updateInfo(messageManager);
         return this;
     }
