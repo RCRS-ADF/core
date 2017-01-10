@@ -6,6 +6,9 @@ import org.msgpack.jackson.dataformat.MessagePackFactory;
 import rescuecore2.standard.entities.StandardEntityURN;
 import rescuecore2.worldmodel.EntityID;
 
+import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +20,7 @@ public final class PrecomputeData {
 	public static final String DEFAULT_FILE_NAME = "data.bin";
 	public static final File PRECOMP_DATA_DIR = new File("precomp_data");
 
+	@Nonnull
 	private String fileName;
 
 	private PreData data;
@@ -26,19 +30,19 @@ public final class PrecomputeData {
 		this(DEFAULT_FILE_NAME);
 	}
 
-	public PrecomputeData(String name)
+	public PrecomputeData(@Nonnull String name)
 	{
 		this.fileName = name;
 		this.init();
 	}
 
-	private PrecomputeData(String name, PreData precomputeDatas)
+	private PrecomputeData(@Nonnull String  name, @Nonnull PreData precomputeDatas)
 	{
 		this.fileName = name;
 		this.data = precomputeDatas;
 	}
 
-	public static void removeData(String name)
+	public static void removeData(@Nonnull String name)
 	{
 		if (!PRECOMP_DATA_DIR.exists())
 		{
@@ -57,6 +61,7 @@ public final class PrecomputeData {
 		removeData(DEFAULT_FILE_NAME);
 	}
 
+	@Nonnull
 	public PrecomputeData copy()
 	{
 		return new PrecomputeData(this.fileName, this.data.copy());
@@ -71,7 +76,8 @@ public final class PrecomputeData {
 		}
 	}
 
-	private PreData read(String name)
+	@CheckForNull
+	private PreData read(@Nonnull String name)
 	{
 		try
 		{
@@ -133,7 +139,8 @@ public final class PrecomputeData {
 		}
 	}
 
-	public Integer setInteger(String name, int value)  {
+	@Nullable
+	public Integer setInteger(@Nonnull String name, int value)  {
 	    StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
         if(stackTraceElements == null || stackTraceElements.length == 0) {
             return null;
@@ -142,7 +149,8 @@ public final class PrecomputeData {
 		return this.data.intValues.put(callClassName + ":" + name, value);
 	}
 
-	public Double setDouble(String name, double value) {
+	@Nullable
+	public Double setDouble(@Nonnull String name, double value) {
         StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
         if(stackTraceElements == null || stackTraceElements.length == 0) {
             return null;
@@ -151,7 +159,8 @@ public final class PrecomputeData {
 		return this.data.doubleValues.put(callClassName + ":" + name, value);
 	}
 
-	public Boolean setBoolean(String name, boolean value) {
+	@Nullable
+	public Boolean setBoolean(@Nonnull String name, boolean value) {
         StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
         if(stackTraceElements == null || stackTraceElements.length == 0) {
             return null;
@@ -160,7 +169,8 @@ public final class PrecomputeData {
 		return this.data.boolValues.put(callClassName + ":" + name, value);
 	}
 
-	public String setString(String name, String value) {
+	@Nullable
+	public String setString(@Nonnull String name, @Nonnull String value) {
         StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
         if(stackTraceElements == null || stackTraceElements.length == 0) {
             return null;
@@ -169,7 +179,8 @@ public final class PrecomputeData {
 		return this.data.stringValues.put(callClassName + ":" + name, value);
 	}
 
-	public EntityID setEntityID(String name, EntityID value) {
+	@Nullable
+	public EntityID setEntityID(@Nonnull String name, @Nonnull EntityID value) {
         StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
         if(stackTraceElements == null || stackTraceElements.length == 0) {
             return null;
@@ -179,7 +190,8 @@ public final class PrecomputeData {
 		return id == null ? null : new EntityID(id);
 	}
 
-	public List<Integer> setIntegerList(String name, List<Integer> list) {
+	@Nullable
+	public List<Integer> setIntegerList(@Nonnull String name, @Nonnull List<Integer> list) {
         StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
         if(stackTraceElements == null || stackTraceElements.length == 0) {
             return null;
@@ -188,7 +200,8 @@ public final class PrecomputeData {
 		return this.data.intLists.put(callClassName + ":" + name, list);
 	}
 
-	public List<Double> setDoubleList(String name, List<Double> list) {
+	@Nullable
+	public List<Double> setDoubleList(@Nonnull String name, @Nonnull List<Double> list) {
         StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
         if(stackTraceElements == null || stackTraceElements.length == 0) {
             return null;
@@ -197,7 +210,8 @@ public final class PrecomputeData {
 		return this.data.doubleLists.put(callClassName + ":" + name, list);
 	}
 
-	public List<String> setStringList(String name, List<String> list) {
+	@Nullable
+	public List<String> setStringList(@Nonnull String name, @Nonnull List<String> list) {
         StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
         if(stackTraceElements == null || stackTraceElements.length == 0) {
             return null;
@@ -206,7 +220,8 @@ public final class PrecomputeData {
 		return this.data.stringLists.put(callClassName + ":" + name, list);
 	}
 
-	public List<EntityID> setEntityIDList(String name, List<EntityID> list) {
+	@Nullable
+	public List<EntityID> setEntityIDList(@Nonnull String name, @Nonnull List<EntityID> list) {
         StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
         if(stackTraceElements == null || stackTraceElements.length == 0) {
             return null;
@@ -221,7 +236,8 @@ public final class PrecomputeData {
 		return cvtList == null ? null : cvtList.stream().map(EntityID::new).collect(Collectors.toList());
 	}
 
-	public List<Boolean> setBooleanList(String name, List<Boolean> list) {
+	@Nullable
+	public List<Boolean> setBooleanList(@Nonnull String name, @Nonnull List<Boolean> list) {
         StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
         if(stackTraceElements == null || stackTraceElements.length == 0) {
             return null;
@@ -230,14 +246,15 @@ public final class PrecomputeData {
 		return this.data.boolLists.put(callClassName + ":" + name, list);
 	}
 
-	public boolean setReady(boolean isReady, WorldInfo worldInfo)
+	public boolean setReady(boolean isReady, @Nonnull WorldInfo worldInfo)
 	{
 		this.data.isReady = isReady;
 		this.data.readyID = makeReadyID(worldInfo);
 		return (this.data.isReady && this.data.readyID.equals(this.makeReadyID(worldInfo)));
 	}
 
-	public Integer getInteger(String name) {
+	@Nullable
+	public Integer getInteger(@Nonnull String name) {
         StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
         if(stackTraceElements == null || stackTraceElements.length == 0) {
             return null;
@@ -246,7 +263,8 @@ public final class PrecomputeData {
 		return this.data.intValues.get(callClassName + ":" + name);
 	}
 
-	public Double getDouble(String name) {
+	@Nullable
+	public Double getDouble(@Nonnull String name) {
         StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
         if(stackTraceElements == null || stackTraceElements.length == 0) {
             return null;
@@ -255,7 +273,8 @@ public final class PrecomputeData {
 		return this.data.doubleValues.get(callClassName + ":" + name);
 	}
 
-	public Boolean getBoolean(String name) {
+	@Nullable
+	public Boolean getBoolean(@Nonnull String name) {
         StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
         if(stackTraceElements == null || stackTraceElements.length == 0) {
             return null;
@@ -264,7 +283,8 @@ public final class PrecomputeData {
 		return this.data.boolValues.get(callClassName + ":" + name);
 	}
 
-	public String getString(String name) {
+	@Nullable
+	public String getString(@Nonnull String name) {
         StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
         if(stackTraceElements == null || stackTraceElements.length == 0) {
             return null;
@@ -273,7 +293,8 @@ public final class PrecomputeData {
 		return this.data.stringValues.get(callClassName + ":" + name);
 	}
 
-	public EntityID getEntityID(String name) {
+	@Nullable
+	public EntityID getEntityID(@Nonnull String name) {
         StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
         if(stackTraceElements == null || stackTraceElements.length == 0) {
             return null;
@@ -283,7 +304,8 @@ public final class PrecomputeData {
 		return id == null ? null : new EntityID(id);
 	}
 
-	public List<Integer> getIntegerList(String name) {
+	@Nullable
+	public List<Integer> getIntegerList(@Nonnull String name) {
         StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
         if(stackTraceElements == null || stackTraceElements.length == 0) {
             return null;
@@ -292,7 +314,8 @@ public final class PrecomputeData {
 		return this.data.intLists.get(callClassName + ":" + name);
 	}
 
-	public List<Double> getDoubleList(String name) {
+	@Nullable
+	public List<Double> getDoubleList(@Nonnull String name) {
         StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
         if(stackTraceElements == null || stackTraceElements.length == 0) {
             return null;
@@ -301,7 +324,8 @@ public final class PrecomputeData {
 		return this.data.doubleLists.get(callClassName + ":" + name);
 	}
 
-	public List<String> getStringList(String name) {
+	@Nullable
+	public List<String> getStringList(@Nonnull String name) {
         StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
         if(stackTraceElements == null || stackTraceElements.length == 0) {
             return null;
@@ -310,7 +334,8 @@ public final class PrecomputeData {
 		return this.data.stringLists.get(callClassName + ":" + name);
 	}
 
-	public List<EntityID> getEntityIDList(String name) {
+	@Nullable
+	public List<EntityID> getEntityIDList(@Nonnull String name) {
         StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
         if(stackTraceElements == null || stackTraceElements.length == 0) {
             return null;
@@ -320,7 +345,8 @@ public final class PrecomputeData {
 		return cvtList == null ? null : cvtList.stream().map(EntityID::new).collect(Collectors.toList());
 	}
 
-	public List<Boolean> getBooleanList(String name) {
+	@Nullable
+	public List<Boolean> getBooleanList(@Nonnull String name) {
         StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
         if(stackTraceElements == null || stackTraceElements.length == 0) {
             return null;
@@ -329,12 +355,13 @@ public final class PrecomputeData {
 		return this.data.boolLists.get(callClassName + ":" + name);
 	}
 
-	public boolean isReady(WorldInfo worldInfo)
+	public boolean isReady(@Nonnull WorldInfo worldInfo)
 	{
 		return (this.data.isReady && this.data.readyID.equals(this.makeReadyID(worldInfo)));
 	}
 
-	private String makeReadyID(WorldInfo worldInfo)
+	@Nonnull
+	private String makeReadyID(@Nonnull WorldInfo worldInfo)
 	{
 		return "" + worldInfo.getBounds().getX() + "" + worldInfo.getBounds().getY() + "" + worldInfo.getAllEntities().size();
 	}

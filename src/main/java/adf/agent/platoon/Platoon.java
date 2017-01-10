@@ -9,15 +9,20 @@ import adf.component.tactics.Tactics;
 import adf.launcher.ConsoleOutput;
 import rescuecore2.standard.entities.StandardEntity;
 
+import javax.annotation.Nonnull;
+import javax.annotation.OverridingMethodsMustInvokeSuper;
+
 public abstract class Platoon<E extends StandardEntity> extends Agent<E> {
+	@Nonnull
 	private Tactics rootTactics;
 
-	Platoon(Tactics tactics, String moduleConfigFileName, boolean isPrecompute, String dataStorageName, boolean isDebugMode, DevelopData developData) {
+	Platoon(@Nonnull Tactics tactics, @Nonnull String moduleConfigFileName, boolean isPrecompute, @Nonnull String dataStorageName, boolean isDebugMode, @Nonnull DevelopData developData) {
 		super(moduleConfigFileName, isPrecompute, dataStorageName, isDebugMode, developData);
 		this.rootTactics = tactics;
 	}
 
 	@Override
+    @OverridingMethodsMustInvokeSuper
 	protected void postConnect()
 	{
 		super.postConnect();
@@ -49,6 +54,8 @@ public abstract class Platoon<E extends StandardEntity> extends Agent<E> {
 		}
 	}
 
+	@Override
+    @OverridingMethodsMustInvokeSuper
 	protected void think() {
 		Action action = this.rootTactics.think(this.agentInfo, this.worldInfo, this.scenarioInfo, this.moduleManager, this.messageManager, this.developData);
 		if(action != null) {

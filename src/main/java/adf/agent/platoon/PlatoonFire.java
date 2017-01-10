@@ -6,11 +6,12 @@ import rescuecore2.standard.entities.FireBrigade;
 import rescuecore2.standard.entities.StandardEntityURN;
 
 import javax.annotation.Nonnull;
+import javax.annotation.OverridingMethodsMustInvokeSuper;
 import java.util.EnumSet;
 
 public class PlatoonFire extends Platoon<FireBrigade>
 {
-	public PlatoonFire(TacticsFireBrigade tactics, String moduleConfigFileName, boolean isPrecompute, boolean isDebugMode, DevelopData developData)
+	public PlatoonFire(@Nonnull TacticsFireBrigade tactics, @Nonnull String moduleConfigFileName, boolean isPrecompute, boolean isDebugMode, @Nonnull DevelopData developData)
 	{
 		super(tactics, moduleConfigFileName, isPrecompute, DATASTORAGE_FILE_NAME_FIRE, isDebugMode, developData);
 	}
@@ -23,6 +24,7 @@ public class PlatoonFire extends Platoon<FireBrigade>
 	}
 
 	@Override
+	@OverridingMethodsMustInvokeSuper
 	protected void postConnect()
 	{
 		super.postConnect();
