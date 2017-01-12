@@ -11,7 +11,7 @@ import java.util.Objects;
 
 public class ActionMove extends Action
 {
-
+	@Nonnull
 	private List<EntityID> path;
 
 	private boolean usePosition;

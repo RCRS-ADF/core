@@ -11,12 +11,15 @@ import rescuecore2.standard.messages.AKClear;
 import rescuecore2.standard.messages.AKClearArea;
 import rescuecore2.worldmodel.EntityID;
 
+import javax.annotation.CheckForNull;
+import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Objects;
 
 public class ActionClear extends Action
 {
+	@CheckForNull
 	protected EntityID target;
 	private boolean useOldFunction;
 	private int posX;

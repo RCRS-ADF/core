@@ -11,6 +11,7 @@ import java.util.Objects;
 
 public class ActionLoad extends Action
 {
+	@Nonnull
 	protected EntityID target;
 
 	public ActionLoad(@Nonnull EntityID targetID)

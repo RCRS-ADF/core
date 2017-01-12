@@ -5,6 +5,7 @@ import adf.component.communication.util.BitOutputStream;
 import adf.component.communication.util.BitStreamReader;
 import rescuecore2.worldmodel.EntityID;
 
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Objects;
@@ -22,7 +23,7 @@ public class CommandScout extends StandardMessage {
 
 	protected boolean broadcast;
 
-	public CommandScout(boolean isRadio, @Nullable EntityID toID, @Nullable EntityID targetID, int range)
+	public CommandScout(boolean isRadio, @Nullable EntityID toID, @Nullable EntityID targetID, @Nonnegative int range)
 	{
 		super(isRadio);
 		this.commandToID = toID;
@@ -40,6 +41,7 @@ public class CommandScout extends StandardMessage {
 		this.broadcast = (this.rawToID == -1);
 	}
 
+	@Nonnegative
 	public int getRange()
 	{ return this.scoutRange; }
 

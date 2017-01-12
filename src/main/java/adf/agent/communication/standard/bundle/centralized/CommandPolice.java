@@ -5,6 +5,7 @@ import adf.component.communication.util.BitOutputStream;
 import adf.component.communication.util.BitStreamReader;
 import rescuecore2.worldmodel.EntityID;
 
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Objects;
@@ -28,7 +29,7 @@ public class CommandPolice extends StandardMessage {
 
 	protected boolean broadcast;
 
-	public CommandPolice(boolean isRadio, @Nullable EntityID toID, @Nullable EntityID targetID, int action)
+	public CommandPolice(boolean isRadio, @Nullable EntityID toID, @Nullable EntityID targetID, @Nonnegative int action)
 	{
 		super(isRadio);
 		this.commandToID = toID;
@@ -46,6 +47,7 @@ public class CommandPolice extends StandardMessage {
         this.broadcast = (this.rawToID == -1);
 	}
 
+	@Nonnegative
 	public int getAction()
 	{ return this.myAction; }
 

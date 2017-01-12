@@ -7,15 +7,16 @@ import rescuecore2.standard.entities.*;
 import rescuecore2.worldmodel.ChangeSet;
 import rescuecore2.worldmodel.EntityID;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import javax.annotation.*;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
 public class AgentInfo {
+	@Nonnull
 	private Agent agent;
+	@Nonnull
 	private StandardWorldModel world;
     private int time;
 	private ChangeSet changed;
@@ -45,7 +46,7 @@ public class AgentInfo {
 		this.heard = heard;
 	}
 
-	@Nullable
+	@CheckForNull
 	public Collection<Command> getHeard()
 	{
 		return this.heard;
@@ -89,12 +90,12 @@ public class AgentInfo {
 		this.changed = changed;
 	}
 
-	@Nullable
+	@CheckForNull
     public ChangeSet getChanged() {
         return this.changed;
     }
 
-    @Nullable
+    @CheckReturnValue
 	public Human someoneOnBoard() {
 		EntityID id = this.agent.getID();
 		for (StandardEntity next : this.world.getEntitiesOfType(StandardEntityURN.CIVILIAN)) {
@@ -111,6 +112,7 @@ public class AgentInfo {
         return entity.getStandardURN().equals(StandardEntityURN.FIRE_BRIGADE) && ((FireBrigade) entity).isWaterDefined();
     }
 
+    @Nonnegative
 	public int getWater() {
         StandardEntity entity = this.world.getEntity(this.agent.getID());
         if(entity.getStandardURN().equals(StandardEntityURN.FIRE_BRIGADE)) {

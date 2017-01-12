@@ -6,6 +6,7 @@ import adf.component.communication.util.BitStreamReader;
 import rescuecore2.standard.entities.FireBrigade;
 import rescuecore2.worldmodel.EntityID;
 
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -39,7 +40,7 @@ public class MessageFireBrigade extends StandardMessage
 	protected int myAction;
 	protected int fireBrigadeWater;
 
-	public MessageFireBrigade(boolean isRadio, @Nonnull FireBrigade fireBrigade, int action, @Nullable EntityID target)
+	public MessageFireBrigade(boolean isRadio, @Nonnull FireBrigade fireBrigade, @Nonnegative int action, @Nullable EntityID target)
 	{
 		super(isRadio);
 		this.agentID = fireBrigade.getID();
@@ -76,6 +77,7 @@ public class MessageFireBrigade extends StandardMessage
 
 	public int getWater() { return this.fireBrigadeWater; }
 
+	@Nonnegative
 	public int getAction()
 	{ return this.myAction; }
 

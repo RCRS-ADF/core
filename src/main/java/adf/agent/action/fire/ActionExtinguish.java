@@ -11,7 +11,7 @@ import java.util.Objects;
 
 public class ActionExtinguish extends Action
 {
-
+	@Nonnull
 	protected EntityID target;
 	private int power;
 

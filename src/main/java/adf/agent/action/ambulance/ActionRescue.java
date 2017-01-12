@@ -11,6 +11,7 @@ import java.util.Objects;
 
 public class ActionRescue extends Action
 {
+	@Nonnull
 	protected EntityID target;
 
 	public ActionRescue(@Nonnull EntityID targetID)

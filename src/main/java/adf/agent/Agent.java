@@ -190,12 +190,12 @@ public abstract class Agent<E extends StandardEntity> extends AbstractAgent<Stan
 		return me().getLocation(this.model).second();
 	}
 
-	public void send(Message[] messages)
+	public void send(@Nonnull Message[] messages)
 	{
 		for(Message msg : messages) super.send(msg);
 	}
 
-	public void send(List<Message> messages)
+	public void send(@Nonnull List<Message> messages)
 	{
 		for(Message msg : messages) super.send(msg);
 	}

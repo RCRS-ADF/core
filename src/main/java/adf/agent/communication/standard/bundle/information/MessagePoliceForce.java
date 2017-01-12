@@ -6,6 +6,7 @@ import adf.component.communication.util.BitStreamReader;
 import rescuecore2.standard.entities.PoliceForce;
 import rescuecore2.worldmodel.EntityID;
 
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -36,7 +37,7 @@ public class MessagePoliceForce extends StandardMessage
 	protected EntityID myTargetID;
 	protected int myAction;
 
-	public MessagePoliceForce(boolean isRadio, @Nonnull PoliceForce policeForce, int action, @Nullable EntityID target)
+	public MessagePoliceForce(boolean isRadio, @Nonnull PoliceForce policeForce, @Nonnegative int action, @Nullable EntityID target)
 	{
 		super(isRadio);
 		this.agentID = policeForce.getID();
@@ -68,6 +69,7 @@ public class MessagePoliceForce extends StandardMessage
 		return this.agentID;
 	}
 
+	@Nonnegative
 	public int getAction()
 	{ return this.myAction; }
 
