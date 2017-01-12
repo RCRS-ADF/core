@@ -14,6 +14,7 @@ import rescuecore2.worldmodel.EntityID;
 
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
+import javax.annotation.OverridingMethodsMustInvokeSuper;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -27,15 +28,19 @@ public abstract class PathPlanning extends AbstractModule{
     @CheckReturnValue
     public abstract List<EntityID> getResult();
 
-    public abstract PathPlanning setFrom(EntityID id);
+    @Nonnull
+    public abstract PathPlanning setFrom(@Nonnull EntityID id);
 
-    public abstract PathPlanning setDestination(Collection<EntityID> targets);
+    @Nonnull
+    public abstract PathPlanning setDestination(@Nonnull Collection<EntityID> targets);
 
+    @Nonnull
     public PathPlanning setDestination(EntityID... targets) {
         return this.setDestination(Arrays.asList(targets));
     }
 
     @Nonnull
+    @OverridingMethodsMustInvokeSuper
     @Override
     public PathPlanning precompute(@Nonnull PrecomputeData precomputeData) {
         super.precompute(precomputeData);
@@ -43,6 +48,7 @@ public abstract class PathPlanning extends AbstractModule{
     }
 
     @Nonnull
+    @OverridingMethodsMustInvokeSuper
     @Override
     public PathPlanning resume(@Nonnull PrecomputeData precomputeData) {
         super.resume(precomputeData);
@@ -50,6 +56,7 @@ public abstract class PathPlanning extends AbstractModule{
     }
 
     @Nonnull
+    @OverridingMethodsMustInvokeSuper
     @Override
     public PathPlanning preparate() {
         super.preparate();
@@ -57,6 +64,7 @@ public abstract class PathPlanning extends AbstractModule{
     }
 
     @Nonnull
+    @OverridingMethodsMustInvokeSuper
     @Override
     public PathPlanning updateInfo(@Nonnull MessageManager messageManager){
         super.updateInfo(messageManager);
@@ -94,6 +102,7 @@ public abstract class PathPlanning extends AbstractModule{
     public double getDistance(EntityID from, EntityID dest)
     { return this.setFrom(from).setDestination(dest).calc().getDistance(); }
 
+    @CheckReturnValue
     public List<EntityID> getResult(EntityID from, EntityID dest)
     { return this.setFrom(from).setDestination(dest).calc().getResult(); }
 }

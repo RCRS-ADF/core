@@ -2,6 +2,7 @@ package adf.component.communication;
 
 import adf.component.communication.util.BitOutputStream;
 
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 
 abstract public class CommunicationMessage
@@ -18,6 +19,7 @@ abstract public class CommunicationMessage
         return this.isRadio;
     }
 
+    @Nonnegative
     abstract public int getByteArraySize();
 
     @Nonnull

@@ -3,6 +3,8 @@ package adf.launcher.option;
 import rescuecore2.Constants;
 import rescuecore2.config.Config;
 
+import javax.annotation.Nonnull;
+
 public class OptionServer extends Option
 {
 	@Override
@@ -11,6 +13,7 @@ public class OptionServer extends Option
 		return true;
 	}
 
+	@Nonnull
 	@Override
 	public String getKey()
 	{
@@ -18,7 +21,7 @@ public class OptionServer extends Option
 	}
 
 	@Override
-	public void setValue(Config config, String data)
+	public void setValue(@Nonnull Config config, @Nonnull String data)
 	{
 		String[] splitedData = data.split(":");
 		if (splitedData.length == 2)

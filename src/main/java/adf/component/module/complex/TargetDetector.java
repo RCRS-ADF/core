@@ -11,6 +11,7 @@ import adf.component.module.AbstractModule;
 import rescuecore2.standard.entities.StandardEntity;
 import rescuecore2.worldmodel.EntityID;
 
+import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 
@@ -20,7 +21,7 @@ public abstract class TargetDetector<E extends StandardEntity> extends AbstractM
         super(ai, wi, si, moduleManager, developData);
     }
 
-    @Nonnull
+    @CheckReturnValue
     public abstract EntityID getTarget();
 
     @Nonnull

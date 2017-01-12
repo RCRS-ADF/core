@@ -3,6 +3,8 @@ package adf.launcher.option;
 import adf.launcher.ConfigKey;
 import rescuecore2.config.Config;
 
+import javax.annotation.Nonnull;
+
 public class OptionFireBrigade extends Option
 {
 	@Override
@@ -11,6 +13,7 @@ public class OptionFireBrigade extends Option
 		return true;
 	}
 
+	@Nonnull
 	@Override
 	public String getKey()
 	{
@@ -18,7 +21,7 @@ public class OptionFireBrigade extends Option
 	}
 
 	@Override
-	public void setValue(Config config, String data)
+	public void setValue(@Nonnull Config config, @Nonnull String data)
 	{
 		config.setValue(ConfigKey.KEY_FIRE_BRIGADE_COUNT, data);
 	}

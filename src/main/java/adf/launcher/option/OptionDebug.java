@@ -4,6 +4,8 @@ import adf.launcher.ConfigKey;
 import rescuecore2.Constants;
 import rescuecore2.config.Config;
 
+import javax.annotation.Nonnull;
+
 public class OptionDebug extends Option
 {
 	@Override
@@ -12,6 +14,7 @@ public class OptionDebug extends Option
 		return true;
 	}
 
+	@Nonnull
 	@Override
 	public String getKey()
 	{
@@ -19,7 +22,7 @@ public class OptionDebug extends Option
 	}
 
 	@Override
-	public void setValue(Config config, String data)
+	public void setValue(@Nonnull Config config, @Nonnull String data)
 	{
 		config.setValue(ConfigKey.KEY_DEBUG_FLAG, data);
 	}

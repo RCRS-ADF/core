@@ -34,7 +34,7 @@ abstract public class ExtAction {
     private int countUpdateInfo;
     private int countUpdateInfoCurrentTime;
 
-    @Nullable
+    @CheckForNull
 	protected Action result;
 
 	public ExtAction(@Nonnull AgentInfo ai, @Nonnull WorldInfo wi, @Nonnull ScenarioInfo si, @Nonnull ModuleManager moduleManager, @Nonnull DevelopData developData) {

@@ -29,6 +29,7 @@ public abstract class TargetAllocator extends AbstractModule {
     public abstract TargetAllocator calc();
 
     @Nonnull
+    @OverridingMethodsMustInvokeSuper
     @Override
     public final TargetAllocator precompute(@Nonnull PrecomputeData precomputeData) {
         super.precompute(precomputeData);

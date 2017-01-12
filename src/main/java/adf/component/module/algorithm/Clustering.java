@@ -12,6 +12,7 @@ import rescuecore2.standard.entities.StandardEntity;
 import rescuecore2.worldmodel.EntityID;
 
 import javax.annotation.CheckReturnValue;
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 import java.util.ArrayList;
@@ -24,6 +25,7 @@ public abstract class Clustering extends AbstractModule{
         super(ai, wi, si, moduleManager, developData);
     }
 
+    @Nonnegative
     public abstract int getClusterNumber();
 
     public abstract int getClusterIndex(@Nonnull StandardEntity entity);

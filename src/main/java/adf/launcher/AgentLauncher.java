@@ -26,7 +26,7 @@ public class AgentLauncher
 
     private List<Connector> connectors;
 
-    public AgentLauncher(String... args) throws ClassNotFoundException, ClassCastException, InstantiationException, IllegalAccessException
+    public AgentLauncher(@Nonnull String... args) throws ClassNotFoundException, ClassCastException, InstantiationException, IllegalAccessException
     {
         this.init(args);
     }

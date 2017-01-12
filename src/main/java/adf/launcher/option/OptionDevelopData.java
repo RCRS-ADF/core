@@ -3,6 +3,7 @@ package adf.launcher.option;
 import adf.launcher.ConfigKey;
 import rescuecore2.config.Config;
 
+import javax.annotation.Nonnull;
 import java.util.Base64;
 
 public class OptionDevelopData extends Option
@@ -15,6 +16,7 @@ public class OptionDevelopData extends Option
         return true;
     }
 
+    @Nonnull
     @Override
     public String getKey()
     {
@@ -22,7 +24,7 @@ public class OptionDevelopData extends Option
     }
 
     @Override
-    public void setValue(Config config, String data)
+    public void setValue(@Nonnull Config config, @Nonnull String data)
     {
         StringBuilder rawDevelopData = new StringBuilder(config.getValue(ConfigKey.KEY_DEVELOP_DATA, ""));
         rawDevelopData.append(DATA_DELIMITER);
