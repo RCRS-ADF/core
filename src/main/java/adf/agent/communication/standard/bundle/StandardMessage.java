@@ -32,6 +32,11 @@ abstract public class StandardMessage extends CommunicationMessage
 		return mySenderID;
 	}
 
+	public int getTTL()
+	{
+		return this.ttl;
+	}
+
 	protected int getBitSize(int value) {
 		if((value & 0xFFFF0000) != 0) {
 			if ((value & 0xFF000000) != 0) {

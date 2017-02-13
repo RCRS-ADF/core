@@ -2,6 +2,7 @@ package adf.agent.communication.standard;
 
 import adf.agent.Agent;
 import adf.agent.communication.MessageManager;
+import adf.agent.communication.standard.bundle.StandardMessage;
 import adf.component.communication.CommunicationMessage;
 import adf.component.communication.CommunicationModule;
 import adf.component.communication.util.BitOutputStream;
@@ -129,6 +130,12 @@ public class StandardCommunicationModule extends CommunicationModule
 
             BitOutputStream bitOutputStream = new BitOutputStream();
             bitOutputStream.writeBits(messageClassIndex, SIZE_ID);
+
+            if (!message.isRadio())
+            {
+                bitOutputStream.writeBits(((StandardMessage)message).getTTL(), SIZE_TTL);
+            }
+
             bitOutputStream.writeBits(message.toBitOutputStream());
 
             if (message.isRadio())
