@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 
 public final class DevelopData
 {
-    public static final String DEFAULT_FILE_NAME = System.getProperty("user.dir") + "data" + File.separator + "develop.json";
+    public static final String DEFAULT_FILE_NAME = System.getProperty("user.dir") + File.separator + "data" + File.separator + "develop.json";
 
     private boolean developFlag;
 
