@@ -448,10 +448,12 @@ public class LaunchSupporter
                                     String line;
                                     while ((line = br.readLine()) != null)
                                     {
-                                        if ((count++) % 2 == 0)
+                                        if (line.charAt(line.length() -1) == ')')
                                         {
                                             line = line.trim();
-                                            dependClasses.add(line.substring(0, line.lastIndexOf(' ')));
+                                            line = line.substring(0, line.lastIndexOf(' '));
+                                            if (line.indexOf('.') > 0)
+                                            { dependClasses.add(line); }
                                         }
                                     }
                                     br.close();
