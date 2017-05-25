@@ -23,7 +23,6 @@ import rescuecore2.standard.entities.StandardEntityURN;
 import rescuecore2.standard.entities.StandardWorldModel;
 import rescuecore2.standard.messages.AKSubscribe;
 import rescuecore2.worldmodel.ChangeSet;
-
 import java.util.*;
 
 public abstract class Agent<E extends StandardEntity> extends AbstractAgent<StandardWorldModel, E>
@@ -52,7 +51,8 @@ public abstract class Agent<E extends StandardEntity> extends AbstractAgent<Stan
 		this.isPrecompute = isPrecompute;
 		this.isDebugMode = isDebugMode;
 
-		if (isPrecompute) {
+		if (isPrecompute)
+		{
 			PrecomputeData.removeData(dataStorageName);
 			this.mode = ScenarioInfo.Mode.PRECOMPUTATION_PHASE;
 		}
@@ -70,13 +70,14 @@ public abstract class Agent<E extends StandardEntity> extends AbstractAgent<Stan
 	}
 
 	@Override
-	public final String[] getRequestedEntityURNs() {
+	public final String[] getRequestedEntityURNs()
+	{
 		EnumSet<StandardEntityURN> set = getRequestedEntityURNsEnum();
 		String[] result = new String[set.size()];
 		int i = 0;
-		for (StandardEntityURN next : set) {
-			result[i++] = next.toString();
-		}
+		for (StandardEntityURN next : set)
+		{ result[i++] = next.toString(); }
+
 		return result;
 	}
 
@@ -89,18 +90,21 @@ public abstract class Agent<E extends StandardEntity> extends AbstractAgent<Stan
 	}
 
 	@Override
-	protected void postConnect() {
+	protected void postConnect()
+	{
 		super.postConnect();
-		if (shouldIndex()) this.model.index();
+		if (shouldIndex()) { this.model.index(); }
 
 		this.ignoreTime = config.getIntValue(kernel.KernelConstants.IGNORE_AGENT_COMMANDS_KEY);
 
 		this.worldInfo = new WorldInfo(this.model);
 
-		if (!this.isPrecompute) {
-            this.mode = this.precomputeData.isReady(this.worldInfo) ?
-                    ScenarioInfo.Mode.PRECOMPUTED :
-                    ScenarioInfo.Mode.NON_PRECOMPUTE;
+		if (!this.isPrecompute)
+		{
+			if (this.precomputeData.isReady(this.worldInfo))
+			{ this.mode = ScenarioInfo.Mode.PRECOMPUTED; }
+			else
+			{ this.mode = ScenarioInfo.Mode.NON_PRECOMPUTE; }
 		}
 
 		this.config.setBooleanValue(ConfigKey.KEY_DEBUG_FLAG, this.isDebugMode);
@@ -108,7 +112,8 @@ public abstract class Agent<E extends StandardEntity> extends AbstractAgent<Stan
 		this.scenarioInfo = new ScenarioInfo(this.config, this.mode);
 		this.communicationModule = null;
 
-		switch (scenarioInfo.getMode()) {
+		switch (scenarioInfo.getMode())
+		{
 			case NON_PRECOMPUTE:
 				ConsoleOutput.out(ConsoleOutput.State.INFO,
 						"Connected - " + this + " (NON_PRECOMPUTE)");
@@ -126,7 +131,8 @@ public abstract class Agent<E extends StandardEntity> extends AbstractAgent<Stan
 	}
 
 	@Override
-	protected void processSense(KASense sense) {
+	protected void processSense(KASense sense)
+	{
 		int time = sense.getTime();
 		ChangeSet changed = sense.getChangeSet();
 		this.worldInfo.setTime(time);
@@ -136,37 +142,42 @@ public abstract class Agent<E extends StandardEntity> extends AbstractAgent<Stan
 	}
 
 	@Override
-	protected void think(int time, ChangeSet changed, Collection<Command> heard) {
+	protected void think(int time, ChangeSet changed, Collection<Command> heard)
+	{
 		this.agentInfo.setTime(time);
 
-		if ( 1 == time ) {
-			if (this.communicationModule != null) {
+		if ( 1 == time )
+		{
+			if (this.communicationModule != null)
+			{
 				ConsoleOutput.out(ConsoleOutput.State.ERROR, "[ERROR ] Loader is not found.");
-                ConsoleOutput.out(ConsoleOutput.State.NOTICE, "CommunicationModule is modified - " + this);
-			} else {
+				ConsoleOutput.out(ConsoleOutput.State.NOTICE, "CommunicationModule is modified - " + this);
+			}
+			else
+			{
 				this.communicationModule = new StandardCommunicationModule();
 			}
+
 			this.messageManager.registerMessageBundle(new StandardMessageBundle());
 		}
 
-		if (time <= this.ignoreTime) {
-			super.send(new AKSubscribe(this.getID(), time, 1));
-		}
+		if (time <= this.ignoreTime)
+		{ super.send(new AKSubscribe(this.getID(), time, 1)); }
 
 		this.agentInfo.setHeard(heard);
 		this.agentInfo.setChanged(changed);
 		this.worldInfo.setChanged(changed);
 
-		if (time > this.ignoreTime) {
+		if (time > this.ignoreTime)
+		{
 			this.messageManager.refresh();
 			this.communicationModule.receive(this, this.messageManager);
 		}
 
 		think();
 
-		if (time > this.ignoreTime) {
-			this.communicationModule.send(this, this.messageManager);
-		}
+		if (time > this.ignoreTime)
+		{ this.communicationModule.send(this, this.messageManager); }
 	}
 
 	abstract protected void think();
@@ -196,3 +207,4 @@ public abstract class Agent<E extends StandardEntity> extends AbstractAgent<Stan
 		for(Message msg : messages) super.send(msg);
 	}
 }
+

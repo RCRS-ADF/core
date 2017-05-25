@@ -21,8 +21,8 @@ public class ActionRest extends Action
 		return "ActionRest []";
 	}
 
-	@Override
-    @Nonnull
+  @Override
+  @Nonnull
 	public Message getCommand(@Nonnull EntityID agentID, int time)
 	{
 		return new AKRest(agentID, time);

@@ -28,15 +28,16 @@ public class CommandAmbulance extends StandardMessage {
 	protected EntityID commandTargetID;
 	protected int myAction;
 
-    protected boolean broadcast;
+	protected boolean broadcast;
 
-	public CommandAmbulance(boolean isRadio, @Nullable EntityID toID, @Nullable EntityID targetID, int action) {
+	public CommandAmbulance(boolean isRadio, @Nullable EntityID toID, @Nullable EntityID targetID, int action)
+	{
 		super(isRadio);
 		this.commandToID = toID;
 		this.commandTargetID = targetID;
 		this.myAction = action;
-        this.broadcast = (toID == null);
-}
+		this.broadcast = (toID == null);
+	}
 
 	public CommandAmbulance(boolean isRadio, int from, int ttl, @Nonnull BitStreamReader bitStreamReader)
 	{
@@ -44,11 +45,13 @@ public class CommandAmbulance extends StandardMessage {
 		this.rawToID = (bitStreamReader.getBits(1) == 1) ? bitStreamReader.getBits(SIZE_TO) : -1;
 		this.rawTargetID = (bitStreamReader.getBits(1) == 1) ? bitStreamReader.getBits(SIZE_TARGET) : -1;
 		this.myAction = bitStreamReader.getBits(SIZE_ACTION);
-        this.broadcast = (this.rawToID == -1);
+		this.broadcast = (this.rawToID == -1);
 	}
 
 	public int getAction()
-	{ return this.myAction; }
+	{
+		return this.myAction;
+	}
 
 	@Override
 	public int getByteArraySize()
@@ -58,68 +61,83 @@ public class CommandAmbulance extends StandardMessage {
 
 	@Override
 	@Nonnull
-	public byte[] toByteArray() {
+	public byte[] toByteArray()
+	{
 		return this.toBitOutputStream().toByteArray();
 	}
 
 	@Override
-    @Nonnull
+	@Nonnull
 	public BitOutputStream toBitOutputStream()
 	{
 		BitOutputStream bitOutputStream = new BitOutputStream();
-        if (this.commandToID != null) {
-            bitOutputStream.writeBitsWithExistFlag(this.commandToID.getValue(), SIZE_TO);
-        } else if(this.rawToID != -1) {
-            bitOutputStream.writeBitsWithExistFlag(this.rawToID, SIZE_TO);
-        }else {
-            bitOutputStream.writeNullFlag();
-        }
-        if (this.commandTargetID != null) {
-            bitOutputStream.writeBitsWithExistFlag(this.commandTargetID.getValue(), SIZE_TARGET);
-        } else if(this.rawTargetID != -1) {
-            bitOutputStream.writeBitsWithExistFlag(this.rawTargetID, SIZE_TARGET);
-        }else {
-            bitOutputStream.writeNullFlag();
-        }
+		if (this.commandToID != null)
+		{ bitOutputStream.writeBitsWithExistFlag(this.commandToID.getValue(), SIZE_TO); }
+		else if(this.rawToID != -1)
+		{ bitOutputStream.writeBitsWithExistFlag(this.rawToID, SIZE_TO); }
+		else
+		{ bitOutputStream.writeNullFlag(); }
+
+		if (this.commandTargetID != null)
+		{ bitOutputStream.writeBitsWithExistFlag(this.commandTargetID.getValue(), SIZE_TARGET); }
+		else if(this.rawTargetID != -1)
+		{ bitOutputStream.writeBitsWithExistFlag(this.rawTargetID, SIZE_TARGET); }
+		else
+		{ bitOutputStream.writeNullFlag(); }
+
 		bitOutputStream.writeBits(myAction, SIZE_ACTION);
+
 		return bitOutputStream;
 	}
 
 	@Nullable
-	public EntityID getToID() {
-	    if(this.broadcast) return null;
-		if ( this.commandToID == null ) {
-		    if(this.rawToID != -1) this.commandToID = new EntityID(this.rawToID);
+	public EntityID getToID()
+	{
+		if(this.broadcast) { return null; }
+
+		if ( this.commandToID == null )
+		{
+			if(this.rawToID != -1)
+			{ this.commandToID = new EntityID(this.rawToID); }
 		}
+
 		return this.commandToID;
 	}
 
 	@Nullable
-	public EntityID getTargetID() {
-		if ( this.commandTargetID == null ) {
-		    if(this.rawTargetID != -1) this.commandTargetID = new EntityID(this.rawTargetID);
+	public EntityID getTargetID()
+	{
+		if ( this.commandTargetID == null )
+		{
+			if(this.rawTargetID != -1) { this.commandTargetID = new EntityID(this.rawTargetID); }
 		}
+
 		return this.commandTargetID;
 	}
 
-	public boolean isBroadcast() {
-	    return this.broadcast;
-    }
+	public boolean isBroadcast()
+	{
+		return this.broadcast;
+	}
 
-    public boolean isToIDDefined() {
-        return (this.commandToID != null || this.rawToID != -1);
-    }
+	public boolean isToIDDefined()
+	{
+		return (this.commandToID != null || this.rawToID != -1);
+	}
 
-    public boolean idTargetIDDefined() {
-        return (this.commandTargetID != null || this.rawTargetID != -1);
-    }
+	public boolean idTargetIDDefined()
+	{
+		return (this.commandTargetID != null || this.rawTargetID != -1);
+	}
 
 	@Override
-    @Nonnull
-	public String getCheckKey() {
-		String toIDValue = this.broadcast ? "broadcast" : Objects.requireNonNull(this.getToID()).toString();
+	@Nonnull
+	public String getCheckKey()
+	{
+		String toIDValue = (this.broadcast ? "broadcast" : Objects.requireNonNull(this.getToID()).toString());
 		EntityID tid = this.getTargetID();
-		String tidValue = tid == null ? "null" : tid.toString();
+		String tidValue = (tid == null ? "null" : tid.toString());
+
 		return getClass().getCanonicalName() + " > to:" + toIDValue + " target:" + tidValue + " action:" + this.myAction;
 	}
 }

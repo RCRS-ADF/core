@@ -4,148 +4,149 @@ import adf.agent.communication.standard.bundle.StandardMessageBundle;
 import adf.component.communication.CommunicationMessage;
 import adf.component.communication.MessageBundle;
 import adf.launcher.ConsoleOutput;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
 
 public class MessageManager
 {
-    private int standardMessageClassCount;
-    private int customMessageClassCount;
-    private HashMap<Integer, Class<? extends CommunicationMessage>> messageClassMap;
-    private HashMap<Class<? extends CommunicationMessage>, Integer> messageClassIDMap;
-    private List<CommunicationMessage> sendMessageList;
-    private List<CommunicationMessage> receivedMessageList;
-    private int heardAgentHelpCount;
+	private int standardMessageClassCount;
+	private int customMessageClassCount;
+	private HashMap<Integer, Class<? extends CommunicationMessage>> messageClassMap;
+	private HashMap<Class<? extends CommunicationMessage>, Integer> messageClassIDMap;
+	private List<CommunicationMessage> sendMessageList;
+	private List<CommunicationMessage> receivedMessageList;
+	private int heardAgentHelpCount;
 
-    private Set<String> checkDuplicationCache;
+	private Set<String> checkDuplicationCache;
 
-    public MessageManager()
-    {
-        standardMessageClassCount = 1;   // 00001
-        customMessageClassCount = 16;    // 10000
-        messageClassMap = new HashMap<>(32);
-        messageClassIDMap = new HashMap<>(32);
-        sendMessageList = new ArrayList<>();
-        this.checkDuplicationCache = new HashSet<>();
-        this.receivedMessageList = new ArrayList<>();
-        heardAgentHelpCount = 0;
-    }
+	public MessageManager()
+	{
+		standardMessageClassCount = 1;   // 00001
+		customMessageClassCount = 16;    // 10000
+		messageClassMap = new HashMap<>(32);
+		messageClassIDMap = new HashMap<>(32);
+		sendMessageList = new ArrayList<>();
+		this.checkDuplicationCache = new HashSet<>();
+		this.receivedMessageList = new ArrayList<>();
+		heardAgentHelpCount = 0;
+	}
 
-    public boolean registerMessageClass(int index, @Nonnull Class<? extends CommunicationMessage> messageClass)
-    {
-        if (index > 31)
-        {
-            throw new IllegalArgumentException("index maximum is 31");
-        }
-        if (messageClassMap.containsKey(index))
-        {
-            //throw new IllegalArgumentException("index(" + index + ") is already registrated");
-            ConsoleOutput.out(ConsoleOutput.State.WARN,
-                    "index(" + index + ") is already registered/"+ messageClass.getName() +" is ignored");
-            return false;
-        }
+	public boolean registerMessageClass(int index, @Nonnull Class<? extends CommunicationMessage> messageClass)
+	{
+		if (index > 31)
+		{ throw new IllegalArgumentException("index maximum is 31"); }
 
-        messageClassMap.put(index, messageClass);
-        messageClassIDMap.put(messageClass, index);
+		if (messageClassMap.containsKey(index))
+		{
+			//throw new IllegalArgumentException("index(" + index + ") is already registrated");
+			ConsoleOutput.out(ConsoleOutput.State.WARN,
+					"index(" + index + ") is already registered/"+ messageClass.getName() +" is ignored");
+			return false;
+		}
 
-        return true;
-    }
+		messageClassMap.put(index, messageClass);
+		messageClassIDMap.put(messageClass, index);
 
-    public void registerMessageBundle(@Nonnull MessageBundle messageBundle)
-    {
-        for (Class<? extends CommunicationMessage> messageClass : messageBundle.getMessageClassList())
-        {
-            this.registerMessageClass(
-                    (messageBundle.getClass().equals(StandardMessageBundle.class) ? standardMessageClassCount++ : customMessageClassCount++),
-                    messageClass);
-        }
-    }
+		return true;
+	}
 
-    @Nullable
-    public Class<? extends CommunicationMessage> getMessageClass(int index)
-    {
-        if (!messageClassMap.containsKey(index))
-        {
-            return null;
-        }
+	public void registerMessageBundle(@Nonnull MessageBundle messageBundle)
+	{
+		for (Class<? extends CommunicationMessage> messageClass : messageBundle.getMessageClassList())
+		{
+			this.registerMessageClass(
+					(messageBundle.getClass().equals(StandardMessageBundle.class) ?
+					 standardMessageClassCount++ : customMessageClassCount++),
+					messageClass);
+		}
+	}
 
-        return messageClassMap.get(index);
-    }
+	@Nullable
+	public Class<? extends CommunicationMessage> getMessageClass(int index)
+	{
+		if (!messageClassMap.containsKey(index))
+		{
+			return null;
+		}
 
-    public int getMessageClassIndex(@Nonnull CommunicationMessage message)
-    {
-        if (!messageClassMap.containsValue(message.getClass()))
-        {
-            throw new IllegalArgumentException(message.getClass().getName() + " isnot registorated to manager");
-        }
+		return messageClassMap.get(index);
+	}
 
-        return messageClassIDMap.get(message.getClass());
-    }
+	public int getMessageClassIndex(@Nonnull CommunicationMessage message)
+	{
+		if (!messageClassMap.containsValue(message.getClass()))
+		{
+			throw new IllegalArgumentException(message.getClass().getName() + " isnot registorated to manager");
+		}
 
-    public void addMessage(@Nonnull CommunicationMessage message) {
-        this.addMessage(message, true);
-    }
+		return messageClassIDMap.get(message.getClass());
+	}
 
-    public void addMessage(@Nonnull CommunicationMessage message, boolean checkDuplication) {
-        String checkKey = message.getCheckKey();
-        if(checkDuplication && !this.checkDuplicationCache.contains(checkKey)) {
-            this.sendMessageList.add(message);
-            this.checkDuplicationCache.add(checkKey);
-        }else {
-            this.sendMessageList.add(message);
-            this.checkDuplicationCache.add(checkKey);
-        }
-    }
+	public void addMessage(@Nonnull CommunicationMessage message) {
+		this.addMessage(message, true);
+	}
 
-    @Nonnull
-    public List<CommunicationMessage> getSendMessageList()
-    {
-        return this.sendMessageList;
-    }
+	public void addMessage(@Nonnull CommunicationMessage message, boolean checkDuplication)
+	{
+		String checkKey = message.getCheckKey();
+		if(checkDuplication && !this.checkDuplicationCache.contains(checkKey))
+		{
+			this.sendMessageList.add(message);
+			this.checkDuplicationCache.add(checkKey);
+		}
+		else
+		{
+			this.sendMessageList.add(message);
+			this.checkDuplicationCache.add(checkKey);
+		}
+	}
 
-    public void addReceivedMessage(@Nonnull CommunicationMessage message)
-    {
-        receivedMessageList.add(message);
-    }
+	@Nonnull
+	public List<CommunicationMessage> getSendMessageList()
+	{
+		return this.sendMessageList;
+	}
 
-    @Nonnull
-    public List<CommunicationMessage> getReceivedMessageList()
-    {
-        return this.receivedMessageList;
-    }
+	public void addReceivedMessage(@Nonnull CommunicationMessage message)
+	{
+		receivedMessageList.add(message);
+	}
 
-    @SafeVarargs
-    @Nonnull
-    public final List<CommunicationMessage> getReceivedMessageList(Class<? extends CommunicationMessage>... messageClasses)
-    {
-        List<CommunicationMessage> resultList = new ArrayList<>();
-        for (CommunicationMessage message : this.receivedMessageList)
-        {
-            if (Arrays.asList(messageClasses).contains(message.getClass()))
-            {
-                resultList.add(message);
-            }
-        }
-        return resultList;
-    }
+	@Nonnull
+	public List<CommunicationMessage> getReceivedMessageList()
+	{
+		return this.receivedMessageList;
+	}
 
-    public void addHeardAgentHelpCount()
-    {
-        this.heardAgentHelpCount++;
-    }
+	@SafeVarargs
+	@Nonnull
+	public final List<CommunicationMessage> getReceivedMessageList(Class<? extends CommunicationMessage>... messageClasses)
+	{
+		List<CommunicationMessage> resultList = new ArrayList<>();
+		for (CommunicationMessage message : this.receivedMessageList)
+		{
+			if (Arrays.asList(messageClasses).contains(message.getClass()))
+			{ resultList.add(message); }
+		}
+		return resultList;
+	}
 
-    public int getHeardAgentHelpCount()
-    {
-        return this.heardAgentHelpCount;
-    }
+	public void addHeardAgentHelpCount()
+	{
+		this.heardAgentHelpCount++;
+	}
 
-    public void refresh()
-    {
-        this.sendMessageList.clear();
-        this.checkDuplicationCache.clear();
-        this.receivedMessageList.clear();
-        this.heardAgentHelpCount = 0;
-    }
+	public int getHeardAgentHelpCount()
+	{
+		return this.heardAgentHelpCount;
+	}
+
+	public void refresh()
+	{
+		this.sendMessageList.clear();
+		this.checkDuplicationCache.clear();
+		this.receivedMessageList.clear();
+		this.heardAgentHelpCount = 0;
+	}
 }

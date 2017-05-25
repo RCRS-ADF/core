@@ -5,7 +5,6 @@ import rescuecore2.messages.Message;
 import rescuecore2.standard.entities.Building;
 import rescuecore2.standard.messages.AKExtinguish;
 import rescuecore2.worldmodel.EntityID;
-
 import javax.annotation.Nonnull;
 import java.util.Objects;
 

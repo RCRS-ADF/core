@@ -4,7 +4,6 @@ import adf.agent.action.Action;
 import rescuecore2.messages.Message;
 import rescuecore2.standard.messages.AKUnload;
 import rescuecore2.worldmodel.EntityID;
-
 import javax.annotation.Nonnull;
 
 public class ActionUnload extends Action

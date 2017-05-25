@@ -4,7 +4,6 @@ import adf.agent.communication.standard.bundle.StandardMessage;
 import adf.component.communication.util.BitOutputStream;
 import adf.component.communication.util.BitStreamReader;
 import rescuecore2.worldmodel.EntityID;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Objects;
@@ -41,7 +40,9 @@ public class CommandScout extends StandardMessage {
 	}
 
 	public int getRange()
-	{ return this.scoutRange; }
+	{
+		return this.scoutRange;
+	}
 
 	@Override
 	public int getByteArraySize()
@@ -60,59 +61,68 @@ public class CommandScout extends StandardMessage {
 	public BitOutputStream toBitOutputStream()
 	{
 		BitOutputStream bitOutputStream = new BitOutputStream();
-		if (this.commandToID != null) {
-			bitOutputStream.writeBitsWithExistFlag(this.commandToID.getValue(), SIZE_TO);
-		} else if(this.rawToID != -1) {
-			bitOutputStream.writeBitsWithExistFlag(this.rawToID, SIZE_TO);
-		}else {
-			bitOutputStream.writeNullFlag();
-		}
-		if (this.commandTargetID != null) {
-			bitOutputStream.writeBitsWithExistFlag(this.commandTargetID.getValue(), SIZE_TARGET);
-		} else if(this.rawTargetID != -1) {
-			bitOutputStream.writeBitsWithExistFlag(this.rawTargetID, SIZE_TARGET);
-		}else {
-			bitOutputStream.writeNullFlag();
-		}
+		if (this.commandToID != null)
+		{ bitOutputStream.writeBitsWithExistFlag(this.commandToID.getValue(), SIZE_TO); }
+		else if(this.rawToID != -1)
+		{ bitOutputStream.writeBitsWithExistFlag(this.rawToID, SIZE_TO); }
+		else
+		{ bitOutputStream.writeNullFlag(); }
+
+		if (this.commandTargetID != null)
+		{ bitOutputStream.writeBitsWithExistFlag(this.commandTargetID.getValue(), SIZE_TARGET); }
+		else if(this.rawTargetID != -1)
+		{ bitOutputStream.writeBitsWithExistFlag(this.rawTargetID, SIZE_TARGET); }
+		else
+		{ bitOutputStream.writeNullFlag(); }
+
 		bitOutputStream.writeBits(this.scoutRange, SIZE_RANGE);
+
 		return bitOutputStream;
 	}
 
 	@Nullable
-	public EntityID getToID() {
-		if(this.broadcast) return null;
-		if ( this.commandToID == null ) {
+	public EntityID getToID()
+	{
+		if (this.broadcast) { return null; }
+		if ( this.commandToID == null )
+		{
 			if(this.rawToID != -1) this.commandToID = new EntityID(this.rawToID);
 		}
 		return this.commandToID;
 	}
 
 	@Nullable
-	public EntityID getTargetID() {
-		if ( this.commandTargetID == null ) {
-			if(this.rawTargetID != -1) this.commandTargetID = new EntityID(this.rawTargetID);
+	public EntityID getTargetID()
+	{
+		if ( this.commandTargetID == null )
+		{
+			if(this.rawTargetID != -1) { this.commandTargetID = new EntityID(this.rawTargetID); }
 		}
 		return this.commandTargetID;
 	}
 
-	public boolean isBroadcast() {
+	public boolean isBroadcast()
+	{
 		return this.broadcast;
 	}
 
-	public boolean isToIDDefined() {
+	public boolean isToIDDefined()
+	{
 		return (this.commandToID != null || this.rawToID != -1);
 	}
 
-	public boolean idTargetIDDefined() {
+	public boolean idTargetIDDefined()
+	{
 		return (this.commandTargetID != null || this.rawTargetID != -1);
 	}
 
 	@Override
-    @Nonnull
-	public String getCheckKey() {
-		String toIDValue = this.broadcast ? "broadcast" : Objects.requireNonNull(this.getToID()).toString();
+	@Nonnull
+	public String getCheckKey()
+	{
+		String toIDValue = (this.broadcast ? "broadcast" : Objects.requireNonNull(this.getToID()).toString());
 		EntityID tid = this.getTargetID();
-		String tidValue = tid == null ? "null" : tid.toString();
+		String tidValue = (tid == null ? "null" : tid.toString());
 		return getClass().getCanonicalName() + " > to:" + toIDValue + " target:" + tidValue;
 	}
 }

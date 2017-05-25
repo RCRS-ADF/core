@@ -5,7 +5,6 @@ import rescuecore2.messages.Message;
 import rescuecore2.standard.entities.Human;
 import rescuecore2.standard.messages.AKRescue;
 import rescuecore2.worldmodel.EntityID;
-
 import javax.annotation.Nonnull;
 import java.util.Objects;
 

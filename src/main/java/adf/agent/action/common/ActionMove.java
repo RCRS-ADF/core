@@ -4,7 +4,6 @@ import adf.agent.action.Action;
 import rescuecore2.messages.Message;
 import rescuecore2.standard.messages.AKMove;
 import rescuecore2.worldmodel.EntityID;
-
 import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Objects;
@@ -63,7 +62,7 @@ public class ActionMove extends Action
 	}
 
 	@Override
-    @Nonnull
+  @Nonnull
 	public Message getCommand(@Nonnull EntityID agentID, int time)
 	{
 		return this.usePosition ? new AKMove(agentID, time, this.path, this.posX, this.posY) : new AKMove(agentID, time, this.path);

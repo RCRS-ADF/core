@@ -21,163 +21,164 @@ import java.util.Collection;
 
 public class StandardCommunicationModule extends CommunicationModule
 {
-    final private int ESCAPE_CHAR = 0x41;
-    final private int SIZE_ID = 5;
-    final private int SIZE_TTL = 3;
+	final private int ESCAPE_CHAR = 0x41;
+	final private int SIZE_ID = 5;
+	final private int SIZE_TTL = 3;
 
-    private int channel = 1;
+	private int channel = 1;
 
-    @Override
-    public void receive(@Nonnull Agent agent, @Nonnull MessageManager messageManager)
-    {
-        Collection<Command> heardList = agent.agentInfo.getHeard();
+	@Override
+	public void receive(@Nonnull Agent agent, @Nonnull MessageManager messageManager)
+	{
+		Collection<Command> heardList = agent.agentInfo.getHeard();
 
-        for (Command heard : heardList)
-        {
-            if (heard instanceof AKSpeak)
-            {
-                EntityID senderID = heard.getAgentID();
+		for (Command heard : heardList)
+		{
+			if (heard instanceof AKSpeak)
+			{
+				EntityID senderID = heard.getAgentID();
 
-                if (agent.getID() == senderID)
-                { continue; }
+				if (agent.getID() == senderID)
+				{ continue; }
 
-                AKSpeak received = (AKSpeak)heard;
-                byte[] receivedData = received.getContent();
-                boolean isRadio =  (received.getChannel() != 0);
+				AKSpeak received = (AKSpeak)heard;
+				byte[] receivedData = received.getContent();
+				boolean isRadio =  (received.getChannel() != 0);
 
-                if (receivedData.length <= 0)
-                { continue; }
+				if (receivedData.length <= 0)
+				{ continue; }
 
-                if (isRadio)
-                {
-                    addReceivedMessage(messageManager, Boolean.TRUE, senderID, receivedData);
-                }
-                else
-                {
-                    String voiceString = new String(receivedData);
-                    if ("Help".equalsIgnoreCase(voiceString) || "Ouch".equalsIgnoreCase(voiceString))
-                    {
-                        messageManager.addHeardAgentHelpCount();
-                        continue;
-                    }
+				if (isRadio)
+				{
+					addReceivedMessage(messageManager, Boolean.TRUE, senderID, receivedData);
+				}
+				else
+				{
+					String voiceString = new String(receivedData);
+					if ("Help".equalsIgnoreCase(voiceString) || "Ouch".equalsIgnoreCase(voiceString))
+					{
+						messageManager.addHeardAgentHelpCount();
+						continue;
+					}
 
-                    BitOutputStream messageTemp = new BitOutputStream();
-                    for (int i = 0; i < receivedData.length; i++)
-                    {
-                        if (receivedData[i] == ESCAPE_CHAR)
-                        {
-                            if ((i +1) >= receivedData.length)
-                            {
-                                addReceivedMessage(messageManager, Boolean.FALSE, senderID, messageTemp.toByteArray());
-                                break;
-                            }
-                            else if (receivedData[i +1] != ESCAPE_CHAR)
-                            {
-                                addReceivedMessage(messageManager, Boolean.FALSE, senderID, messageTemp.toByteArray());
-                                messageTemp.reset();
-                                continue;
-                            }
+					BitOutputStream messageTemp = new BitOutputStream();
+					for (int i = 0; i < receivedData.length; i++)
+					{
+						if (receivedData[i] == ESCAPE_CHAR)
+						{
+							if ((i +1) >= receivedData.length)
+							{
+								addReceivedMessage(messageManager, Boolean.FALSE, senderID, messageTemp.toByteArray());
+								break;
+							}
+							else if (receivedData[i +1] != ESCAPE_CHAR)
+							{
+								addReceivedMessage(messageManager, Boolean.FALSE, senderID, messageTemp.toByteArray());
+								messageTemp.reset();
+								continue;
+							}
 
-                            i += 1;
-                        }
-                        messageTemp.write(receivedData[i]);
-                    }
-                }
-            }
-        }
-    }
+							i += 1;
+						}
+						messageTemp.write(receivedData[i]);
+					}
+				}
+			}
+		}
+	}
 
 
-    final Class<?>[] standardMessageArgTypes = {boolean.class, int.class, int.class, BitStreamReader.class};
+	final Class<?>[] standardMessageArgTypes = {boolean.class, int.class, int.class, BitStreamReader.class};
 
-    private void addReceivedMessage(@Nonnull MessageManager messageManager, boolean isRadio, @Nonnull EntityID senderID, byte[] data)
-    {
-        BitStreamReader bitStreamReader = new BitStreamReader(data);
-        int messageClassIndex = bitStreamReader.getBits(SIZE_ID);
-        if (messageClassIndex <= 0)
-        {
-            ConsoleOutput.out(ConsoleOutput.State.WARN, "ignore Message Class Index (0)");
-            return;
-        }
+	private void addReceivedMessage(@Nonnull MessageManager messageManager, boolean isRadio, @Nonnull EntityID senderID, byte[] data)
+	{
+		BitStreamReader bitStreamReader = new BitStreamReader(data);
+		int messageClassIndex = bitStreamReader.getBits(SIZE_ID);
+		if (messageClassIndex <= 0)
+		{
+			ConsoleOutput.out(ConsoleOutput.State.WARN, "ignore Message Class Index (0)");
+			return;
+		}
 
-        int messageTTL = (isRadio ? -1 : bitStreamReader.getBits(SIZE_TTL));
+		int messageTTL = (isRadio ? -1 : bitStreamReader.getBits(SIZE_TTL));
 
-        Object[] args = {Boolean.valueOf(isRadio), Integer.valueOf(senderID.getValue()), Integer.valueOf(messageTTL), bitStreamReader};
-        try {
-            messageManager.addReceivedMessage(
-                    messageManager.getMessageClass(messageClassIndex).getConstructor(standardMessageArgTypes).newInstance(args)
-            );
-        } catch (NoSuchMethodException | IllegalArgumentException e) {
-            e.printStackTrace();
-        } catch (ReflectiveOperationException e) {
-            e.printStackTrace();
-        }
-    }
+		Object[] args = {Boolean.valueOf(isRadio), Integer.valueOf(senderID.getValue()), Integer.valueOf(messageTTL), bitStreamReader};
+		try {
+			messageManager.addReceivedMessage(
+					messageManager.getMessageClass(messageClassIndex).getConstructor(standardMessageArgTypes).newInstance(args)
+					);
+		} catch (NoSuchMethodException | IllegalArgumentException e) {
+			e.printStackTrace();
+		} catch (ReflectiveOperationException e) {
+			e.printStackTrace();
+		}
+	}
 
-    @Override
-    public void send(@Nonnull Agent agent, @Nonnull MessageManager messageManager)
-    {
-        final int voiceLimitBytes = agent.scenarioInfo.getVoiceMessagesSize();
-        int voiceMessageLeft = voiceLimitBytes;
-        //BitOutputStream voiceMessageStream = new BitOutputStream();
-        ByteArrayOutputStream voiceMessageStream = new ByteArrayOutputStream();
+	@Override
+	public void send(@Nonnull Agent agent, @Nonnull MessageManager messageManager)
+	{
+		final int voiceLimitBytes = agent.scenarioInfo.getVoiceMessagesSize();
+		int voiceMessageLeft = voiceLimitBytes;
+		//BitOutputStream voiceMessageStream = new BitOutputStream();
+		ByteArrayOutputStream voiceMessageStream = new ByteArrayOutputStream();
 
-        Message[] messages = new Message[1];
+		Message[] messages = new Message[1];
 
-        for (CommunicationMessage message : messageManager.getSendMessageList())
-        {
-            int messageClassIndex = messageManager.getMessageClassIndex(message);
+		for (CommunicationMessage message : messageManager.getSendMessageList())
+		{
+			int messageClassIndex = messageManager.getMessageClassIndex(message);
 
-            BitOutputStream bitOutputStream = new BitOutputStream();
-            bitOutputStream.writeBits(messageClassIndex, SIZE_ID);
+			BitOutputStream bitOutputStream = new BitOutputStream();
+			bitOutputStream.writeBits(messageClassIndex, SIZE_ID);
 
-            if (!message.isRadio())
-            {
-                bitOutputStream.writeBits(((StandardMessage)message).getTTL(), SIZE_TTL);
-            }
+			if (!message.isRadio())
+			{
+				bitOutputStream.writeBits(((StandardMessage)message).getTTL(), SIZE_TTL);
+			}
 
-            bitOutputStream.writeBits(message.toBitOutputStream());
+			bitOutputStream.writeBits(message.toBitOutputStream());
 
-            if (message.isRadio())
-            {
-                messages[0] = new AKSpeak(agent.getID(), agent.agentInfo.getTime(), channel, bitOutputStream.toByteArray());
-                agent.send(messages);
-            }
-            else
-            {
-                int messageSize = (int)Math.ceil(((double)bitOutputStream.size()) / 8.0);
-                if (messageSize <= voiceMessageLeft)
-                {
-                    byte[] messageData = bitOutputStream.toByteArray();
-                    ByteArrayOutputStream escapedMessage = new ByteArrayOutputStream();
-                    for (int i = 0; i < messageSize; i++)
-                    {
-                        if (messageData[i] == ESCAPE_CHAR)
-                        {
-                            escapedMessage.write(ESCAPE_CHAR);
-                        }
-                        escapedMessage.write(messageData[i]);
-                    }
-                    escapedMessage.toByteArray();
-                    escapedMessage.write(ESCAPE_CHAR);
-                    if (escapedMessage.size() <= voiceMessageLeft)
-                    {
-                        voiceMessageLeft -= escapedMessage.size();
-                        try
-                        {
-                            voiceMessageStream.write(escapedMessage.toByteArray());
-                        }
-                        catch (IOException e) { e.printStackTrace(); }
-                    }
-                }
-            }
-        }
+			if (message.isRadio())
+			{
+				messages[0] = new AKSpeak(agent.getID(), agent.agentInfo.getTime(), channel, bitOutputStream.toByteArray());
+				agent.send(messages);
+			}
+			else
+			{
+				int messageSize = (int)Math.ceil(((double)bitOutputStream.size()) / 8.0);
+				if (messageSize <= voiceMessageLeft)
+				{
+					byte[] messageData = bitOutputStream.toByteArray();
+					ByteArrayOutputStream escapedMessage = new ByteArrayOutputStream();
+					for (int i = 0; i < messageSize; i++)
+					{
+						if (messageData[i] == ESCAPE_CHAR)
+						{
+							escapedMessage.write(ESCAPE_CHAR);
+						}
+						escapedMessage.write(messageData[i]);
+					}
+					escapedMessage.toByteArray();
+					escapedMessage.write(ESCAPE_CHAR);
+					if (escapedMessage.size() <= voiceMessageLeft)
+					{
+						voiceMessageLeft -= escapedMessage.size();
+						try
+						{
+							voiceMessageStream.write(escapedMessage.toByteArray());
+						}
+						catch (IOException e) { e.printStackTrace(); }
+					}
+				}
+			}
+		}
 
-        //messages[0] = new AKSay(agent.getID(), agent.agentInfo.getTime(), voiceMessageStream.toByteArray());
-        if (voiceMessageStream.size() > 0)
-        {
-            messages[0] = new AKSpeak(agent.getID(), agent.agentInfo.getTime(), 0, voiceMessageStream.toByteArray());
-            agent.send(messages);
-        }
-    }
+		//messages[0] = new AKSay(agent.getID(), agent.agentInfo.getTime(), voiceMessageStream.toByteArray());
+		if (voiceMessageStream.size() > 0)
+		{
+			messages[0] = new AKSpeak(agent.getID(), agent.agentInfo.getTime(), 0, voiceMessageStream.toByteArray());
+			agent.send(messages);
+		}
+	}
 }
+
