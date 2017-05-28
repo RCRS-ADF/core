@@ -174,10 +174,17 @@ public abstract class Agent<E extends StandardEntity> extends AbstractAgent<Stan
 			this.communicationModule.receive(this, this.messageManager);
 		}
 
-		think();
 
-		if (time > this.ignoreTime)
-		{ this.communicationModule.send(this, this.messageManager); }
+		try{
+			think();
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		
+		if (time > this.ignoreTime) {
+			this.communicationModule.send(this, this.messageManager);
+		}
+
 	}
 
 	abstract protected void think();
@@ -205,6 +212,11 @@ public abstract class Agent<E extends StandardEntity> extends AbstractAgent<Stan
 	public void send(List<Message> messages)
 	{
 		for(Message msg : messages) super.send(msg);
+	}
+	
+	@Override
+	public String getName() {
+		return moduleConfig.getValue("Team.Name") + "." + getClass().getSimpleName();
 	}
 }
 

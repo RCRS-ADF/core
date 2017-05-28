@@ -1,5 +1,8 @@
 package adf.component.module;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import adf.agent.communication.MessageManager;
 import adf.agent.develop.DevelopData;
 import adf.agent.info.AgentInfo;
@@ -10,6 +13,7 @@ import adf.agent.precompute.PrecomputeData;
 
 public abstract class AbstractModule
 {
+	private List<AbstractModule> subModules=new ArrayList<>();
     protected ScenarioInfo scenarioInfo;
     protected AgentInfo agentInfo;
     protected WorldInfo worldInfo;
@@ -34,19 +38,35 @@ public abstract class AbstractModule
         this.countUpdateInfo = 0;
         this.countUpdateInfoCurrentTime = 0;
     }
+    
+    protected void registerModule(AbstractModule module){
+    	subModules.add(module);
+    }
+    protected boolean unregisterModule(AbstractModule module){
+    	return subModules.remove(module);
+    }
 
     public AbstractModule precompute(PrecomputeData precomputeData) {
         this.countPrecompute++;
+        for (AbstractModule abstractModule : subModules) {
+			abstractModule.precompute(precomputeData);
+		}
         return this;
     }
 
     public AbstractModule resume(PrecomputeData precomputeData) {
         this.countResume++;
+        for (AbstractModule abstractModule : subModules) {
+			abstractModule.resume(precomputeData);
+		}
         return this;
     }
 
     public AbstractModule preparate() {
         this.countPreparate++;
+        for (AbstractModule abstractModule : subModules) {
+			abstractModule.preparate();
+		}
         return this;
     }
 
@@ -56,6 +76,9 @@ public abstract class AbstractModule
             this.countUpdateInfo = 0;
             this.countUpdateInfoCurrentTime = this.agentInfo.getTime();
         }
+        for (AbstractModule abstractModule : subModules) {
+			abstractModule.updateInfo(messageManager);
+		}
         this.countUpdateInfo++;
         return this;
     }
