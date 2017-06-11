@@ -80,7 +80,7 @@ public class ModuleConfig extends Config
         { e.printStackTrace(); }
         catch (JsonParseException e)
         {
-            ConsoleOutput.out(ConsoleOutput.State.WARN, "DevelopData input is invalid : " + data);
+            ConsoleOutput.out(ConsoleOutput.State.WARN, "ModuleData input is invalid : " + data);
         }
         catch (IOException e)
         { e.printStackTrace(); }
