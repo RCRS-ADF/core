@@ -416,7 +416,7 @@ public class LaunchSupporter
 
                             for (Field field : ClassLoader.getSystemClassLoader().loadClass(loaderClass).getDeclaredFields())
                             {
-                                if (Modifier.isStatic(field.getModifiers()) && !(Modifier.isFinal(field.getModifiers())))
+                                if (Modifier.isStatic(field.getModifiers()) && !(Modifier.isFinal(field.getModifiers())) && !(noStructureWarning))
                                 {
                                     ConsoleOutput.warn("Variable static field is exist : " + loaderClass + "." + field.getName());
                                     countAgentCheckWarning++;
