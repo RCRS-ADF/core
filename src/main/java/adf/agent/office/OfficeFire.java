@@ -1,5 +1,6 @@
 package adf.agent.office;
 
+import adf.agent.config.ModuleConfig;
 import adf.agent.develop.DevelopData;
 import adf.component.tactics.TacticsFireStation;
 import rescuecore2.standard.entities.Building;
@@ -9,9 +10,9 @@ import java.util.EnumSet;
 
 public class OfficeFire extends Office<Building>
 {
-	public OfficeFire(TacticsFireStation tacticsFireStation, String moduleConfigFileName, boolean isPrecompute, boolean isDebugMode, DevelopData developData)
+	public OfficeFire(TacticsFireStation tacticsFireStation, boolean isPrecompute, boolean isDebugMode, ModuleConfig moduleConfig, DevelopData developData)
 	{
-		super(tacticsFireStation, moduleConfigFileName, isPrecompute, DATASTORAGE_FILE_NAME_FIRE, isDebugMode, developData);
+		super(tacticsFireStation, isPrecompute, DATASTORAGE_FILE_NAME_FIRE, isDebugMode, moduleConfig, developData);
 	}
 
 	@Override

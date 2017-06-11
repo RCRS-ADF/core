@@ -126,6 +126,7 @@ public class LaunchSupporter
         System.out.println("-h [HOST]\t\t\t\tRCRS server host (port:7000)");
         System.out.println("-pre [0|1]\t\t\t\tPrecompute flag");
         System.out.println("-mc [FILE]\t\t\t\tModuleConfig file name");
+        System.out.println("-md [JSON]\t\t\t\tModuleConfig JSON");
         System.out.println("-dev [0|1]\t\t\t\tDevelop flag");
         System.out.println("-dd [JSON]\t\t\t\tDevelopData JSON");
         System.out.println("-df [JSON File]\t\t\t\tDevelopData JSON file");

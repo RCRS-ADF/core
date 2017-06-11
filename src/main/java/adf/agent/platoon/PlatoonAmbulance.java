@@ -1,5 +1,6 @@
 package adf.agent.platoon;
 
+import adf.agent.config.ModuleConfig;
 import adf.agent.develop.DevelopData;
 import adf.component.tactics.TacticsAmbulanceTeam;
 import rescuecore2.standard.entities.AmbulanceTeam;
@@ -9,9 +10,9 @@ import java.util.EnumSet;
 
 public class PlatoonAmbulance extends Platoon<AmbulanceTeam>
 {
-	public PlatoonAmbulance(TacticsAmbulanceTeam tactics, String moduleConfigFileName, boolean isPrecompute, boolean isDebugMode, DevelopData developData)
+	public PlatoonAmbulance(TacticsAmbulanceTeam tactics, boolean isPrecompute, boolean isDebugMode, ModuleConfig moduleConfig, DevelopData developData)
 	{
-		super(tactics, moduleConfigFileName, isPrecompute, DATASTORAGE_FILE_NAME_AMBULANCE, isDebugMode, developData);
+		super(tactics, isPrecompute, DATASTORAGE_FILE_NAME_AMBULANCE, isDebugMode, moduleConfig, developData);
 	}
 
 	@Override

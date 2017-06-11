@@ -1,5 +1,6 @@
 package adf.agent.office;
 
+import adf.agent.config.ModuleConfig;
 import adf.agent.develop.DevelopData;
 import adf.component.tactics.TacticsAmbulanceCentre;
 import rescuecore2.standard.entities.Building;
@@ -9,9 +10,9 @@ import java.util.EnumSet;
 
 public class OfficeAmbulance extends Office<Building>
 {
-	public OfficeAmbulance(TacticsAmbulanceCentre tacticsAmbulanceCenter, String moduleConfigFileName, boolean isPrecompute, boolean isDebugMode, DevelopData developData)
+	public OfficeAmbulance(TacticsAmbulanceCentre tacticsAmbulanceCenter, boolean isPrecompute, boolean isDebugMode, ModuleConfig moduleConfig, DevelopData developData)
 	{
-		super(tacticsAmbulanceCenter, moduleConfigFileName, isPrecompute, DATASTORAGE_FILE_NAME_AMBULANCE, isDebugMode, developData);
+		super(tacticsAmbulanceCenter, isPrecompute, DATASTORAGE_FILE_NAME_AMBULANCE, isDebugMode, moduleConfig, developData);
 	}
 
 	@Override

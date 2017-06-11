@@ -46,7 +46,7 @@ public abstract class Agent<E extends StandardEntity> extends AbstractAgent<Stan
 	private int ignoreTime;
 
 	//public Agent(String moduleConfigFileName, boolean isPrecompute, String dataStorageName, boolean isDevelopMode, String developDataFileName, List<String> rawdevelopData)
-	public Agent(String moduleConfigFileName, boolean isPrecompute, String dataStorageName, boolean isDebugMode, DevelopData developData)
+	public Agent(boolean isPrecompute, String dataStorageName, boolean isDebugMode, ModuleConfig moduleConfig, DevelopData developData)
 	{
 		this.isPrecompute = isPrecompute;
 		this.isDebugMode = isDebugMode;
@@ -57,13 +57,7 @@ public abstract class Agent<E extends StandardEntity> extends AbstractAgent<Stan
 			this.mode = ScenarioInfo.Mode.PRECOMPUTATION_PHASE;
 		}
 
-		try {
-			this.moduleConfig = new ModuleConfig(moduleConfigFileName);
-		} catch (ConfigException e) {
-			e.printStackTrace();
-			throw new RuntimeException("ModuleConfig file is not found : " + moduleConfigFileName);
-		}
-
+		this.moduleConfig = moduleConfig;
 		this.precomputeData = new PrecomputeData(dataStorageName);
 		this.developData = developData;
 		this.messageManager = new MessageManager();

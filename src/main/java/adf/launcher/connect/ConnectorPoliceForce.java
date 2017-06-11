@@ -37,16 +37,23 @@ public class ConnectorPoliceForce extends Connector
 				{
 					tacticsPoliceForce = loader.getTacticsPoliceForce();
 				}
+
+				ModuleConfig moduleConfig = new ModuleConfig(
+						config.getValue(ConfigKey.KEY_MODULE_CONFIG_FILE_NAME, ModuleConfig.DEFAULT_CONFIG_FILE_NAME),
+						config.getArrayValue(ConfigKey.KEY_MODULE_DATA, "")
+				);
+
 				DevelopData developData = new DevelopData(
 						config.getBooleanValue(ConfigKey.KEY_DEVELOP_FLAG, false),
 						config.getValue(ConfigKey.KEY_DEVELOP_DATA_FILE_NAME, DevelopData.DEFAULT_FILE_NAME),
 						config.getArrayValue(ConfigKey.KEY_DEVELOP_DATA, "")
 				);
+
 				launcher.connect(new PlatoonPolice(
                         tacticsPoliceForce,
-						config.getValue(ConfigKey.KEY_MODULE_CONFIG_FILE_NAME, ModuleConfig.DEFAULT_CONFIG_FILE_NAME),
 						config.getBooleanValue(ConfigKey.KEY_PRECOMPUTE, false),
 						config.getBooleanValue(ConfigKey.KEY_DEBUG_FLAG, false),
+						moduleConfig,
 						developData
 				));
 				//System.out.println(name);

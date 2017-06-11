@@ -4,7 +4,8 @@ public final class ConfigKey {
     //
     public static final String KEY_LOADER_CLASS = "adf.launcher.loader";
     public static final String KEY_PRECOMPUTE = "adf.launcher.precompute";
-    public static final String KEY_MODULE_CONFIG_FILE_NAME = "adf.agent.moduleconfig";
+    public static final String KEY_MODULE_CONFIG_FILE_NAME = "adf.agent.moduleconfig.file";
+    public static final String KEY_MODULE_DATA = "adf.agent.moduleconfig.data";
     public static final String KEY_DEBUG_FLAG = "adf.debug.flag";
     public static final String KEY_DEVELOP_FLAG = "adf.develop.flag";
     public static final String KEY_DEVELOP_DATA = "adf.develop.data";

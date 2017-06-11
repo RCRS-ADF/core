@@ -35,16 +35,23 @@ public class ConnectorAmbulanceCentre extends Connector {
 				{
 					tacticsAmbulanceCenter = loader.getTacticsAmbulanceCentre();
 				}
+
+				ModuleConfig moduleConfig = new ModuleConfig(
+						config.getValue(ConfigKey.KEY_MODULE_CONFIG_FILE_NAME, ModuleConfig.DEFAULT_CONFIG_FILE_NAME),
+						config.getArrayValue(ConfigKey.KEY_MODULE_DATA, "")
+				);
+
 				DevelopData developData = new DevelopData(
 						config.getBooleanValue(ConfigKey.KEY_DEVELOP_FLAG, false),
 						config.getValue(ConfigKey.KEY_DEVELOP_DATA_FILE_NAME, DevelopData.DEFAULT_FILE_NAME),
 						config.getArrayValue(ConfigKey.KEY_DEVELOP_DATA, "")
 						);
+
 				launcher.connect(new OfficeAmbulance(
 						tacticsAmbulanceCenter,
-						config.getValue(ConfigKey.KEY_MODULE_CONFIG_FILE_NAME, ModuleConfig.DEFAULT_CONFIG_FILE_NAME),
 						config.getBooleanValue(ConfigKey.KEY_PRECOMPUTE, false),
 						config.getBooleanValue(ConfigKey.KEY_DEBUG_FLAG, false),
+						moduleConfig,
 						developData
 				));
 				//System.out.println(name);

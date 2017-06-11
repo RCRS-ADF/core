@@ -2,6 +2,7 @@ package adf.agent.platoon;
 
 import adf.agent.Agent;
 import adf.agent.action.Action;
+import adf.agent.config.ModuleConfig;
 import adf.agent.develop.DevelopData;
 import adf.agent.info.AgentInfo;
 import adf.agent.module.ModuleManager;
@@ -12,8 +13,8 @@ import rescuecore2.standard.entities.StandardEntity;
 public abstract class Platoon<E extends StandardEntity> extends Agent<E> {
 	private Tactics rootTactics;
 
-	Platoon(Tactics tactics, String moduleConfigFileName, boolean isPrecompute, String dataStorageName, boolean isDebugMode, DevelopData developData) {
-		super(moduleConfigFileName, isPrecompute, dataStorageName, isDebugMode, developData);
+	Platoon(Tactics tactics, boolean isPrecompute, String dataStorageName, boolean isDebugMode, ModuleConfig moduleConfig, DevelopData developData) {
+		super(isPrecompute, dataStorageName, isDebugMode, moduleConfig, developData);
 		this.rootTactics = tactics;
 	}
 

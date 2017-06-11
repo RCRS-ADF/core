@@ -1,6 +1,7 @@
 package adf.agent.office;
 
 import adf.agent.Agent;
+import adf.agent.config.ModuleConfig;
 import adf.agent.develop.DevelopData;
 import adf.agent.info.AgentInfo;
 import adf.agent.module.ModuleManager;
@@ -11,9 +12,9 @@ public abstract class Office<E extends StandardEntity> extends Agent<E> {
 
 	TacticsCenter rootTacticsCenter;
 
-	public Office(TacticsCenter tacticsCenter, String moduleConfigFileName, boolean isPrecompute, String datastorageName, boolean isDebugMode, DevelopData developData)
+	public Office(TacticsCenter tacticsCenter, boolean isPrecompute, String datastorageName, boolean isDebugMode, ModuleConfig moduleConfig, DevelopData developData)
 	{
-		super(moduleConfigFileName, isPrecompute, datastorageName, isDebugMode, developData);
+		super(isPrecompute, datastorageName, isDebugMode, moduleConfig, developData);
 		this.rootTacticsCenter = tacticsCenter;
 	}
 

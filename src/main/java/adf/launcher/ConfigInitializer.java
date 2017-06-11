@@ -69,6 +69,7 @@ class ConfigInitializer
 		registerOption(options, new OptionHost());
 		registerOption(options, new OptionPrecompute());
 		registerOption(options, new OptionModuleConfig());
+        registerOption(options, new OptionModuleData());
 		registerOption(options, new OptionDebug());
         registerOption(options, new OptionDevelop());
         registerOption(options, new OptionDevelopData());

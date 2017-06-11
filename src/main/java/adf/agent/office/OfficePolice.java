@@ -1,5 +1,6 @@
 package adf.agent.office;
 
+import adf.agent.config.ModuleConfig;
 import adf.agent.develop.DevelopData;
 import adf.component.tactics.TacticsPoliceOffice;
 import rescuecore2.standard.entities.Building;
@@ -9,9 +10,9 @@ import java.util.EnumSet;
 
 public class OfficePolice extends Office<Building>
 {
-	public OfficePolice(TacticsPoliceOffice tacticsPoliceOffice, String moduleConfigFileName, boolean isPrecompute, boolean isDebugMode, DevelopData developData)
+	public OfficePolice(TacticsPoliceOffice tacticsPoliceOffice, boolean isPrecompute, boolean isDebugMode, ModuleConfig moduleConfig, DevelopData developData)
 	{
-		super(tacticsPoliceOffice, moduleConfigFileName, isPrecompute, DATASTORAGE_FILE_NAME_POLICE, isDebugMode, developData);
+		super(tacticsPoliceOffice, isPrecompute, DATASTORAGE_FILE_NAME_POLICE, isDebugMode, moduleConfig, developData);
 	}
 
 	@Override
