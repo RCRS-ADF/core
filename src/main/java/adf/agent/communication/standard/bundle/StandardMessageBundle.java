@@ -17,7 +17,7 @@ public class StandardMessageBundle extends MessageBundle
 	{
 		List<Class<? extends CommunicationMessage>> messageClassList = new ArrayList<>();
 
-		messageClassList.add(MessageDummy.class);
+		//messageClassList.add(MessageDummy.class);
 		//information
 		messageClassList.add(MessageAmbulanceTeam.class);
 		messageClassList.add(MessageBuilding.class);

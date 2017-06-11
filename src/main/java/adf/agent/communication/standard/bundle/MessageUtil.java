@@ -3,11 +3,72 @@ package adf.agent.communication.standard.bundle;
 import adf.agent.communication.standard.bundle.information.*;
 import adf.agent.info.WorldInfo;
 import rescuecore2.standard.entities.*;
+import rescuecore2.worldmodel.EntityID;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Set;
 
 public class MessageUtil
 {
+    @Nullable
+	public static StandardEntity reflectMessage(@Nonnull WorldInfo worldInfo, @Nonnull StandardMessage message)
+	{
+	    StandardEntity entity = null;
+		Set<EntityID> changedEntities = worldInfo.getChanged().getChangedEntities();
+		Class<? extends StandardMessage> messageClass = message.getClass();
+
+		if (messageClass == MessageCivilian.class)
+		{
+			MessageCivilian mc = (MessageCivilian) message;
+			if (!changedEntities.contains(mc.getAgentID()))
+			{
+				entity = MessageUtil.reflectMessage(worldInfo, mc);
+			}
+		}
+		else if (messageClass == MessageAmbulanceTeam.class)
+		{
+			MessageAmbulanceTeam mat = (MessageAmbulanceTeam) message;
+			if (!changedEntities.contains(mat.getAgentID()))
+			{
+				entity = MessageUtil.reflectMessage(worldInfo, mat);
+			}
+		}
+		else if (messageClass == MessageFireBrigade.class)
+		{
+			MessageFireBrigade mfb = (MessageFireBrigade) message;
+			if (!changedEntities.contains(mfb.getAgentID()))
+			{
+				entity = MessageUtil.reflectMessage(worldInfo, mfb);
+			}
+		}
+		else if (messageClass == MessagePoliceForce.class)
+		{
+			MessagePoliceForce mpf = (MessagePoliceForce) message;
+			if (!changedEntities.contains(mpf.getAgentID()))
+			{
+				entity = MessageUtil.reflectMessage(worldInfo, mpf);
+			}
+		}
+		else if (messageClass == MessageBuilding.class)
+		{
+			MessageBuilding mb = (MessageBuilding) message;
+			if (!changedEntities.contains(mb.getBuildingID()))
+			{
+				entity = MessageUtil.reflectMessage(worldInfo, mb);
+			}
+		}
+		else if (messageClass == MessageRoad.class)
+		{
+			MessageRoad mr = (MessageRoad) message;
+			if (!changedEntities.contains(mr.getRoadID()))
+			{
+				entity = MessageUtil.reflectMessage(worldInfo, mr);
+			}
+		}
+
+	    return entity;
+	}
 
 	@Nonnull
 	public static Building reflectMessage(@Nonnull WorldInfo worldInfo, @Nonnull MessageBuilding message)
@@ -30,27 +91,32 @@ public class MessageUtil
 		return building;
 	}
 
-	@Nonnull
-	public static AmbulanceTeam reflectMessage(@Nonnull WorldInfo worldInfo, @Nonnull MessageAmbulanceTeam message)
+	@Nullable
+	public static Road reflectMessage(@Nonnull WorldInfo worldInfo, @Nonnull MessageRoad message)
 	{
-		AmbulanceTeam ambulanceteam = (AmbulanceTeam) worldInfo.getEntity(message.getAgentID());
-		if (ambulanceteam != null)
+		Road road = (Road)worldInfo.getEntity(message.getRoadID());
+
+		if(message.getBlockadeID() == null) { return road; }
+
+		Blockade blockade = (Blockade)worldInfo.getEntity(message.getBlockadeID());
+		if (blockade != null)
 		{
-			if(message.isHPDefined()) { ambulanceteam.setHP(message.getHP()); }
-			if(message.isBuriednessDefined()) { ambulanceteam.setBuriedness(message.getBuriedness()); }
-			if(message.isDamageDefined()) { ambulanceteam.setDamage(message.getDamage()); }
-			if(message.isPositionDefined()) { ambulanceteam.setPosition(message.getPosition()); }
+			blockade.setPosition(message.getRoadID());
+			if(message.isRepairCostDefined()) { blockade.setRepairCost(message.getRepairCost()); }
+			if(message.isXDefined()) { blockade.setX(message.getBlockadeX()); }
+			if(message.isYDefined()) { blockade.setY(message.getBlockadeY()); }
 		}
 		else
 		{
-			ambulanceteam = new AmbulanceTeam(message.getAgentID());
-			if(message.isHPDefined()) { ambulanceteam.setHP(message.getHP()); }
-			if(message.isBuriednessDefined()) { ambulanceteam.setBuriedness(message.getBuriedness()); }
-			if(message.isDamageDefined()) { ambulanceteam.setDamage(message.getDamage()); }
-			if(message.isPositionDefined()) { ambulanceteam.setPosition(message.getPosition()); }
-			worldInfo.addEntity(ambulanceteam);
+			blockade = new Blockade(message.getBlockadeID());
+			blockade.setPosition(message.getRoadID());
+			if(message.isRepairCostDefined()) { blockade.setRepairCost(message.getRepairCost()); }
+			if(message.isXDefined()) { blockade.setX(message.getBlockadeX()); }
+			if(message.isYDefined()) { blockade.setY(message.getBlockadeY()); }
+			worldInfo.addEntity(blockade);
 		}
-		return ambulanceteam;
+
+		return road;
 	}
 
 	@Nonnull
@@ -74,6 +140,29 @@ public class MessageUtil
 			worldInfo.addEntity(civilian);
 		}
 		return civilian;
+	}
+
+	@Nonnull
+	public static AmbulanceTeam reflectMessage(@Nonnull WorldInfo worldInfo, @Nonnull MessageAmbulanceTeam message)
+	{
+		AmbulanceTeam ambulanceteam = (AmbulanceTeam) worldInfo.getEntity(message.getAgentID());
+		if (ambulanceteam != null)
+		{
+			if(message.isHPDefined()) { ambulanceteam.setHP(message.getHP()); }
+			if(message.isBuriednessDefined()) { ambulanceteam.setBuriedness(message.getBuriedness()); }
+			if(message.isDamageDefined()) { ambulanceteam.setDamage(message.getDamage()); }
+			if(message.isPositionDefined()) { ambulanceteam.setPosition(message.getPosition()); }
+		}
+		else
+		{
+			ambulanceteam = new AmbulanceTeam(message.getAgentID());
+			if(message.isHPDefined()) { ambulanceteam.setHP(message.getHP()); }
+			if(message.isBuriednessDefined()) { ambulanceteam.setBuriedness(message.getBuriedness()); }
+			if(message.isDamageDefined()) { ambulanceteam.setDamage(message.getDamage()); }
+			if(message.isPositionDefined()) { ambulanceteam.setPosition(message.getPosition()); }
+			worldInfo.addEntity(ambulanceteam);
+		}
+		return ambulanceteam;
 	}
 
 	@Nonnull
@@ -122,31 +211,6 @@ public class MessageUtil
 			worldInfo.addEntity(policeforce);
 		}
 		return policeforce;
-	}
-
-	@Nullable
-	public static Blockade reflectMessage(@Nonnull WorldInfo worldInfo, @Nonnull MessageRoad message)
-	{
-		if(message.getBlockadeID() == null) { return null; }
-
-		Blockade blockade = (Blockade) worldInfo.getEntity(message.getBlockadeID());
-		if (blockade != null)
-		{
-			blockade.setPosition(message.getRoadID());
-			if(message.isRepairCostDefined()) { blockade.setRepairCost(message.getRepairCost()); }
-			if(message.isXDefined()) { blockade.setX(message.getBlockadeX()); }
-			if(message.isYDefined()) { blockade.setY(message.getBlockadeY()); }
-		}
-		else
-		{
-			blockade = new Blockade(message.getBlockadeID());
-			blockade.setPosition(message.getRoadID());
-			if(message.isRepairCostDefined()) { blockade.setRepairCost(message.getRepairCost()); }
-			if(message.isXDefined()) { blockade.setX(message.getBlockadeX()); }
-			if(message.isYDefined()) { blockade.setY(message.getBlockadeY()); }
-			worldInfo.addEntity(blockade);
-		}
-		return blockade;
 	}
 }
 
