@@ -41,7 +41,7 @@ public class AgentLauncher
             ConsoleOutput.info("*** DEBUG MODE ***");
         }
 
-        if (this.config.getBooleanValue(ConfigKey.KEY_DEBUG_FLAG))
+        if (this.config.getBooleanValue(ConfigKey.KEY_DEVELOP_FLAG))
         {
             ConsoleOutput.info("*** DEVELOP MODE ***");
         }
