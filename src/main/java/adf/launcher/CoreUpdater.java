@@ -35,7 +35,7 @@ public class CoreUpdater
         }
         catch (Exception e)
         {
-            ConsoleOutput.error("Download jars failed");
+            ConsoleOutput.error("Download jars failed : " + e.toString());
             return false;
         }
 
@@ -89,7 +89,7 @@ public class CoreUpdater
         int httpStatusCode = connection.getResponseCode();
         if(httpStatusCode != HttpURLConnection.HTTP_OK)
         {
-            throw new Exception();
+            throw new Exception("Status code : " + httpStatusCode);
         }
 
         InputStream dataInStream = new DataInputStream(connection.getInputStream());
