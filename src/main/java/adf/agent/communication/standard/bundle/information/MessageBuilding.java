@@ -1,6 +1,7 @@
 package adf.agent.communication.standard.bundle.information;
 
 import adf.agent.communication.standard.bundle.StandardMessage;
+import adf.agent.communication.standard.bundle.StandardMessagePriority;
 import adf.component.communication.util.BitOutputStream;
 import adf.component.communication.util.BitStreamReader;
 import rescuecore2.standard.entities.Building;
@@ -24,7 +25,12 @@ public class MessageBuilding extends StandardMessage
 
 	public MessageBuilding(boolean isRadio, @Nonnull Building building)
 	{
-		super(isRadio);
+		this(isRadio, StandardMessagePriority.NORMAL, building);
+	}
+
+	public MessageBuilding(boolean isRadio, StandardMessagePriority sendingPriority, @Nonnull Building building)
+	{
+		super(isRadio, sendingPriority);
 		this.buildingID = building.getID();
 		this.buildingBrokenness = building.isBrokennessDefined() ? building.getBrokenness() : -1;
 		this.buildingFieryness = building.isFierynessDefined() ? building.getFieryness() : -1;

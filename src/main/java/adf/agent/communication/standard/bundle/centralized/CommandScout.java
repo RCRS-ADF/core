@@ -1,6 +1,7 @@
 package adf.agent.communication.standard.bundle.centralized;
 
 import adf.agent.communication.standard.bundle.StandardMessage;
+import adf.agent.communication.standard.bundle.StandardMessagePriority;
 import adf.component.communication.util.BitOutputStream;
 import adf.component.communication.util.BitStreamReader;
 import rescuecore2.worldmodel.EntityID;
@@ -23,7 +24,12 @@ public class CommandScout extends StandardMessage {
 
 	public CommandScout(boolean isRadio, @Nullable EntityID toID, @Nullable EntityID targetID, int range)
 	{
-		super(isRadio);
+		this(isRadio, StandardMessagePriority.NORMAL, toID, targetID, range);
+	}
+
+	public CommandScout(boolean isRadio, StandardMessagePriority sendingPriority, @Nullable EntityID toID, @Nullable EntityID targetID, int range)
+	{
+		super(isRadio, sendingPriority);
 		this.commandToID = toID;
 		this.commandTargetID = targetID;
 		this.scoutRange = range;

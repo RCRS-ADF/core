@@ -1,26 +1,26 @@
 package adf.agent.communication.standard.bundle;
 
-import adf.component.communication.util.BitStreamReader;
 import adf.component.communication.CommunicationMessage;
 import rescuecore2.worldmodel.EntityID;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 abstract public class StandardMessage extends CommunicationMessage
 {
 	int rawSenderID = -1;
 	EntityID mySenderID;
 	int ttl = -1;
+	StandardMessagePriority sendingPriority = StandardMessagePriority.NORMAL;
 
-	public StandardMessage(boolean isRadio)
+	public StandardMessage(boolean isRadio, StandardMessagePriority sendingPriority)
 	{
 		super(isRadio);
-	}
+        this.sendingPriority = sendingPriority;
+    }
 
 	public StandardMessage(boolean isRadio, int senderID, int ttl, adf.component.communication.util.BitStreamReader bsr) {
 		super(isRadio);
-		this.rawSenderID = senderID;
+        this.rawSenderID = senderID;
 		this.ttl = ttl;
 	}
 
@@ -35,6 +35,11 @@ abstract public class StandardMessage extends CommunicationMessage
 	public int getTTL()
 	{
 		return this.ttl;
+	}
+
+	public StandardMessagePriority getSendingPriority()
+	{
+	    return this.sendingPriority;
 	}
 
 	protected int getBitSize(int value)

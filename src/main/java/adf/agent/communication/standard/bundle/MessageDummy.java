@@ -13,7 +13,12 @@ public class MessageDummy extends StandardMessage
 
 	public MessageDummy(boolean isRadio, int test)
 	{
-		super(isRadio);
+		this(isRadio, StandardMessagePriority.NORMAL, test);
+	}
+
+	public MessageDummy(boolean isRadio, StandardMessagePriority sendingPriority, int test)
+	{
+		super(isRadio, sendingPriority);
 		dummyTest = test;
 	}
 

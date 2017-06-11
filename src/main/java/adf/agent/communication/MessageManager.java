@@ -1,8 +1,12 @@
 package adf.agent.communication;
 
 import adf.agent.communication.standard.bundle.StandardMessageBundle;
+import adf.agent.info.AgentInfo;
+import adf.agent.info.ScenarioInfo;
+import adf.agent.info.WorldInfo;
 import adf.component.communication.CommunicationMessage;
 import adf.component.communication.MessageBundle;
+import adf.component.communication.MessageCoordinator;
 import adf.launcher.ConsoleOutput;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -14,22 +18,24 @@ public class MessageManager
 	private int customMessageClassCount;
 	private HashMap<Integer, Class<? extends CommunicationMessage>> messageClassMap;
 	private HashMap<Class<? extends CommunicationMessage>, Integer> messageClassIDMap;
-	private List<CommunicationMessage> sendMessageList;
+	private ArrayList<CommunicationMessage> sendMessageList;
 	private List<CommunicationMessage> receivedMessageList;
 	private int heardAgentHelpCount;
+	private List<MessageCoordinator> messageCoordinatorList;
 
 	private Set<String> checkDuplicationCache;
 
 	public MessageManager()
 	{
-		standardMessageClassCount = 1;   // 00001
-		customMessageClassCount = 16;    // 10000
-		messageClassMap = new HashMap<>(32);
-		messageClassIDMap = new HashMap<>(32);
-		sendMessageList = new ArrayList<>();
+		this.standardMessageClassCount = 1;   // 00001
+		this.customMessageClassCount = 16;    // 10000
+		this.messageClassMap = new HashMap<>(32);
+		this.messageClassIDMap = new HashMap<>(32);
+		this.sendMessageList = new ArrayList<>();
 		this.checkDuplicationCache = new HashSet<>();
 		this.receivedMessageList = new ArrayList<>();
-		heardAgentHelpCount = 0;
+		this.heardAgentHelpCount = 0;
+		this.messageCoordinatorList = new ArrayList<>();
 	}
 
 	public boolean registerMessageClass(int index, @Nonnull Class<? extends CommunicationMessage> messageClass)
@@ -59,6 +65,12 @@ public class MessageManager
 					(messageBundle.getClass().equals(StandardMessageBundle.class) ?
 					 standardMessageClassCount++ : customMessageClassCount++),
 					messageClass);
+		}
+
+		MessageCoordinator messageCoordinator = messageBundle.getMessageCoordinator();
+		if (messageCoordinator != null)
+		{
+		    messageCoordinatorList.add(messageCoordinator);
 		}
 	}
 
@@ -130,6 +142,15 @@ public class MessageManager
 			{ resultList.add(message); }
 		}
 		return resultList;
+	}
+
+	public void coordinateMessages(AgentInfo agentInfo, WorldInfo worldInfo, ScenarioInfo scenarioInfo)
+	{
+		for (int index = (this.messageCoordinatorList.size() -1); 0 <= index; index--)
+		{
+			MessageCoordinator coordinator = this.messageCoordinatorList.get(index);
+			coordinator.coordinate(agentInfo, worldInfo, scenarioInfo, this, this.sendMessageList);
+		}
 	}
 
 	public void addHeardAgentHelpCount()

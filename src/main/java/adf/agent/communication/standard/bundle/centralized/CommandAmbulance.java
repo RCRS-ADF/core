@@ -1,6 +1,7 @@
 package adf.agent.communication.standard.bundle.centralized;
 
 import adf.agent.communication.standard.bundle.StandardMessage;
+import adf.agent.communication.standard.bundle.StandardMessagePriority;
 import adf.component.communication.util.BitOutputStream;
 import adf.component.communication.util.BitStreamReader;
 import rescuecore2.worldmodel.EntityID;
@@ -32,7 +33,12 @@ public class CommandAmbulance extends StandardMessage {
 
 	public CommandAmbulance(boolean isRadio, @Nullable EntityID toID, @Nullable EntityID targetID, int action)
 	{
-		super(isRadio);
+	    this(isRadio, StandardMessagePriority.NORMAL, toID, targetID, action);
+	}
+
+	public CommandAmbulance(boolean isRadio, StandardMessagePriority sendingPriority, @Nullable EntityID toID, @Nullable EntityID targetID, int action)
+	{
+		super(isRadio, sendingPriority);
 		this.commandToID = toID;
 		this.commandTargetID = targetID;
 		this.myAction = action;

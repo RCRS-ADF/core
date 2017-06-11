@@ -1,6 +1,7 @@
 package adf.agent.communication.standard.bundle.information;
 
 import adf.agent.communication.standard.bundle.StandardMessage;
+import adf.agent.communication.standard.bundle.StandardMessagePriority;
 import adf.component.communication.util.BitOutputStream;
 import adf.component.communication.util.BitStreamReader;
 import rescuecore2.standard.entities.Blockade;
@@ -29,14 +30,14 @@ public class MessageRoad extends StandardMessage
     protected Integer blockadeY;
     protected boolean isSendBlockadeLocation;
 
-    public MessageRoad(boolean isRadio, @Nonnull Road road, @Nullable Blockade blockade, Boolean isPassable)
-    {
-        this(isRadio, road, blockade, isPassable, false);
-    }
-
     public MessageRoad(boolean isRadio, @Nonnull Road road, @Nullable Blockade blockade, @Nullable Boolean isPassable, boolean isSendBlockadeLocation)
     {
-        super(isRadio);
+        this(isRadio, StandardMessagePriority.NORMAL, road, blockade, isPassable, isSendBlockadeLocation);
+    }
+
+    public MessageRoad(boolean isRadio, StandardMessagePriority sendingPriority, @Nonnull Road road, @Nullable Blockade blockade, @Nullable Boolean isPassable, boolean isSendBlockadeLocation)
+    {
+        super(isRadio, sendingPriority);
         this.roadID = road.getID();
         if (blockade != null)
         {

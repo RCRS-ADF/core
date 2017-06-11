@@ -1,6 +1,7 @@
 package adf.agent.communication.standard.bundle.information;
 
 import adf.agent.communication.standard.bundle.StandardMessage;
+import adf.agent.communication.standard.bundle.StandardMessagePriority;
 import adf.component.communication.util.BitOutputStream;
 import adf.component.communication.util.BitStreamReader;
 import rescuecore2.standard.entities.PoliceForce;
@@ -38,7 +39,12 @@ public class MessagePoliceForce extends StandardMessage
 
 	public MessagePoliceForce(boolean isRadio, @Nonnull PoliceForce policeForce, int action, @Nullable EntityID target)
 	{
-		super(isRadio);
+		this(isRadio, StandardMessagePriority.NORMAL, policeForce, action, target);
+	}
+
+	public MessagePoliceForce(boolean isRadio, StandardMessagePriority sendingPriority, @Nonnull PoliceForce policeForce, int action, @Nullable EntityID target)
+	{
+		super(isRadio, sendingPriority);
 		this.agentID = policeForce.getID();
 		this.humanHP = policeForce.isHPDefined() ? policeForce.getHP() : -1;
 		this.humanBuriedness = policeForce.isBuriednessDefined() ? policeForce.getBuriedness() : -1;

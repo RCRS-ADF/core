@@ -1,6 +1,7 @@
 package adf.agent.communication.standard.bundle.information;
 
 import adf.agent.communication.standard.bundle.StandardMessage;
+import adf.agent.communication.standard.bundle.StandardMessagePriority;
 import adf.component.communication.util.BitOutputStream;
 import adf.component.communication.util.BitStreamReader;
 import rescuecore2.standard.entities.FireBrigade;
@@ -41,7 +42,12 @@ public class MessageFireBrigade extends StandardMessage
 
 	public MessageFireBrigade(boolean isRadio, @Nonnull FireBrigade fireBrigade, int action, @Nullable EntityID target)
 	{
-		super(isRadio);
+		this(isRadio, StandardMessagePriority.NORMAL, fireBrigade, action, target);
+	}
+
+	public MessageFireBrigade(boolean isRadio, StandardMessagePriority sendingPriority, @Nonnull FireBrigade fireBrigade, int action, @Nullable EntityID target)
+	{
+		super(isRadio, sendingPriority);
 		this.agentID = fireBrigade.getID();
 		this.humanHP = fireBrigade.isHPDefined() ? fireBrigade.getHP() : -1;
 		this.humanBuriedness = fireBrigade.isBuriednessDefined() ? fireBrigade.getBuriedness() : -1;

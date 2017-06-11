@@ -172,6 +172,7 @@ public abstract class Agent<E extends StandardEntity> extends AbstractAgent<Stan
 			e.printStackTrace();
 		}
 
+		this.messageManager.coordinateMessages(this.agentInfo, this.worldInfo, this.scenarioInfo);
 		this.communicationModule.send(this, this.messageManager);
 	}
 

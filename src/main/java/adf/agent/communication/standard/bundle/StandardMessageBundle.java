@@ -4,6 +4,7 @@ import adf.agent.communication.standard.bundle.information.*;
 import adf.agent.communication.standard.bundle.centralized.*;
 import adf.component.communication.CommunicationMessage;
 import adf.component.communication.MessageBundle;
+import adf.component.communication.MessageCoordinator;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -34,4 +35,11 @@ public class StandardMessageBundle extends MessageBundle
 
 		return messageClassList;
 	}
+
+	@Override
+	public MessageCoordinator getMessageCoordinator()
+	{
+		return new StandardMessageCoordinator();
+	}
+
 }

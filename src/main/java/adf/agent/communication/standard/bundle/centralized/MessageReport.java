@@ -1,6 +1,7 @@
 package adf.agent.communication.standard.bundle.centralized;
 
 import adf.agent.communication.standard.bundle.StandardMessage;
+import adf.agent.communication.standard.bundle.StandardMessagePriority;
 import adf.component.communication.util.BitOutputStream;
 import adf.component.communication.util.BitStreamReader;
 import rescuecore2.worldmodel.EntityID;
@@ -19,8 +20,13 @@ public class MessageReport extends StandardMessage
     private EntityID reportFromID;
     private int rawReportFromID;
 
-	public MessageReport(boolean isRadio, boolean isDone, boolean isBroadcast, @Nullable EntityID fromID) {
-		super(isRadio);
+	public MessageReport(boolean isRadio, boolean isDone, boolean isBroadcast, @Nullable EntityID fromID)
+	{
+		this(isRadio, StandardMessagePriority.NORMAL, isDone, isBroadcast, fromID);
+	}
+	public MessageReport(boolean isRadio, StandardMessagePriority sendingPriority, boolean isDone, boolean isBroadcast, @Nullable EntityID fromID)
+	{
+		super(isRadio, sendingPriority);
 		this.reportDone = isDone;
         this.reportBroadcast = isBroadcast;
         this.reportFromID = fromID;

@@ -1,6 +1,7 @@
 package adf.agent.communication.standard.bundle.information;
 
 import adf.agent.communication.standard.bundle.StandardMessage;
+import adf.agent.communication.standard.bundle.StandardMessagePriority;
 import adf.component.communication.util.BitOutputStream;
 import adf.component.communication.util.BitStreamReader;
 import rescuecore2.standard.entities.AmbulanceTeam;
@@ -40,7 +41,12 @@ public class MessageAmbulanceTeam extends StandardMessage
 
 	public MessageAmbulanceTeam(boolean isRadio, @Nonnull AmbulanceTeam ambulanceTeam, int action, @Nullable EntityID target)
 	{
-		super(isRadio);
+		this(isRadio, StandardMessagePriority.NORMAL, ambulanceTeam, action, target);
+	}
+
+	public MessageAmbulanceTeam(boolean isRadio, StandardMessagePriority sendingPriority, @Nonnull AmbulanceTeam ambulanceTeam, int action, @Nullable EntityID target)
+	{
+		super(isRadio, sendingPriority);
 		this.agentID = ambulanceTeam.getID();
 		this.humanHP = ambulanceTeam.isHPDefined() ? ambulanceTeam.getHP() : -1;
 		this.humanBuriedness = ambulanceTeam.isBuriednessDefined() ? ambulanceTeam.getBuriedness() : -1;
