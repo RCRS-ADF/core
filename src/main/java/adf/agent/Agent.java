@@ -144,6 +144,7 @@ public abstract class Agent<E extends StandardEntity> extends AbstractAgent<Stan
 	@Override
 	protected void think(int time, ChangeSet changed, Collection<Command> heard)
 	{
+	    this.agentInfo.recordThinkStartTime();
 		this.agentInfo.setTime(time);
 
 		if ( 1 == time )
@@ -168,23 +169,16 @@ public abstract class Agent<E extends StandardEntity> extends AbstractAgent<Stan
 		this.agentInfo.setChanged(changed);
 		this.worldInfo.setChanged(changed);
 
-		if (time > this.ignoreTime)
-		{
-			this.messageManager.refresh();
-			this.communicationModule.receive(this, this.messageManager);
-		}
+		this.messageManager.refresh();
+		this.communicationModule.receive(this, this.messageManager);
 
-
-		try{
+		try {
 			think();
-		}catch(Exception e){
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
-		if (time > this.ignoreTime) {
-			this.communicationModule.send(this, this.messageManager);
-		}
 
+		this.communicationModule.send(this, this.messageManager);
 	}
 
 	abstract protected void think();

@@ -14,20 +14,24 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-public class AgentInfo {
+public class AgentInfo
+{
 	private Agent agent;
 	private StandardWorldModel world;
     private int time;
 	private ChangeSet changed;
 	private Collection<Command> heard;
+	private long thinkStartTime;
 
     private Map<Integer, Action> actionHistory;
 
-	public AgentInfo(@Nonnull Agent agent, @Nonnull StandardWorldModel world) {
+	public AgentInfo(@Nonnull Agent agent, @Nonnull StandardWorldModel world)
+	{
 		this.agent  = Objects.requireNonNull(agent);
 		this.world  = Objects.requireNonNull(world);
         this.time = 0;
         this.actionHistory = new HashMap<>();
+        recordThinkStartTime();
 	}
 
 	public void setTime(int time)
@@ -73,7 +77,8 @@ public class AgentInfo {
 	}
 
 	@Nonnull
-	public EntityID getPosition() {
+	public EntityID getPosition()
+    {
 	    StandardEntity entity = this.world.getEntity(this.agent.getID());
         return (entity instanceof Human) ? ((Human) entity).getPosition() : entity.getID();
     }
@@ -90,42 +95,61 @@ public class AgentInfo {
 	}
 
 	@Nullable
-    public ChangeSet getChanged() {
+    public ChangeSet getChanged()
+    {
         return this.changed;
     }
 
     @Nullable
-	public Human someoneOnBoard() {
+	public Human someoneOnBoard()
+    {
 		EntityID id = this.agent.getID();
-		for (StandardEntity next : this.world.getEntitiesOfType(StandardEntityURN.CIVILIAN)) {
+		for (StandardEntity next : this.world.getEntitiesOfType(StandardEntityURN.CIVILIAN))
+		{
 			Human human = (Human)next;
-			if (human.getPosition().equals(id)) {
+			if (human.getPosition().equals(id))
+			{
 				return human;
 			}
 		}
 		return null;
 	}
 
-    public boolean isWaterDefined() {
+    public boolean isWaterDefined()
+    {
         StandardEntity entity = this.world.getEntity(this.agent.getID());
         return entity.getStandardURN().equals(StandardEntityURN.FIRE_BRIGADE) && ((FireBrigade) entity).isWaterDefined();
     }
 
-	public int getWater() {
+	public int getWater()
+    {
         StandardEntity entity = this.world.getEntity(this.agent.getID());
-        if(entity.getStandardURN().equals(StandardEntityURN.FIRE_BRIGADE)) {
+        if(entity.getStandardURN().equals(StandardEntityURN.FIRE_BRIGADE))
+        {
             return ((FireBrigade)entity).getWater();
         }
 		return 0;
 	}
 
 	@Nullable
-	public Action getExecutedAction(int time) {
+	public Action getExecutedAction(int time)
+    {
 	    if(time > 0) return this.actionHistory.get(time);
         return this.actionHistory.get(this.getTime() + time);
     }
 
-    public void setExecutedAction(int time, @Nullable Action action) {
+    public void setExecutedAction(int time, @Nullable Action action)
+    {
         this.actionHistory.put(time > 0 ? time : this.getTime() + time, action);
+    }
+
+    public void recordThinkStartTime()
+    {
+        this.thinkStartTime = System.currentTimeMillis();
+    }
+
+    public long getThinkTimeMillis()
+    {
+        return (System.currentTimeMillis() - this.thinkStartTime);
     }
 }
