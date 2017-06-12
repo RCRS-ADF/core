@@ -7,9 +7,18 @@ import adf.agent.info.ScenarioInfo;
 import adf.agent.info.WorldInfo;
 import adf.agent.module.ModuleManager;
 import adf.agent.precompute.PrecomputeData;
+import adf.component.centralized.CommandPicker;
+import adf.component.extaction.ExtAction;
+import adf.component.module.AbstractModule;
 
-public abstract class TacticsCenter {
+import java.util.ArrayList;
+import java.util.List;
+
+public abstract class TacticsCenter
+{
     private TacticsCenter parentControl;
+    private List<AbstractModule> modules = new ArrayList<>();
+    private List<CommandPicker> modulesCommandPicker = new ArrayList<>();
 
     public TacticsCenter(TacticsCenter parent)
     {
@@ -29,5 +38,73 @@ public abstract class TacticsCenter {
     public TacticsCenter getParentControl()
     {
         return parentControl;
+    }
+
+    protected void registerModule(AbstractModule module)
+    {
+        modules.add(module);
+    }
+
+    protected boolean unregisterModule(AbstractModule module)
+    {
+        return modules.remove(module);
+    }
+
+    protected void registerModule(CommandPicker module)
+    {
+        modulesCommandPicker.add(module);
+    }
+
+    protected boolean unregisterModule(CommandPicker module)
+    {
+        return modulesCommandPicker.remove(module);
+    }
+
+    protected void modulesPrecompute(PrecomputeData precomputeData)
+    {
+        for (AbstractModule module : modules)
+        {
+            module.precompute(precomputeData);
+        }
+        for (CommandPicker module : modulesCommandPicker)
+        {
+            module.precompute(precomputeData);
+        }
+    }
+
+    protected void modulesResume(PrecomputeData precomputeData)
+    {
+        for (AbstractModule module : modules)
+        {
+            module.resume(precomputeData);
+        }
+        for (CommandPicker module : modulesCommandPicker)
+        {
+            module.resume(precomputeData);
+        }
+    }
+
+    protected void modulesPreparate()
+    {
+        for (AbstractModule module : modules)
+        {
+            module.preparate();
+        }
+        for (CommandPicker module : modulesCommandPicker)
+        {
+            module.preparate();
+        }
+    }
+
+    protected void modulesUpdateInfo(MessageManager messageManager)
+    {
+        for (AbstractModule module : modules)
+        {
+            module.updateInfo(messageManager);
+        }
+        for (CommandPicker module : modulesCommandPicker)
+        {
+            module.updateInfo(messageManager);
+        }
     }
 }
