@@ -34,9 +34,13 @@ public class StandardMessageCoordinator extends MessageCoordinator
                         standardMessageHighList.add(m);
                         break;
                 }
-                sendMessageList.remove(msg);
             }
         }
+
+        sendMessageList.removeAll(standardMessageHighList);
+        sendMessageList.removeAll(standardMessageNormalList);
+        sendMessageList.removeAll(standardMessageLowList);
+
         sendMessageList.addAll(standardMessageHighList);
         sendMessageList.addAll(standardMessageNormalList);
         sendMessageList.addAll(standardMessageLowList);
