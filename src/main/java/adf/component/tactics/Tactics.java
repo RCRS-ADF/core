@@ -8,8 +8,10 @@ import adf.agent.precompute.PrecomputeData;
 import adf.agent.info.ScenarioInfo;
 import adf.agent.info.WorldInfo;
 import adf.agent.action.Action;
+import adf.component.centralized.CommandExecutor;
 import adf.component.extaction.ExtAction;
 import adf.component.module.AbstractModule;
+import rescuecore2.messages.Command;
 
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 import java.util.ArrayList;
@@ -20,6 +22,7 @@ public abstract class Tactics
 	private Tactics parentTactics;
 	private List<AbstractModule> modules = new ArrayList<>();
     private List<ExtAction> modulesExtAction = new ArrayList<>();
+    private List<CommandExecutor> modulesCommandExecutor = new ArrayList<>();
 
 	public Tactics(Tactics parent)
 	{
@@ -62,6 +65,16 @@ public abstract class Tactics
         return modulesExtAction.remove(module);
     }
 
+    protected void registerModule(CommandExecutor module)
+    {
+        modulesCommandExecutor.add(module);
+    }
+
+    protected boolean unregisterModule(CommandExecutor module)
+    {
+        return modulesCommandExecutor.remove(module);
+    }
+
     protected void modulesPrecompute(PrecomputeData precomputeData)
     {
         for (AbstractModule module : modules)
@@ -69,6 +82,10 @@ public abstract class Tactics
             module.precompute(precomputeData);
         }
         for (ExtAction module : modulesExtAction)
+        {
+            module.precompute(precomputeData);
+        }
+        for (CommandExecutor module : modulesCommandExecutor)
         {
             module.precompute(precomputeData);
         }
@@ -84,6 +101,10 @@ public abstract class Tactics
         {
             module.resume(precomputeData);
         }
+        for (CommandExecutor module : modulesCommandExecutor)
+        {
+            module.resume(precomputeData);
+        }
     }
 
     protected void modulesPreparate()
@@ -96,6 +117,10 @@ public abstract class Tactics
         {
             module.preparate();
         }
+        for (CommandExecutor module : modulesCommandExecutor)
+        {
+            module.preparate();
+        }
     }
 
     protected void modulesUpdateInfo(MessageManager messageManager)
@@ -105,6 +130,10 @@ public abstract class Tactics
             module.updateInfo(messageManager);
         }
         for (ExtAction module : modulesExtAction)
+        {
+            module.updateInfo(messageManager);
+        }
+        for (CommandExecutor module : modulesCommandExecutor)
         {
             module.updateInfo(messageManager);
         }
