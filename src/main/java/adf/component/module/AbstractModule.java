@@ -13,7 +13,7 @@ import adf.agent.precompute.PrecomputeData;
 
 public abstract class AbstractModule
 {
-	private List<AbstractModule> subModules=new ArrayList<>();
+	private List<AbstractModule> subModules = new ArrayList<>();
     protected ScenarioInfo scenarioInfo;
     protected AgentInfo agentInfo;
     protected WorldInfo worldInfo;
