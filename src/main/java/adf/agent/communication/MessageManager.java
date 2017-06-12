@@ -59,6 +59,8 @@ public class MessageManager
 
 	public void registerMessageBundle(@Nonnull MessageBundle messageBundle)
 	{
+		if (messageBundle == null) { return; }
+
 		for (Class<? extends CommunicationMessage> messageClass : messageBundle.getMessageClassList())
 		{
 			this.registerMessageClass(
@@ -101,6 +103,8 @@ public class MessageManager
 
 	public void addMessage(@Nonnull CommunicationMessage message, boolean checkDuplication)
 	{
+		if (message == null) { return; }
+
 		String checkKey = message.getCheckKey();
 		if(checkDuplication && !this.checkDuplicationCache.contains(checkKey))
 		{
