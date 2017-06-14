@@ -15,6 +15,7 @@ public class LaunchSupporter
     private final String OPTION_COMPILE = "-compile";
     private final String OPTION_JAVAHOME = "-javahome";
     private final String OPTION_CHECK = "-check";
+    private final String OPTION_NOCHECK = "-nocheck";
     private final String OPTION_AUTOCLASSPATH = "-autocp";
     private final String OPTION_AUTOLOADERCLASS = "-autolc";
     private final String OPTION_UPDATECORE = "-updatecore";
@@ -93,8 +94,12 @@ public class LaunchSupporter
 
         if (args.contains(OPTION_CHECK))
         {
+            if (! args.contains(OPTION_NOCHECK))
+            {
+                checkAgentClass(compilerJavaHome);
+            }
+            removeOption(args, OPTION_NOCHECK);
             removeOption(args, OPTION_CHECK);
-            checkAgentClass(compilerJavaHome);
             worked = true;
         }
 
