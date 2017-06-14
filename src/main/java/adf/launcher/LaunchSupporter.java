@@ -92,16 +92,13 @@ public class LaunchSupporter
             autoLoadDefaultClassPath();
         }
 
-        if (args.contains(OPTION_CHECK))
+        if (args.contains(OPTION_CHECK) && (! args.contains(OPTION_NOCHECK)))
         {
-            if (! args.contains(OPTION_NOCHECK))
-            {
-                checkAgentClass(compilerJavaHome);
-            }
-            removeOption(args, OPTION_NOCHECK);
-            removeOption(args, OPTION_CHECK);
+            checkAgentClass(compilerJavaHome);
             worked = true;
         }
+        removeOption(args, OPTION_CHECK);
+        removeOption(args, OPTION_NOCHECK);
 
         if (args.contains(OPTION_AUTOLOADERCLASS))
         {
