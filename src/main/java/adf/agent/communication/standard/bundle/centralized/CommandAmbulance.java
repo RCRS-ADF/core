@@ -41,6 +41,8 @@ public class CommandAmbulance extends StandardMessage {
 		super(isRadio, sendingPriority);
 		this.commandToID = toID;
 		this.commandTargetID = targetID;
+		this.rawToID = (toID == null ? -1 : toID.getValue());
+		this.rawTargetID = (targetID == null ? -1 : targetID.getValue());
 		this.myAction = action;
 		this.broadcast = (toID == null);
 	}

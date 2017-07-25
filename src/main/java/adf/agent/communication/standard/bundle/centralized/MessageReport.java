@@ -30,6 +30,7 @@ public class MessageReport extends StandardMessage
 		this.reportDone = isDone;
         this.reportBroadcast = isBroadcast;
         this.reportFromID = fromID;
+        this.rawReportFromID = (fromID == null ? -1 : fromID.getValue());
 	}
 
 	public MessageReport(boolean isRadio, int from, int ttl, @Nonnull BitStreamReader bitStreamReader) {

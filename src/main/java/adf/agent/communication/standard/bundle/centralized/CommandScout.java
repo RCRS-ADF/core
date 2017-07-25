@@ -32,6 +32,8 @@ public class CommandScout extends StandardMessage {
 		super(isRadio, sendingPriority);
 		this.commandToID = toID;
 		this.commandTargetID = targetID;
+		this.rawToID = (toID == null ? -1 : toID.getValue());
+		this.rawTargetID = (targetID == null ? -1 : targetID.getValue());
 		this.scoutRange = range;
 		this.broadcast = (toID == null);
 	}
