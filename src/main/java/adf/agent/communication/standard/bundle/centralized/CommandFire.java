@@ -129,7 +129,13 @@ public class CommandFire extends StandardMessage
 		return (this.commandToID != null || this.rawToID != -1);
 	}
 
+	@Deprecated
 	public boolean idTargetIDDefined()
+	{
+		return (this.commandTargetID != null || this.rawTargetID != -1);
+	}
+
+	public boolean isTargetIDDefined()
 	{
 		return (this.commandTargetID != null || this.rawTargetID != -1);
 	}
