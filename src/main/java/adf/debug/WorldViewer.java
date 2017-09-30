@@ -24,7 +24,7 @@ import static rescuecore2.misc.java.JavaTools.instantiate;
 
 public class WorldViewer extends JPanel {
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 2732220527053489740L;
 
@@ -40,13 +40,7 @@ public class WorldViewer extends JPanel {
 
 	/**
 	 * Construct a LogViewer.
-	 * 
-	 * @param reader
-	 *            The LogReader to read.
-	 * @param config
-	 *            The system configuration.
-	 * @throws LogException
-	 *             If there is a problem reading the log.
+	 *
 	 */
 	public WorldViewer(WorldInfo worldinfo, ScenarioInfo scenarioInfo)  {
 		super(new BorderLayout());
@@ -82,7 +76,7 @@ public class WorldViewer extends JPanel {
 
 	/**
 	 * Show a particular timestep in the viewer.
-	 * 
+	 *
 	 * @param time
 	 *            The timestep to show. If this value is out of range then this
 	 *            method will silently return.
@@ -99,13 +93,13 @@ public class WorldViewer extends JPanel {
 		}
 	}
 
-	
+
 	private void registerViewers(Config config) {
 		viewers = new ArrayList<ViewComponent>();
 		Config c2 = new Config(config);
 		c2.appendValue("viewer.standard.AreaNeighboursLayer.visible", "false");
 		for (String next : config.getArrayValue(VIEWERS_KEY, "rescuecore2.standard.view.AnimatedWorldModelViewer")) {
-			
+
 			ViewComponent viewer = instantiate(next, ViewComponent.class);
 			if (viewer != null) {
 				viewer.initialise(c2);
